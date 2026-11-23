@@ -70,7 +70,8 @@ class Answer(_Open):
 
 class Resource(_Open):
     title: str
-    url: str
+    # http(s) only: packs may come from other people or an LLM, and a javascript: URL would run on click.
+    url: str = Field(pattern=r"^https?://")
     kind: str | None = None  # doc | video | article | course ...
 
 

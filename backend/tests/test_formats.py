@@ -157,3 +157,12 @@ def test_real_decks_round_trip(path):
     original = json.loads(path.read_text(encoding="utf-8"))
     pack, progress = studydeck_v1.from_v1(original, pack_slug=path.stem)
     assert studydeck_v1.to_v1(pack, progress) == original
+
+
+@pytest.mark.parametrize("url", ["javascript:alert(1)", "JavaScript:alert(1)", "data:text/html,x", "/relative"])
+def test_resource_urls_must_be_http(url):
+    with pytest.raises(ValidationError):
+        Item(id="i", type=ItemType.flashcard, prompt="q", answer=Answer(text="a"),
+             resources=[{"title": "t", "url": url}])
+    Item(id="i", type=ItemType.flashcard, prompt="q", answer=Answer(text="a"),
+         resources=[{"title": "t", "url": "https://docs.databricks.com/"}])

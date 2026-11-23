@@ -338,6 +338,7 @@
           "type": "string"
         },
         "url": {
+          "pattern": "^https?://",
           "title": "Url",
           "type": "string"
         },

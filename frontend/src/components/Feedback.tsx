@@ -1,9 +1,18 @@
 import type { AttemptItem } from "../api";
 import { Markdown } from "./Markdown";
 
+export function isWebUrl(url: string): boolean {
+  try {
+    return ["http:", "https:"].includes(new URL(url).protocol);
+  } catch {
+    return false;
+  }
+}
+
 /** Explanation and follow-up resources for a revealed item. */
 export function Feedback({ item, correct }: { item: AttemptItem; correct: boolean | null }) {
-  const resources = item.resources ?? [];
+  // Defense in depth: the pack schema already requires http(s), but never render another scheme.
+  const resources = (item.resources ?? []).filter((r) => isWebUrl(r.url));
   return (
     <section className={`feedback ${correct ? "is-correct" : "is-wrong"}`} aria-live="polite">
       <p className="feedback-verdict">{correct ? "Correct" : "Not quite"}</p>

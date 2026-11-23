@@ -40,3 +40,11 @@ test("topic breakdown sorts weakest first", () => {
     { name: "X", correct: 2, total: 2 },
   ]);
 });
+
+test("only http(s) resource links are rendered", async () => {
+  const { isWebUrl } = await import("../components/Feedback");
+  expect(isWebUrl("https://docs.aws.amazon.com/")).toBe(true);
+  expect(isWebUrl("javascript:alert(1)")).toBe(false);
+  expect(isWebUrl(" javascript:alert(1)")).toBe(false);
+  expect(isWebUrl("not a url")).toBe(false);
+});

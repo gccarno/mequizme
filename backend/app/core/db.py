@@ -71,6 +71,27 @@ CREATE TABLE IF NOT EXISTS srs_state (
     due TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS srs_due ON srs_state(due);
+
+CREATE TABLE IF NOT EXISTS ai_jobs (            -- background AI work (fill in explanations, write questions)
+    id TEXT PRIMARY KEY,
+    kind TEXT NOT NULL,             -- enrich | generate
+    params TEXT NOT NULL,           -- JSON
+    status TEXT NOT NULL,           -- queued | running | done | failed | interrupted
+    total INTEGER NOT NULL DEFAULT 0,
+    done INTEGER NOT NULL DEFAULT 0,
+    changed INTEGER NOT NULL DEFAULT 0,
+    errors TEXT NOT NULL DEFAULT '[]',  -- JSON array of strings
+    created_at TEXT NOT NULL,
+    finished_at TEXT
+);
+CREATE TABLE IF NOT EXISTS ai_explanations (    -- "explain my mistake", cached per question and wrong answer
+    item_id TEXT NOT NULL,
+    choice_key TEXT NOT NULL,       -- sorted chosen ids, e.g. "A" or "A,C"
+    text TEXT NOT NULL,
+    model TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (item_id, choice_key)
+);
 """
 
 

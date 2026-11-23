@@ -5,6 +5,7 @@ import { api, type Attempt, type AttemptCreate } from "../api";
 import { Bubbles, marksFor } from "../components/Bubbles";
 import { CONFIDENCE_LABELS } from "../components/Confidence";
 import { Feedback, isWebUrl } from "../components/Feedback";
+import { TutorHelp } from "../components/Tutor";
 import { Markdown } from "../components/Markdown";
 import { formatDuration, percent } from "../lib/format";
 
@@ -227,7 +228,9 @@ function Review({ attempt }: { attempt: Attempt }) {
                       rationales={e.item.choiceRationales}
                     />
                   )}
-                  <Feedback item={e.item} correct={!!e.response?.correct} />
+                  <Feedback item={e.item} correct={!!e.response?.correct}>
+                    <TutorHelp attemptId={attempt.id} item={e.item} response={e.response} />
+                  </Feedback>
                 </>
               )}
             </li>

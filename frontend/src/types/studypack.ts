@@ -58,6 +58,25 @@ export type Role = "prompt" | "answer" | "explanation";
 export type Alt = string | null;
 export type Media = Media1[];
 export type ItemStatus = "reviewed" | "draft";
+/**
+ * Item fields awaiting review, e.g. explanation, resources
+ */
+export type Fields = string[];
+/**
+ * Who wrote them, e.g. a model name
+ */
+export type By = string | null;
+export type At = string | null;
+/**
+ * Values the draft replaced
+ */
+export type Previous = {
+  [k: string]: unknown;
+} | null;
+/**
+ * Concerns for the reviewer, e.g. a doubtful answer key
+ */
+export type Notes = string | null;
 export type Createdat = string | null;
 export type Updatedat = string | null;
 export type Items = Item[];
@@ -120,6 +139,7 @@ export interface Item {
   resources?: Resources;
   media?: Media;
   status?: ItemStatus;
+  draft?: Draft | null;
   createdAt?: Createdat;
   updatedAt?: Updatedat;
   [k: string]: unknown;
@@ -145,6 +165,21 @@ export interface Media1 {
   path: Path;
   role?: Role;
   alt?: Alt;
+  [k: string]: unknown;
+}
+/**
+ * Fields written by an AI (or another tool) that a person hasn't reviewed yet.
+ *
+ * Accepting removes this marker. Rejecting restores `previous` for each listed field
+ * (fields absent from `previous` are removed). An item whose `status` is `draft` was
+ * wholly generated, and rejecting it deletes the item.
+ */
+export interface Draft {
+  fields: Fields;
+  by?: By;
+  at?: At;
+  previous?: Previous;
+  notes?: Notes;
   [k: string]: unknown;
 }
 export interface Quiz {

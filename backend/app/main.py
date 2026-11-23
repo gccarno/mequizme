@@ -12,16 +12,20 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.api import packs, quiz, stats, study
+from app.api import ai, drafts, packs, quiz, stats, study
 from app.core.db import Database
 from app.core.ingest import ingest_dir
+from app.llm import provider
+from app.llm.jobs import JobRunner, mark_interrupted
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+_FROM_ENV = object()
 log = logging.getLogger("mequizme")
 
 
 def create_app(content_dir: Path | None = None, db_path: Path | str | None = None,
-               static_dir: Path | None = None) -> FastAPI:
+               static_dir: Path | None = None, llm=_FROM_ENV) -> FastAPI:
+    """`llm`: a provider, None to turn AI off, or omitted to pick one from the environment."""
     content_dir = Path(content_dir or os.environ.get("MEQUIZME_CONTENT", REPO_ROOT / "content"))
     db_path = db_path or os.environ.get("MEQUIZME_DB", REPO_ROOT / "data" / "mequizme.db")
     static_dir = Path(static_dir or REPO_ROOT / "frontend" / "dist")
@@ -33,12 +37,25 @@ def create_app(content_dir: Path | None = None, db_path: Path | str | None = Non
         log.info("ingested %d packs / %d items from %s", report.packs, report.items, content_dir)
         for path, err in report.errors.items():
             log.warning("invalid pack %s: %s", path, err)
+        mark_interrupted(app.state.db)
+        if app.state.llm:
+            log.info("AI tutor: %s", provider.author(app.state.llm))
+        else:
+            log.info("AI tutor off: %s", app.state.llm_reason)
         yield
+        if app.state.jobs:
+            app.state.jobs.shutdown()
 
     app = FastAPI(title="mequizme", lifespan=lifespan)
     app.state.db = Database(db_path)
     app.state.content_dir = content_dir
-    for r in (packs.router, quiz.router, stats.router, study.router):
+    if llm is _FROM_ENV:
+        llm, reason = provider.from_env()
+    else:
+        reason = "AI features are off."
+    app.state.llm, app.state.llm_reason = llm, (None if llm else reason)
+    app.state.jobs = JobRunner(app.state.db, content_dir, llm) if llm else None
+    for r in (packs.router, quiz.router, stats.router, study.router, ai.router, drafts.router):
         app.include_router(r)
 
     @app.get("/api/health")

@@ -1,15 +1,17 @@
-from pathlib import Path
-
 import pytest
 from fastapi.testclient import TestClient
 
 from app.main import create_app
+from pristine import pristine_copy
 
-CONTENT = Path(__file__).resolve().parents[2] / "content"
+
+@pytest.fixture(scope="session")
+def content(tmp_path_factory):
+    return pristine_copy(tmp_path_factory.mktemp("content"))
 
 
 @pytest.fixture
-def client(tmp_path):
-    app = create_app(content_dir=CONTENT, db_path=tmp_path / "t.db", static_dir=tmp_path / "none")
+def client(tmp_path, content):
+    app = create_app(content_dir=content, db_path=tmp_path / "t.db", static_dir=tmp_path / "none", llm=None)
     with TestClient(app) as c:
         yield c

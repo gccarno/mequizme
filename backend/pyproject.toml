@@ -10,6 +10,9 @@ dependencies = [
     "uvicorn[standard]>=0.54.0",
 ]
 
+[project.optional-dependencies]
+api = ["anthropic>=0.40"]  # only for the Anthropic API provider; Claude Code needs nothing extra
+
 [project.scripts]
 studypack = "app.cli:main"
 mequizme = "app.server:main"

@@ -3,7 +3,7 @@
 A local study tutor for certifications: flashcards, quizzes, timed exams, answer review,
 topic analytics, and (optionally) LLM-generated explanations and new questions.
 
-Status: **Phase 3 – tutor analytics.** See the full plan in `docs/plan.md`.
+Status: **Phase 4 – AI tutor.** See the full plan in `docs/plan.md`.
 
 ## Run it
 
@@ -44,15 +44,40 @@ Content is read from `content/` at startup (`MEQUIZME_CONTENT` to override). You
   confidence level; and a reading list built from the links on questions you've missed.
 - **Drills**: one click builds a practice set from your weakest topics (or one topic you pick),
   mixing in questions due for review and favouring ones you missed or haven't seen.
+- **AI tutor** (optional, see below): fills in explanations, notes on each wrong choice, doc links
+  and topics; checks answer keys; explains a specific mistake; chats about a question or topic; and
+  writes new practice questions. Everything it writes is a draft you accept, edit or reject on the
+  **AI tutor** page, and learners see which parts haven't been checked.
 - Keyboard: A–H or 1–9 to choose, G/U/S for confidence, Enter to check/continue, F to flag,
   arrows to move; Space and 1–4 for flashcards.
+
+## AI tutor
+
+Off unless a model is available. By default the app uses, in order:
+
+1. The Anthropic API, if `ANTHROPIC_API_KEY` is set (`uv sync --extra api`).
+2. **Claude Code**, if `claude` is installed and signed in. No API key needed: the server runs
+   `claude -p` headless with tools, settings, MCP servers and session history all off, from an
+   empty folder, so the model only sees the question. Usage counts against your Claude plan.
+   This is meant for you on your own machine; use an API key if other people will use the app.
+
+Settings: `MEQUIZME_LLM` = `auto` | `claude-code` | `api` | `off` | `fake` (canned answers, used
+by the e2e tests); `MEQUIZME_LLM_MODEL` (default `sonnet` for Claude Code, `claude-sonnet-5-5` for
+the API); `MEQUIZME_LLM_CONCURRENCY` (parallel calls for bulk jobs, default 3);
+`MEQUIZME_CHECK_LINKS=0` to skip checking that suggested links exist.
+
+How drafts work: AI output is written into the pack files in `content/` with a `draft` marker
+listing the fields it wrote, what they replaced, and any doubt about the answer key. Accepting
+removes the marker; rejecting restores the old values. New questions go to
+`content/<exam>/generated.json` with `status: draft` and stay out of quizzes until accepted. The
+tutor never changes an answer key; it flags doubts for you. Links that return 404 are dropped.
 
 ## Tests
 
 ```sh
 cd backend && uv run pytest                      # format, adapters, scheduler, grading, analytics, API
 cd frontend && npm test                          # unit tests
-cd frontend && npm run build && npm run e2e      # Playwright: exam, practice, flashcards, progress
+cd frontend && npm run build && npm run e2e      # Playwright: exam, practice, flashcards, progress, tutor
 ```
 
 ## Study Pack format (v2)
@@ -64,7 +89,7 @@ StudyDeck Android app (whose deck JSON is v1).
 - Models (source of truth): `backend/app/core/schema.py`
 - Generated JSON Schema: `schema/studypack.v2.schema.json`
 - Item types: `flashcard`, `cloze`, `mcq_single`, `mcq_multi`, `true_false`, `short_answer`
-- Each item can carry `explanation`, per-choice `choiceRationales`, `topics` (ids from the
+- Each item can carry `draft` (unreviewed AI-written fields, see above), `explanation`, per-choice `choiceRationales`, `topics` (ids from the
   pack's `taxonomy`, with exam weights), `tags`, `difficulty`, `resources` (links), `media`,
   and `status` (`draft` for unreviewed/LLM-generated content).
 - Ids are stable UUIDs, so items keep their identity across edits and re-imports.

@@ -81,6 +81,21 @@ class Media(_Open):
     alt: str | None = None
 
 
+class Draft(_Open):
+    """Fields written by an AI (or another tool) that a person hasn't reviewed yet.
+
+    Accepting removes this marker. Rejecting restores `previous` for each listed field
+    (fields absent from `previous` are removed). An item whose `status` is `draft` was
+    wholly generated, and rejecting it deletes the item.
+    """
+
+    fields: list[str] = Field(description="Item fields awaiting review, e.g. explanation, resources")
+    by: str | None = Field(default=None, description="Who wrote them, e.g. a model name")
+    at: datetime | None = None
+    previous: dict | None = Field(default=None, description="Values the draft replaced")
+    notes: str | None = Field(default=None, description="Concerns for the reviewer, e.g. a doubtful answer key")
+
+
 class Item(_Open):
     id: str
     type: ItemType
@@ -95,6 +110,7 @@ class Item(_Open):
     resources: list[Resource] = Field(default_factory=list)
     media: list[Media] = Field(default_factory=list)
     status: ItemStatus = ItemStatus.reviewed
+    draft: Draft | None = None
     createdAt: datetime | None = None
     updatedAt: datetime | None = None
 

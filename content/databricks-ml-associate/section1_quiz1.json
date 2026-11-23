@@ -64,15 +64,38 @@
           "B"
         ]
       },
+      "explanation": "Databricks Runtime for Machine Learning is a standard Databricks Runtime image with common ML and deep learning libraries already installed, such as scikit-learn, XGBoost, TensorFlow, PyTorch and MLflow. Databricks tests these libraries together, so the team no longer has to install them or match versions by hand. This cuts setup time and dependency conflicts. It does not change how models are trained or how well they perform.",
+      "choiceRationales": {
+        "A": "Hyperparameter tuning isn't automatic on any runtime. You have to set it up with tools such as Hyperopt, Optuna or AutoML.",
+        "C": "Experiment tracking still needs MLflow, and autologging records runs to an MLflow experiment. The runtime doesn't automatically log every run to Unity Catalog, and it doesn't remove the need to track experiments.",
+        "D": "A runtime provides libraries and environment, not accuracy guarantees. Model quality depends on the data, features and algorithm."
+      },
       "topics": [
         "databricks-ml"
       ],
       "tags": [],
-      "resources": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "Databricks Runtime for Machine Learning",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/databricks-runtime-ml",
+          "kind": "doc"
+        }
+      ],
       "media": [],
       "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:59Z"
+      },
       "createdAt": "2026-11-18T01:54:51Z",
-      "updatedAt": "2026-11-18T01:54:51Z"
+      "updatedAt": "2026-11-23T15:17:59Z"
     },
     {
       "id": "0fd15ae5-a1b7-5924-853e-647b6df179af",
@@ -101,15 +124,38 @@
           "D"
         ]
       },
+      "explanation": "Databricks AutoML follows a \"glass box\" approach. It trains and tunes several models, logs each run to MLflow, and generates an editable Python notebook with the source code for every trial. You can inspect the code, change it, and use the best trial as a quick, transparent baseline. You still need to review the results, add domain-specific work, and deploy the model yourself.",
+      "choiceRationales": {
+        "A": "AutoML doesn't deploy anything automatically. You review the results and then register and deploy the model yourself.",
+        "B": "AutoML does basic preprocessing and produces a data exploration notebook, but it doesn't replace a data scientist's judgment on exploration or domain-specific feature engineering.",
+        "C": "For classification, AutoML trains traditional ML algorithms such as scikit-learn, XGBoost, and LightGBM models. It isn't limited to deep learning."
+      },
       "topics": [
         "databricks-ml"
       ],
       "tags": [],
-      "resources": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "What is AutoML? (Databricks docs)",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/automl/",
+          "kind": "doc"
+        }
+      ],
       "media": [],
       "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:03Z"
+      },
       "createdAt": "2026-11-18T01:54:51Z",
-      "updatedAt": "2026-11-18T01:54:51Z"
+      "updatedAt": "2026-11-23T15:18:03Z"
     },
     {
       "id": "bbf1d3fe-0e64-547f-890b-bd6a04eaf607",
@@ -138,15 +184,38 @@
           "A"
         ]
       },
+      "explanation": "In Unity Catalog-enabled workspaces, any Delta table with a primary key (and optionally a timestamp key) can serve as a feature table. It lives in the metastore's three-level namespace (catalog.schema.table). Because the metastore is shared by all three workspaces, the feature tables can be reached from each one, and access is controlled centrally with UC privileges such as SELECT and USE CATALOG. Unity Catalog also captures lineage between feature tables, models, and the notebooks or jobs that use them. That gives you the sharing, discovery, access control and lineage the team needs.",
+      "choiceRationales": {
+        "B": "Workspace-level feature tables are the legacy approach, scoped to a single workspace, so they don't give cross-workspace sharing, and notebook ACLs don't govern data access or provide lineage.",
+        "C": "Databricks does not automatically replicate workspace-level feature tables to other workspaces in the account, so this describes behavior that doesn't exist.",
+        "D": "Delta Sharing is for sharing across metastores or with external organizations. Workspaces attached to the same metastore can read UC feature tables directly, given the right privileges."
+      },
       "topics": [
         "databricks-ml"
       ],
       "tags": [],
-      "resources": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Feature management in Databricks (Feature Engineering in Unity Catalog)",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/feature-store/",
+          "kind": "doc"
+        }
+      ],
       "media": [],
       "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:03Z"
+      },
       "createdAt": "2026-11-18T01:54:51Z",
-      "updatedAt": "2026-11-18T01:54:51Z"
+      "updatedAt": "2026-11-23T15:18:03Z"
     },
     {
       "id": "4e789ac0-e816-5a1b-9e64-6c051be1c240",
@@ -175,15 +244,38 @@
           "B"
         ]
       },
+      "explanation": "In Unity Catalog, any Delta table that has a primary key constraint can be used as a feature table. The primary key (which must be NOT NULL) identifies each entity, such as a customer. It lets Databricks look up and join feature values and publish them to online stores. A time series key can optionally be added for point-in-time lookups. No special registration step or catalog name is needed.",
+      "choiceRationales": {
+        "A": "register_table belongs to the legacy workspace Feature Store and is not needed for Unity Catalog tables, which count as feature tables once they have a primary key.",
+        "C": "Feature tables can live in any catalog and schema, and no catalog named feature_store is required.",
+        "D": "The table can be managed or external, and Change Data Feed is not required for a feature table, though it can help with syncing to online tables."
+      },
       "topics": [
         "databricks-ml"
       ],
       "tags": [],
-      "resources": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Databricks Feature Engineering in Unity Catalog",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/feature-store/uc/feature-tables-uc",
+          "kind": "doc"
+        }
+      ],
       "media": [],
       "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:07Z"
+      },
       "createdAt": "2026-11-18T01:54:51Z",
-      "updatedAt": "2026-11-18T01:54:51Z"
+      "updatedAt": "2026-11-23T15:18:07Z"
     },
     {
       "id": "693e7687-2b88-5452-8f03-9e5d7b66e97f",
@@ -212,15 +304,38 @@
           "C"
         ]
       },
+      "explanation": "When you log a model with FeatureEngineeringClient.log_model and pass the training set, the model is packaged with feature metadata. That metadata records which feature tables, features, and lookup keys were used in training. At inference, score_batch reads this metadata, looks up the current feature values from the feature tables using the supplied keys, joins them to the input, and then calls the model. This keeps training and serving features consistent and means callers don't have to rebuild the feature logic.",
+      "choiceRationales": {
+        "A": "Only metadata about the features is stored with the model, not the values, so the feature tables are still needed at scoring time to look up the current values.",
+        "B": "Updated feature values are picked up automatically at scoring time through the lookup, so retraining is only needed when you want the model to learn from new data, not because a table changed.",
+        "D": "Models logged this way can be scored in batch with score_batch as well as served through a real-time endpoint, so real-time serving isn't the only option."
+      },
       "topics": [
         "databricks-ml"
       ],
       "tags": [],
-      "resources": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Databricks Feature Engineering: Train models using feature tables",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/feature-store/train-models-with-feature-store",
+          "kind": "doc"
+        }
+      ],
       "media": [],
       "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:10Z"
+      },
       "createdAt": "2026-11-18T01:54:51Z",
-      "updatedAt": "2026-11-18T01:54:51Z"
+      "updatedAt": "2026-11-23T15:18:10Z"
     },
     {
       "id": "8816e30c-3e4c-5e70-a3e7-f131990826c0",
@@ -249,15 +364,38 @@
           "D"
         ]
       },
+      "explanation": "Training and batch scoring work on large volumes of data, so they use the offline feature table (a Delta table in Unity Catalog). Real-time serving needs millisecond key-based lookups, which an online store is built for. Publishing the offline table to an online store keeps one source of feature definitions and values, so training and serving use the same features and avoid training-serving skew. Databricks Feature Engineering can publish tables to an online store, and a model served with feature lookups can fetch the features automatically at inference time.",
+      "choiceRationales": {
+        "A": "Delta tables are optimized for analytical scans, not millisecond per-key lookups, so querying one on every request would be too slow and costly for a real-time endpoint.",
+        "B": "Recomputing features from raw data on every request adds heavy latency and risks logic that differs from the training pipeline, which causes training-serving skew.",
+        "C": "An online store is tuned for low-latency lookups of current values and is not suited to large-scale training reads or historical point-in-time data, so it shouldn't be the only store or the training source."
+      },
       "topics": [
         "databricks-ml"
       ],
       "tags": [],
-      "resources": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Databricks Feature Store / Feature Engineering",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/feature-store/",
+          "kind": "doc"
+        }
+      ],
       "media": [],
       "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:10Z"
+      },
       "createdAt": "2026-11-18T01:54:51Z",
-      "updatedAt": "2026-11-18T01:54:51Z"
+      "updatedAt": "2026-11-23T15:18:10Z"
     },
     {
       "id": "0c9bb962-b7ef-50b8-962e-bf7010e0b063",
@@ -286,15 +424,38 @@
           "D"
         ]
       },
+      "explanation": "`MlflowClient.search_runs` accepts a list of experiment IDs and an `order_by` list. Because RMSE is an error metric where lower is better, sorting ascending (`metrics.rmse ASC`) puts the best run first. Setting `max_results=1` then returns only that run. The result is a list of `Run` objects, so you read the best run from index 0.",
+      "choiceRationales": {
+        "A": "MLflow has no `mlflow.get_best_run` function; you have to search and sort runs yourself.",
+        "B": "Sorting `metrics.rmse DESC` puts the highest RMSE first, so it returns the worst run, not the best.",
+        "C": "`get_run` takes a run ID, not an experiment ID, and it returns one specific run's data, so it can't compare runs to find the best one."
+      },
       "topics": [
         "databricks-ml"
       ],
       "tags": [],
-      "resources": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "MLflow Tracking: Search Runs",
+          "url": "https://mlflow.org/docs/latest/ml/search/search-runs/",
+          "kind": "doc"
+        }
+      ],
       "media": [],
       "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:14Z"
+      },
       "createdAt": "2026-11-18T01:54:51Z",
-      "updatedAt": "2026-11-18T01:54:51Z"
+      "updatedAt": "2026-11-23T15:18:14Z"
     },
     {
       "id": "2bdc4420-d4a9-5455-b893-8f23dfd0796b",
@@ -323,15 +484,38 @@
           "A"
         ]
       },
+      "explanation": "`mlflow.log_metric(key, value, step=...)` records a numeric value that can change over time. The `step` argument stores each epoch's value as a point in a series, so the UI can plot a metric history such as validation RMSE. `mlflow.log_artifact(local_path)` uploads a file, such as a saved PNG, to the run's artifact store, where you can view it later. Use metrics for numbers that change over time and artifacts for files.",
+      "choiceRationales": {
+        "B": "`log_param` stores a single constant value per key, so it can't record RMSE per epoch. MLflow raises an error if you try to overwrite a param with a different value.",
+        "C": "`log_metric` takes a numeric value, not a file path, so it can't attach an image. Using `log_param` for RMSE would also lose the per-epoch history.",
+        "D": "`set_tag` stores string metadata, not a time series of metrics, and `log_metric` can't log a file, because images must go through `log_artifact`."
+      },
       "topics": [
         "databricks-ml"
       ],
       "tags": [],
-      "resources": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "MLflow Tracking",
+          "url": "https://mlflow.org/docs/latest/tracking.html",
+          "kind": "doc"
+        }
+      ],
       "media": [],
       "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:17Z"
+      },
       "createdAt": "2026-11-18T01:54:51Z",
-      "updatedAt": "2026-11-18T01:54:51Z"
+      "updatedAt": "2026-11-23T15:18:17Z"
     },
     {
       "id": "ad4ddf16-a856-5db0-abc0-3317a0df1fff",
@@ -360,15 +544,38 @@
           "C"
         ]
       },
+      "explanation": "Unity Catalog uses a three-level namespace: catalog.schema.model. When you log a model with `mlflow.sklearn.log_model(..., registered_model_name=\"prod.ml_team.iris_model\")`, MLflow registers it as a model in the `ml_team` schema of the `prod` catalog. You must also point MLflow at the Unity Catalog registry, with `mlflow.set_registry_uri(\"databricks-uc\")`. Newer Databricks runtimes may do this by default. Without a full three-level name, the registration can't resolve to a Unity Catalog location.",
+      "choiceRationales": {
+        "A": "A single-part name is the format for the legacy workspace model registry, and it has no catalog or schema, so Unity Catalog can't place the model.",
+        "B": "A two-part name specifies only a schema and model. Unity Catalog needs the catalog as well, so this is incomplete.",
+        "D": "A workspace-style file path isn't a valid registered model name. Models in Unity Catalog are securable objects in the catalog.schema.model namespace, not workspace files."
+      },
       "topics": [
         "databricks-ml"
       ],
       "tags": [],
-      "resources": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Manage model lifecycle in Unity Catalog (Databricks docs)",
+          "url": "https://docs.databricks.com/en/machine-learning/manage-model-lifecycle/index.html",
+          "kind": "doc"
+        }
+      ],
       "media": [],
       "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:17Z"
+      },
       "createdAt": "2026-11-18T01:54:51Z",
-      "updatedAt": "2026-11-18T01:54:51Z"
+      "updatedAt": "2026-11-23T15:18:17Z"
     },
     {
       "id": "a0abbea1-23e6-5fe2-afb9-36ed12842842",
@@ -397,15 +604,43 @@
           "B"
         ]
       },
+      "explanation": "In Unity Catalog, model aliases are mutable, named pointers to a specific model version. Inference code that loads `models:/prod.ml.fraud@Champion` resolves the alias at load time. Calling `set_registered_model_alias(\"prod.ml.fraud\", \"Champion\", 7)` reassigns the alias from the old version to version 7. An alias can point to only one version at a time, so the old champion loses it automatically. No inference code changes are needed.",
+      "choiceRationales": {
+        "A": "Stage transitions (Staging/Production) are the legacy workspace registry workflow and aren't supported for Unity Catalog models, and they wouldn't affect the `@Champion` alias anyway.",
+        "C": "A model version tag is only metadata and doesn't change what `models:/...@Champion` resolves to, so inference would keep loading the old version.",
+        "D": "Registering a separate model and editing inference code defeats the goal of promoting without code changes and fragments version lineage."
+      },
       "topics": [
         "databricks-ml"
       ],
       "tags": [],
-      "resources": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Manage model lifecycle in Unity Catalog (Databricks)",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/manage-model-lifecycle/",
+          "kind": "doc"
+        },
+        {
+          "title": "MLflow Model Registry",
+          "url": "https://mlflow.org/docs/latest/model-registry.html",
+          "kind": "doc"
+        }
+      ],
       "media": [],
       "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:23Z"
+      },
       "createdAt": "2026-11-18T01:54:51Z",
-      "updatedAt": "2026-11-18T01:54:51Z"
+      "updatedAt": "2026-11-23T15:18:23Z"
     }
   ],
   "quizzes": [
@@ -430,5 +665,5 @@
     }
   ],
   "createdAt": "2026-11-18T01:54:51Z",
-  "updatedAt": "2026-11-18T01:54:51Z"
+  "updatedAt": "2026-11-23T15:18:23Z"
 }

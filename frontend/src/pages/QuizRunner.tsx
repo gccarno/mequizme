@@ -5,6 +5,7 @@ import { api, type Attempt, type AttemptEntry, type Confidence, type ResponseIn 
 import { Bubbles, marksFor } from "../components/Bubbles";
 import { CONFIDENCE_KEYS, ConfidencePicker } from "../components/Confidence";
 import { Feedback } from "../components/Feedback";
+import { TutorHelp } from "../components/Tutor";
 import { Markdown } from "../components/Markdown";
 import { Timer } from "../components/Timer";
 
@@ -233,7 +234,11 @@ function Runner({ attempt }: { attempt: Attempt }) {
                 />
               )}
               <ConfidencePicker value={confidence} onChange={rate} disabled={revealed} />
-              {revealed && !isExam && <Feedback item={item} correct={entry.response?.correct ?? false} />}
+              {revealed && !isExam && (
+                <Feedback item={item} correct={entry.response?.correct ?? false}>
+                  <TutorHelp key={item.id} attemptId={attempt.id} item={item} response={entry.response} />
+                </Feedback>
+              )}
             </>
           )}
 

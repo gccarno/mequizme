@@ -1,6 +1,6 @@
-import type { Item, Topic } from "./types/studypack";
+import type { Draft, Item, Resource, Topic } from "./types/studypack";
 
-export type { Item, Topic };
+export type { Draft, Item, Resource, Topic };
 
 export interface PackSummary {
   id: string;
@@ -145,6 +145,45 @@ export interface ExamStats {
   dueCount: number;
 }
 
+export type AiStatus =
+  | { available: false; reason: string }
+  | { available: true; provider: "claude-code" | "api"; model: string; label: string };
+
+export interface AiJob {
+  id: string;
+  kind: "enrich" | "generate";
+  params: { exam?: string; packId?: string; topic?: string; count?: number; focus?: string };
+  status: "queued" | "running" | "done" | "failed" | "cancelled" | "interrupted";
+  total: number;
+  done: number;
+  changed: number;
+  errors: string[];
+  createdAt: string;
+  finishedAt: string | null;
+}
+
+export type DraftItem = Item & { packId: string; packName: string; exam: string | null };
+
+export interface DraftEdits {
+  explanation?: string;
+  choiceRationales?: Record<string, string>;
+  resources?: { title: string; url: string; kind?: string }[];
+  topics?: string[];
+  difficulty?: number;
+}
+
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export interface ChatContext {
+  attemptId?: string;
+  itemId?: string;
+  exam?: string;
+  topic?: string;
+}
+
 export class ApiError extends Error {
   constructor(public status: number, message: string) {
     super(message);
@@ -198,6 +237,30 @@ export const api = {
       body: JSON.stringify({ itemId, rating, durationMs }),
     }),
   examStats: (exam: string) => request<ExamStats>(`/api/stats/exams/${encodeURIComponent(exam)}`),
+  aiStatus: () => request<AiStatus>("/api/ai/status"),
+  enrichPreview: (params: { exam?: string; packId?: string }) =>
+    request<{ count: number }>(`/api/ai/enrich/preview${qs(params)}`),
+  startEnrich: (body: { exam?: string; packId?: string; itemIds?: string[] }) =>
+    request<AiJob>("/api/ai/enrich", { method: "POST", body: JSON.stringify(body) }),
+  startGenerate: (body: { exam: string; topic: string; count: number; focus?: string }) =>
+    request<AiJob>("/api/ai/generate", { method: "POST", body: JSON.stringify(body) }),
+  jobs: () => request<AiJob[]>("/api/ai/jobs"),
+  job: (id: string) => request<AiJob>(`/api/ai/jobs/${id}`),
+  cancelJob: (id: string) => request<AiJob>(`/api/ai/jobs/${id}/cancel`, { method: "POST" }),
+  explainMistake: (attemptId: string, itemId: string, refresh = false) =>
+    request<{ text: string; by: string; cached: boolean }>("/api/ai/explain", {
+      method: "POST",
+      body: JSON.stringify({ attemptId, itemId, refresh }),
+    }),
+  chat: (messages: ChatMessage[], context: ChatContext) =>
+    request<{ reply: string }>("/api/ai/chat", { method: "POST", body: JSON.stringify({ messages, ...context }) }),
+  drafts: (exam?: string) =>
+    request<{ items: DraftItem[]; topicNames: Record<string, string> }>(`/api/drafts${qs({ exam })}`),
+  draftCount: () => request<{ count: number }>("/api/drafts/count"),
+  acceptDraft: (itemId: string, edits?: DraftEdits) =>
+    request<Item>(`/api/items/${itemId}/accept`, { method: "POST", body: JSON.stringify(edits ?? {}) }),
+  rejectDraft: (itemId: string) =>
+    request<{ deleted: boolean; item: Item | null }>(`/api/items/${itemId}/reject`, { method: "POST" }),
   dueQuestions: (params: { packId?: string; exam?: string }) =>
     request<{ count: number; itemIds: string[] }>(`/api/study/due-questions${qs(params)}`),
 };

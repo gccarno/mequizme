@@ -68,6 +68,78 @@
       "title": "Choice",
       "type": "object"
     },
+    "Draft": {
+      "additionalProperties": true,
+      "description": "Fields written by an AI (or another tool) that a person hasn't reviewed yet.\n\nAccepting removes this marker. Rejecting restores `previous` for each listed field\n(fields absent from `previous` are removed). An item whose `status` is `draft` was\nwholly generated, and rejecting it deletes the item.",
+      "properties": {
+        "fields": {
+          "description": "Item fields awaiting review, e.g. explanation, resources",
+          "items": {
+            "type": "string"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Who wrote them, e.g. a model name",
+          "title": "By"
+        },
+        "at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "At"
+        },
+        "previous": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Values the draft replaced",
+          "title": "Previous"
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Concerns for the reviewer, e.g. a doubtful answer key",
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "fields"
+      ],
+      "title": "Draft",
+      "type": "object"
+    },
     "Item": {
       "additionalProperties": true,
       "properties": {
@@ -174,6 +246,17 @@
         "status": {
           "$ref": "#/$defs/ItemStatus",
           "default": "reviewed"
+        },
+        "draft": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         },
         "createdAt": {
           "anyOf": [

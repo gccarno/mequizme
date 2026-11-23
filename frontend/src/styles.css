@@ -15,6 +15,8 @@
   --miss-soft: #f6e0db;
   --flag: #a86b12;
   --pencil: #3a3f47;     /* filled bubble */
+  --tutor: #6a4c9c;      /* the AI tutor's ink: margin notes, drafts */
+  --tutor-soft: #ebe5f4;
 
   --font: "Atkinson Hyperlegible", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, monospace;
@@ -46,6 +48,8 @@
     --miss-soft: #43241e;
     --flag: #e0a84a;
     --pencil: #d9dde3;
+    --tutor: #bba6e6;
+    --tutor-soft: #2c2540;
     color-scheme: dark;
   }
 }
@@ -370,4 +374,95 @@ pre code { background: none; padding: 0; }
   .topic-table th, .topic-table td { padding: 0.5rem 0.3rem; }
   .mastery { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
   .mastery-bar { width: 5.5rem; }
+}
+
+/* --- AI tutor: written in the tutor's ink, like margin notes on the answer sheet ------------- */
+.top nav a { display: inline-flex; align-items: baseline; gap: 0.35rem; }
+.nav-count {
+  font-size: 0.72rem; font-weight: 700; line-height: 1; color: var(--sheet); background: var(--tutor);
+  border-radius: 99px; padding: 0.2rem 0.45rem; font-variant-numeric: tabular-nums;
+}
+.tab .nav-count { margin-left: 0.4rem; }
+.draft-note { margin-top: 0.75rem; font-size: var(--t-sm); color: var(--tutor); }
+.draft-note p { margin: 0 0 0.25rem; }
+.draft-doubt {
+  font-size: var(--t-sm); color: var(--ink); background: color-mix(in srgb, var(--flag) 16%, transparent);
+  border-left: 3px solid var(--flag); padding: 0.4rem 0.7rem; border-radius: 0 var(--radius) var(--radius) 0;
+}
+.tutor { margin-top: 1rem; }
+.tutor-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.tutor-actions .btn.quiet { color: var(--tutor); padding-left: 0.25rem; }
+.tutor-note, .chat-msg.is-assistant {
+  border-left: 2px dashed var(--tutor); padding: 0.1rem 0 0.1rem 0.9rem; margin-top: 0.75rem;
+}
+.tutor-by { font-size: var(--t-sm); color: var(--tutor); margin: 0.5rem 0 0; }
+.tutor-by .link { color: inherit; }
+.chat { margin-top: 1rem; }
+.chat-log { list-style: none; margin: 0 0 0.75rem; padding: 0; display: grid; gap: 0.5rem; }
+.chat-msg { margin: 0; }
+.chat-msg.is-user { padding-left: 0.9rem; border-left: 2px solid var(--rule); }
+.chat-msg p:last-child, .chat-msg .md p:last-child { margin-bottom: 0; }
+.chat-who { display: block; font-size: var(--t-sm); font-weight: 700; color: var(--graphite); }
+.chat-msg.is-assistant .chat-who { color: var(--tutor); }
+.chat-form textarea, .tool input, .tool select, .draft-card textarea, .draft-card input, .draft-card select {
+  width: 100%; font: inherit; color: var(--ink); background: var(--paper);
+  border: 1px solid var(--rule); border-radius: var(--radius); padding: 0.45rem 0.6rem; font-weight: 400;
+}
+.chat-form textarea { resize: vertical; }
+.chat-buttons { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+
+.drafts .lede { max-width: var(--measure); color: var(--graphite); margin-bottom: 1.5rem; }
+.notice { max-width: var(--measure); padding: 0.75rem 1rem; background: var(--sheet); border-left: 3px solid var(--rule); }
+.tools {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 1.5rem 2.5rem;
+  padding-bottom: 2rem; margin-bottom: 2rem; border-bottom: 2px solid var(--ink);
+}
+.tool h2 { font-size: var(--t-md); }
+.tool p { max-width: 52ch; }
+.tool-fields { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.9rem; }
+.tool-fields label .muted { font-weight: 400; }
+.tool-fields label { display: grid; gap: 0.25rem; font-size: var(--t-sm); font-weight: 700; min-width: 7rem; }
+.tool-fields label.grow { flex: 1 1 14rem; }
+.jobs { grid-column: 1 / -1; list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; font-size: var(--t-sm); }
+.job { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; color: var(--tutor); }
+.job.is-failed, .job.is-interrupted { color: var(--miss); }
+.job progress { width: 12rem; accent-color: var(--tutor); }
+.job details { flex-basis: 100%; color: var(--graphite); }
+
+.draft-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+.seg { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+.seg .btn[aria-pressed="true"] { color: var(--ink); background: var(--sheet); border-color: var(--rule); }
+.confirm-inline { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: var(--t-sm); }
+.draft-list { list-style: none; margin: 0; padding: 0; }
+.draft-card {
+  max-width: var(--measure); background: var(--sheet); border: 1px solid var(--rule); border-radius: var(--radius);
+  padding: 1.25rem 1.5rem; margin-bottom: 1.25rem;
+}
+.draft-card, .bubble-text, .chat-msg { overflow-wrap: anywhere; min-width: 0; }
+.draft-card .question-meta { margin-bottom: 0.25rem; }
+.draft-what { font-size: var(--t-sm); color: var(--tutor); font-weight: 700; }
+.draft-what .muted { font-weight: 400; }
+.draft-choices { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: 0.6rem; }
+.draft-choices li { display: grid; grid-template-columns: 1.9rem minmax(0, 1fr); gap: 0.6rem; align-items: start; }
+.draft-choices .md p { margin: 0; }
+.draft-letter {
+  width: 1.7rem; height: 1.7rem; border-radius: 50%; border: 1.5px solid var(--rule);
+  display: grid; place-items: center; font-size: var(--t-sm); font-weight: 700; color: var(--graphite);
+}
+.draft-choices li.is-right .draft-letter { background: var(--correct); border-color: var(--correct); color: var(--sheet); }
+.draft-key { font-size: var(--t-sm); font-weight: 700; color: var(--correct); margin: 0.15rem 0 0; }
+.rationale.is-ai, .draft-explanation.is-ai, .resources.is-ai { border-left: 2px dashed var(--tutor); padding-left: 0.75rem; }
+.draft-explanation { margin-top: 0.5rem; }
+.draft-label { font-weight: 700; font-size: var(--t-sm); margin-bottom: 0.25rem; }
+.url { font-size: var(--t-sm); }
+.draft-edit { display: grid; gap: 1rem; }
+.field { display: grid; gap: 0.3rem; font-size: var(--t-sm); font-weight: 700; border: 0; padding: 0; margin: 0.35rem 0 0; }
+.field legend { padding: 0; margin-bottom: 0.3rem; }
+.field textarea { font-weight: 400; resize: vertical; }
+.link-row { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 0.5rem; margin-bottom: 0.4rem; }
+.draft-card input[aria-invalid="true"] { border-color: var(--miss); }
+@media (max-width: 40rem) {
+  .link-row { grid-template-columns: 1fr; }
+  .draft-card { padding: 1rem; }
+  .top { gap: 1rem; flex-wrap: wrap; }
 }

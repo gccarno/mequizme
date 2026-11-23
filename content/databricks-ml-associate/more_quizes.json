@@ -1,0 +1,772 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "55688cc7-3527-59f5-b3c9-ed01bb251f9b",
+  "name": "Mixed Practice Exam 1",
+  "description": "Mixed practice exam: 20 questions\n\nThe mix follows the real section weights: about 8 on Databricks ML, 4 on data processing, 6 on model development, and 2 on deployment. The questions are shuffled and don’t repeat the earlier quizzes. They lean on the objectives we skipped, such as MLOps practices, the MLflow UI, outliers, and algorithm selection. Pick one answer each.",
+  "source": {
+    "kind": "import",
+    "ref": "more_quizes.md",
+    "format": "markdown-quiz"
+  },
+  "taxonomy": {
+    "exam": "databricks-ml-associate",
+    "topics": [
+      {
+        "id": "databricks-ml",
+        "name": "Databricks Machine Learning",
+        "weight": 0.38
+      },
+      {
+        "id": "data-processing",
+        "name": "Data Processing",
+        "weight": 0.19
+      },
+      {
+        "id": "model-development",
+        "name": "Model Development",
+        "weight": 0.31
+      },
+      {
+        "id": "model-deployment",
+        "name": "Model Deployment",
+        "weight": 0.12
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "e8f5d807-2d8b-5dd8-a941-ca32ea259c22",
+      "type": "mcq_single",
+      "prompt": "A column has a mean of 50 and a standard deviation of 10. Which range keeps the rows left after removing values more than 3 standard deviations from the mean?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "40 to 60"
+        },
+        {
+          "id": "B",
+          "text": "20 to 80"
+        },
+        {
+          "id": "C",
+          "text": "30 to 70"
+        },
+        {
+          "id": "D",
+          "text": "0 to 100"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "c35b135e-e964-54ac-8e17-713fb22bcb78",
+      "type": "mcq_single",
+      "prompt": "Why does Databricks recommend, in most situations, promoting code rather than models between environments?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Model artifacts cannot be copied between catalogs"
+        },
+        {
+          "id": "B",
+          "text": "Code promotion removes the need for a model registry"
+        },
+        {
+          "id": "C",
+          "text": "All code goes through the same review and integration testing, and the production model is trained on production code"
+        },
+        {
+          "id": "D",
+          "text": "Retraining in production is always cheaper than copying a model"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "eb520d74-493e-5fe1-92e1-ebf3ef46fff8",
+      "type": "mcq_single",
+      "prompt": "A Spark ML pipeline has the stages StringIndexer, OneHotEncoder, VectorAssembler, and LogisticRegression. What does pipeline.fit(train_df) return?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "A PipelineModel whose stages are fitted transformers"
+        },
+        {
+          "id": "B",
+          "text": "The same Pipeline object, unchanged"
+        },
+        {
+          "id": "C",
+          "text": "Only a LogisticRegressionModel"
+        },
+        {
+          "id": "D",
+          "text": "A DataFrame of predictions"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "076c72f8-db3b-5c62-b0d8-0d31dcb66aac",
+      "type": "mcq_single",
+      "prompt": "A Unity Catalog feature table holds features for 1 million customers. A job has fresh values for only 10,000 of them. How should the table be updated?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Call fe.create_table(...) again"
+        },
+        {
+          "id": "B",
+          "text": "Call fe.write_table(..., mode=\"overwrite\")"
+        },
+        {
+          "id": "C",
+          "text": "Drop the table and recreate it with SQL"
+        },
+        {
+          "id": "D",
+          "text": "Call fe.write_table(name=..., df=updates_df, mode=\"merge\")"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "0759f584-fd5e-51aa-ab4f-b275ef3738b6",
+      "type": "mcq_single",
+      "prompt": "Which option invokes a model serving endpoint directly from SQL?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "serving_call()"
+        },
+        {
+          "id": "B",
+          "text": "ai_query"
+        },
+        {
+          "id": "C",
+          "text": "mlflow_predict()"
+        },
+        {
+          "id": "D",
+          "text": "ENDPOINT() as a table function"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "973899bd-6d77-57f0-aaad-b9689aa6f2cb",
+      "type": "mcq_single",
+      "prompt": "Which classification metric does not depend on a chosen decision threshold?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "F1 score"
+        },
+        {
+          "id": "B",
+          "text": "Precision"
+        },
+        {
+          "id": "C",
+          "text": "Recall"
+        },
+        {
+          "id": "D",
+          "text": "ROC AUC"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "749ec5ae-eb19-59d8-8927-564d37971c45",
+      "type": "mcq_single",
+      "prompt": "Which is a benefit of registering a model in the Unity Catalog registry rather than the workspace registry?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Models are governed securables with Unity Catalog access control, usable from any workspace attached to the same metastore"
+        },
+        {
+          "id": "B",
+          "text": "Models support fixed Staging and Production stages natively"
+        },
+        {
+          "id": "C",
+          "text": "Registered models are deployed to a serving endpoint automatically"
+        },
+        {
+          "id": "D",
+          "text": "Models can be registered without a three-level name"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "7306f379-29cc-52ae-be6d-c52593efcd9e",
+      "type": "mcq_single",
+      "prompt": "Why is one-hot encoding preferred over integer category indices for a nominal feature in a linear regression?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Integer indices use more memory"
+        },
+        {
+          "id": "B",
+          "text": "Linear models cannot accept numeric inputs"
+        },
+        {
+          "id": "C",
+          "text": "Integer indices imply an order and magnitude between categories that does not exist"
+        },
+        {
+          "id": "D",
+          "text": "One-hot encoding reduces the number of features"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "5e56ca99-8a8f-5ef6-85ba-83d8d326b5a9",
+      "type": "mcq_single",
+      "prompt": "Training a large deep neural network is very expensive and hard to reproduce. All work happens in a single workspace, with no external repos or CI/CD. Which promotion approach fits best?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Promote the code and retrain in every environment"
+        },
+        {
+          "id": "B",
+          "text": "Promote the trained model artifact through the environments"
+        },
+        {
+          "id": "C",
+          "text": "Retrain weekly in each environment"
+        },
+        {
+          "id": "D",
+          "text": "Neither approach works without CI/CD"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "35a6d03f-6dfa-5398-8a07-e7c186054590",
+      "type": "mcq_single",
+      "prompt": "A data scientist must predict next month’s dollar spend per customer from labeled history. Which approach fits?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "k-means clustering"
+        },
+        {
+          "id": "B",
+          "text": "A logistic regression classifier"
+        },
+        {
+          "id": "C",
+          "text": "A regression model, such as linear regression or a gradient-boosted trees regressor"
+        },
+        {
+          "id": "D",
+          "text": "PCA"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "ec7174a3-7eaa-5350-b2cb-1970df399727",
+      "type": "mcq_single",
+      "prompt": "A data scientist wants to compare hyperparameters and validation metrics across 20 runs in the MLflow UI. What is the best approach?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Open each run and copy the values into a spreadsheet"
+        },
+        {
+          "id": "B",
+          "text": "Export the data through the REST API only"
+        },
+        {
+          "id": "C",
+          "text": "Compare is not possible, because the UI shows one run at a time"
+        },
+        {
+          "id": "D",
+          "text": "Select the runs in the experiment’s runs table and open the comparison view"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "b0980093-cad6-5f2e-9384-1f2ed6d995ec",
+      "type": "mcq_single",
+      "prompt": "Which is an advantage of random search over grid search for tuning many hyperparameters under a fixed budget?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "It often finds comparably good settings in fewer trials, since grid cost multiplies with each added hyperparameter"
+        },
+        {
+          "id": "B",
+          "text": "It guarantees the global optimum"
+        },
+        {
+          "id": "C",
+          "text": "It needs no hyperparameter ranges"
+        },
+        {
+          "id": "D",
+          "text": "It is deterministic and never repeats a setting"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "9f150ad7-753c-56a8-afef-f5ed5426c118",
+      "type": "mcq_single",
+      "prompt": "What does a Databricks AutoML classification experiment provide when it completes?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "A fully deployed production endpoint"
+        },
+        {
+          "id": "B",
+          "text": "A data exploration notebook plus source-code notebooks for the trials"
+        },
+        {
+          "id": "C",
+          "text": "Only a leaderboard CSV file"
+        },
+        {
+          "id": "D",
+          "text": "A Docker image of the best model"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "9b32a544-8e50-511d-a76a-c2b709f72e96",
+      "type": "mcq_single",
+      "prompt": "Which approach is most appropriate to examine the relationship between two continuous features?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "A contingency table with a chi-square test"
+        },
+        {
+          "id": "B",
+          "text": "A bar chart of category counts"
+        },
+        {
+          "id": "C",
+          "text": "A pie chart of each feature"
+        },
+        {
+          "id": "D",
+          "text": "A scatter plot with a correlation coefficient"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "6db1ecd8-89d3-5dc9-95b8-7d44a3367f0d",
+      "type": "mcq_single",
+      "prompt": "After training in the production catalog, a new model version passes validation checks. What is the recommended next step?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Overwrite the Champion alias immediately, with no comparison"
+        },
+        {
+          "id": "B",
+          "text": "Delete the old version"
+        },
+        {
+          "id": "C",
+          "text": "Assign the Challenger alias, compare against Champion, and move the Champion alias if it is better"
+        },
+        {
+          "id": "D",
+          "text": "Transition the version to a Production stage"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "2b39aa44-38b8-5762-a664-4f35401594e9",
+      "type": "mcq_single",
+      "prompt": "What is a benefit of k-fold cross-validation over a single train-validation split?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Every row is used for validation exactly once, giving a more reliable estimate"
+        },
+        {
+          "id": "B",
+          "text": "It lowers training cost"
+        },
+        {
+          "id": "C",
+          "text": "It removes the need for a test set"
+        },
+        {
+          "id": "D",
+          "text": "It guarantees no overfitting"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "3ebd7430-a4d3-54aa-85b0-9b1764bb5032",
+      "type": "mcq_single",
+      "prompt": "Which Spark ML approach correctly fills missing values in a numeric income column with its median?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Imputer(strategy=\"mode\") on a string column payment_method"
+        },
+        {
+          "id": "B",
+          "text": "StringIndexer on income"
+        },
+        {
+          "id": "C",
+          "text": "OneHotEncoder on income"
+        },
+        {
+          "id": "D",
+          "text": "Imputer(strategy=\"median\", inputCols=[\"income\"], outputCols=[\"income_imp\"])"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "98045641-5043-59b2-a477-fb2d08bc7d8f",
+      "type": "mcq_single",
+      "prompt": "Which call removes the tag validation_status from version 4 of the Unity Catalog model prod.ml.fraud?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "client.set_registered_model_alias(\"prod.ml.fraud\", \"validation_status\", 4)"
+        },
+        {
+          "id": "B",
+          "text": "client.delete_model_version_tag(\"prod.ml.fraud\", 4, \"validation_status\")"
+        },
+        {
+          "id": "C",
+          "text": "client.remove_tag(\"prod.ml.fraud\", 4)"
+        },
+        {
+          "id": "D",
+          "text": "client.delete_registered_model_alias(\"prod.ml.fraud\", \"validation_status\")"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "dfc394c2-98e8-5fd4-bd94-051a1c0bb719",
+      "type": "mcq_single",
+      "prompt": "Which request key sends tensor-based input in columnar format to a serving endpoint?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "dataframe_records"
+        },
+        {
+          "id": "B",
+          "text": "instances"
+        },
+        {
+          "id": "C",
+          "text": "inputs"
+        },
+        {
+          "id": "D",
+          "text": "dataframe_split"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    },
+    {
+      "id": "e18969e4-315a-5915-a909-75ecb8780e41",
+      "type": "mcq_single",
+      "prompt": "As the maximum depth of a decision tree increases from 1 to 30, what typically happens?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Bias increases and variance decreases"
+        },
+        {
+          "id": "B",
+          "text": "Bias decreases and variance increases"
+        },
+        {
+          "id": "C",
+          "text": "Both bias and variance decrease"
+        },
+        {
+          "id": "D",
+          "text": "Both bias and variance increase"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-22T01:59:26Z"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "ee5583ae-8cf3-59fd-b17a-d5de45e81dcb",
+      "name": "Mixed Practice Exam 1",
+      "itemIds": [
+        "e8f5d807-2d8b-5dd8-a941-ca32ea259c22",
+        "c35b135e-e964-54ac-8e17-713fb22bcb78",
+        "eb520d74-493e-5fe1-92e1-ebf3ef46fff8",
+        "076c72f8-db3b-5c62-b0d8-0d31dcb66aac",
+        "0759f584-fd5e-51aa-ab4f-b275ef3738b6",
+        "973899bd-6d77-57f0-aaad-b9689aa6f2cb",
+        "749ec5ae-eb19-59d8-8927-564d37971c45",
+        "7306f379-29cc-52ae-be6d-c52593efcd9e",
+        "5e56ca99-8a8f-5ef6-85ba-83d8d326b5a9",
+        "35a6d03f-6dfa-5398-8a07-e7c186054590",
+        "ec7174a3-7eaa-5350-b2cb-1970df399727",
+        "b0980093-cad6-5f2e-9384-1f2ed6d995ec",
+        "9f150ad7-753c-56a8-afef-f5ed5426c118",
+        "9b32a544-8e50-511d-a76a-c2b709f72e96",
+        "6db1ecd8-89d3-5dc9-95b8-7d44a3367f0d",
+        "2b39aa44-38b8-5762-a664-4f35401594e9",
+        "3ebd7430-a4d3-54aa-85b0-9b1764bb5032",
+        "98045641-5043-59b2-a477-fb2d08bc7d8f",
+        "dfc394c2-98e8-5fd4-bd94-051a1c0bb719",
+        "e18969e4-315a-5915-a909-75ecb8780e41"
+      ],
+      "timeLimitSec": 2400,
+      "shuffle": false,
+      "shuffleChoices": false
+    }
+  ],
+  "createdAt": "2026-11-22T01:59:26Z",
+  "updatedAt": "2026-11-22T01:59:26Z"
+}

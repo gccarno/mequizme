@@ -1,0 +1,432 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "cab847a4-7680-518b-83c9-fc30e4f4fa63",
+  "name": "Section 3 Quiz 1: Model Development",
+  "description": "Quiz me with 10 multiple-choice questions on Section 3: Model Development , in the style of an actual Databricks certification exam. Don't show answers until I respond.\n\nPick one answer per question.",
+  "source": {
+    "kind": "import",
+    "ref": "section3_quiz1.md",
+    "format": "markdown-quiz"
+  },
+  "taxonomy": {
+    "exam": "databricks-ml-associate",
+    "topics": [
+      {
+        "id": "databricks-ml",
+        "name": "Databricks Machine Learning",
+        "weight": 0.38
+      },
+      {
+        "id": "data-processing",
+        "name": "Data Processing",
+        "weight": 0.19
+      },
+      {
+        "id": "model-development",
+        "name": "Model Development",
+        "weight": 0.31
+      },
+      {
+        "id": "model-deployment",
+        "name": "Model Deployment",
+        "weight": 0.12
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "dcee97f6-7489-5e78-8fc1-56b0e15af04e",
+      "type": "mcq_single",
+      "prompt": "A Spark ML CrossValidator uses a ParamGridBuilder with 3 values for regParam and 4 values for maxIter, and numFolds=5. How many models are trained during the search itself, before the final refit of the best model on the full training set?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "12"
+        },
+        {
+          "id": "B",
+          "text": "20"
+        },
+        {
+          "id": "C",
+          "text": "60"
+        },
+        {
+          "id": "D",
+          "text": "61"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-20T01:48:54Z"
+    },
+    {
+      "id": "378e445d-5c86-5285-9df2-7d4b2b262137",
+      "type": "mcq_single",
+      "prompt": "Which statement about estimators and transformers in Spark ML is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "VectorAssembler is an estimator, because it must learn column ranges from the data"
+        },
+        {
+          "id": "B",
+          "text": "StringIndexer is an estimator. Calling fit() learns the label-to-index mapping and returns a StringIndexerModel, which is a transformer"
+        },
+        {
+          "id": "C",
+          "text": "LogisticRegression is a transformer, and calling transform() on raw data trains it"
+        },
+        {
+          "id": "D",
+          "text": "A fitted StringIndexerModel is an estimator, because it can be refit with fit()"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-20T01:48:54Z"
+    },
+    {
+      "id": "fcd77d6a-2366-52a2-ab7d-38446abca263",
+      "type": "mcq_single",
+      "prompt": "What is a downside of k-fold cross-validation compared with a single train-validation split?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "It leaks validation rows into the training set in every fold"
+        },
+        {
+          "id": "B",
+          "text": "It cannot be combined with hyperparameter search"
+        },
+        {
+          "id": "C",
+          "text": "It gives a less reliable performance estimate than one split"
+        },
+        {
+          "id": "D",
+          "text": "Training cost grows roughly k-fold, because the model is fit k times per hyperparameter combination"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-20T01:48:54Z"
+    },
+    {
+      "id": "85aa71ac-4649-5dfc-bc6a-c4ea5b549dd8",
+      "type": "mcq_single",
+      "prompt": "A fraud dataset is 98% non-fraud. Which approach to mitigating the class imbalance is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Oversample the minority class or undersample the majority class, applied to the training set only"
+        },
+        {
+          "id": "B",
+          "text": "Resample the entire dataset before splitting it into train and test sets"
+        },
+        {
+          "id": "C",
+          "text": "Drop all minority-class rows so the model learns the dominant pattern"
+        },
+        {
+          "id": "D",
+          "text": "Evaluate with accuracy, since it reflects overall correctness"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-20T01:48:54Z"
+    },
+    {
+      "id": "6ec21de3-1caa-5e04-8974-87d81c603ba7",
+      "type": "mcq_single",
+      "prompt": "For the fraud dataset in question 4, which metric is the least appropriate as the only model-selection metric?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Recall"
+        },
+        {
+          "id": "B",
+          "text": "Accuracy"
+        },
+        {
+          "id": "C",
+          "text": "Area under the precision-recall curve"
+        },
+        {
+          "id": "D",
+          "text": "F1 score"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-20T01:48:54Z"
+    },
+    {
+      "id": "077ab62f-489f-55a9-8b5a-6e30e2b73f51",
+      "type": "mcq_single",
+      "prompt": "A data scientist builds a regression model where large prediction errors are disproportionately costly. Which metric best reflects this?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Log loss"
+        },
+        {
+          "id": "B",
+          "text": "ROC AUC"
+        },
+        {
+          "id": "C",
+          "text": "RMSE"
+        },
+        {
+          "id": "D",
+          "text": "MAE"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-20T01:48:54Z"
+    },
+    {
+      "id": "728a877d-1f7e-544f-9f00-29b86af91da1",
+      "type": "mcq_single",
+      "prompt": "A model is trained to predict ln(price). The validation RMSE, computed directly on predicted and actual log values, is 0.21. Stakeholders want the error in dollars. What should the data scientist do?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Report 0.21 as the error in dollars"
+        },
+        {
+          "id": "B",
+          "text": "Compute RMSE on the log values, then take exp(0.21) and report it as dollars"
+        },
+        {
+          "id": "C",
+          "text": "Take the log of the predictions again before computing RMSE"
+        },
+        {
+          "id": "D",
+          "text": "Exponentiate both the predictions and the actual values back to the original scale, then recompute RMSE"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-20T01:48:54Z"
+    },
+    {
+      "id": "337aa8cd-2792-5552-91bc-4f00347a81bc",
+      "type": "mcq_single",
+      "prompt": "A model reaches 99% training accuracy but only 72% validation accuracy. Which diagnosis and fix is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "High variance (overfitting): reduce model complexity, add regularization, or add training data"
+        },
+        {
+          "id": "B",
+          "text": "High bias (underfitting): use a more complex model"
+        },
+        {
+          "id": "C",
+          "text": "High bias: remove features"
+        },
+        {
+          "id": "D",
+          "text": "The model is well fit: deploy it"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-20T01:48:54Z"
+    },
+    {
+      "id": "f2f505fe-2897-537c-a5c2-c04431735dbc",
+      "type": "mcq_single",
+      "prompt": "Which approach chooses each new set of hyperparameters using the results of previous trials, in the style of Bayesian optimization?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "fmin(objective, space, algo=rand.suggest, max_evals=32)"
+        },
+        {
+          "id": "B",
+          "text": "fmin(objective, space, algo=tpe.suggest, max_evals=32)"
+        },
+        {
+          "id": "C",
+          "text": "scikit-learn GridSearchCV, which tries every combination"
+        },
+        {
+          "id": "D",
+          "text": "ParamGridBuilder with CrossValidator"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-20T01:48:54Z"
+    },
+    {
+      "id": "dc35b5ed-1d51-5217-9f65-ccf02c98442b",
+      "type": "mcq_single",
+      "prompt": "A data scientist is tuning a scikit-learn random forest on a Databricks cluster and wants many Hyperopt trials to run in parallel across the workers. Which setup is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Pass Trials() to fmin, which runs trials in parallel on the workers"
+        },
+        {
+          "id": "B",
+          "text": "Use SparkTrials, which is only for Spark ML models"
+        },
+        {
+          "id": "C",
+          "text": "Pass SparkTrials(parallelism=8) to fmin"
+        },
+        {
+          "id": "D",
+          "text": "Wrap fmin in a CrossValidator"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-20T01:48:54Z"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "59968ab2-d4ad-5424-87ca-5f654e9acfac",
+      "name": "Section 3 Quiz 1: Model Development",
+      "itemIds": [
+        "dcee97f6-7489-5e78-8fc1-56b0e15af04e",
+        "378e445d-5c86-5285-9df2-7d4b2b262137",
+        "fcd77d6a-2366-52a2-ab7d-38446abca263",
+        "85aa71ac-4649-5dfc-bc6a-c4ea5b549dd8",
+        "6ec21de3-1caa-5e04-8974-87d81c603ba7",
+        "077ab62f-489f-55a9-8b5a-6e30e2b73f51",
+        "728a877d-1f7e-544f-9f00-29b86af91da1",
+        "337aa8cd-2792-5552-91bc-4f00347a81bc",
+        "f2f505fe-2897-537c-a5c2-c04431735dbc",
+        "dc35b5ed-1d51-5217-9f65-ccf02c98442b"
+      ],
+      "timeLimitSec": 1200,
+      "shuffle": false,
+      "shuffleChoices": false
+    }
+  ],
+  "createdAt": "2026-11-20T01:48:54Z",
+  "updatedAt": "2026-11-20T01:48:54Z"
+}

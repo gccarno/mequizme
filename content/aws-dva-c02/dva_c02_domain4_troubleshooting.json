@@ -1,0 +1,467 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "028e06ac-6316-58c8-a72e-a0382ad2cb0a",
+  "name": "AWS DVA-C02 – Domain 4: Troubleshooting & Optimization",
+  "description": "Troubleshooting and Optimization (18% of exam). Covers CloudWatch, X-Ray, CloudTrail, Lambda optimization, DynamoDB performance, and API Gateway debugging.",
+  "source": {
+    "kind": "import",
+    "ref": "dva_c02_domain4_troubleshooting.json",
+    "format": "studydeck-v1"
+  },
+  "taxonomy": {
+    "exam": "aws-dva-c02",
+    "topics": [
+      {
+        "id": "development",
+        "name": "Development with AWS Services",
+        "weight": 0.32
+      },
+      {
+        "id": "security",
+        "name": "Security",
+        "weight": 0.26
+      },
+      {
+        "id": "deployment",
+        "name": "Deployment",
+        "weight": 0.24
+      },
+      {
+        "id": "troubleshooting",
+        "name": "Troubleshooting and Optimization",
+        "weight": 0.18
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "90235432-0cd4-5d61-8fd4-c6e1a06e7db9",
+      "type": "flashcard",
+      "prompt": "A Lambda function's CloudWatch Logs show `Task timed out after X seconds`. What should the developer check?",
+      "answer": {
+        "text": "The function's **execution timeout** is too low for the work it's performing.\n\nCheck:\n1. Increase the `Timeout` configuration (up to 15 minutes)\n2. Profile where time is spent — external API calls, DB queries, cold start initialization\n3. Move expensive initialization outside the handler (runs once per cold start)\n4. Check for network calls to the internet — Lambda in a VPC may need a NAT Gateway\n5. Check DynamoDB/RDS connection pool exhaustion"
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "f7e1513c-5bc7-50ed-8ce8-bfd27e9f1d60",
+      "type": "flashcard",
+      "prompt": "What AWS X-Ray concept represents a single request as it flows through multiple services?",
+      "answer": {
+        "text": "A **Trace**.\n\nX-Ray hierarchy:\n- **Trace**: The entire end-to-end request (identified by `X-Amz-Trace-Id` header)\n- **Segment**: Work done by a single service/resource within the trace\n- **Subsegment**: Granular breakdown within a segment (specific function, DB query, HTTP call)\n- **Annotation**: Indexed key-value pairs for filtering traces in the X-Ray console\n- **Metadata**: Non-indexed data attached to segments (for debugging, not filtering)"
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "debe0eeb-3374-5867-9eb7-6dae25a8892d",
+      "type": "flashcard",
+      "prompt": "How do you enable X-Ray tracing for a Lambda function?",
+      "answer": {
+        "text": "Two steps:\n1. **Enable active tracing** on the Lambda function (console: Configuration → Monitoring → Enable X-Ray tracing, or `TracingConfig: Active` in SAM/CloudFormation)\n2. **Add the X-Ray SDK** to your function code to instrument outgoing calls (AWS SDK calls are auto-instrumented; custom subsegments require `xray.begin_subsegment()`)\n\nThe Lambda execution role must have `xray:PutTraceSegments` and `xray:PutTelemetryRecords` permissions."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "5a912f24-33d2-5724-a422-cbd36c149a7b",
+      "type": "flashcard",
+      "prompt": "What CloudWatch metric should you monitor to detect Lambda function throttling?",
+      "answer": {
+        "text": "`Throttles`\n\nKey Lambda CloudWatch metrics:\n- `Invocations`: Total invocations\n- `Errors`: Failed invocations (exceptions)\n- `Throttles`: Requests rejected due to concurrency limits\n- `Duration`: Execution time (avg/max/min/p99)\n- `ConcurrentExecutions`: Simultaneous executions\n- `IteratorAge`: (for streams) Age of last record processed — high value indicates lag\n- `DeadLetterErrors`: Failed async deliveries to DLQ"
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "e76d8077-b587-5c24-80ae-f906cb2f04d1",
+      "type": "flashcard",
+      "prompt": "A Lambda function processing DynamoDB Streams has a high `IteratorAge`. What does this indicate and how do you fix it?",
+      "answer": {
+        "text": "`IteratorAge` = the age of the **oldest unprocessed record** in the stream shard.\n\nHigh IteratorAge means the function is **falling behind** — consuming records slower than they arrive.\n\nFixes:\n1. **Increase Lambda concurrency** (or remove reserved concurrency cap)\n2. **Increase batch size** (process more records per invocation)\n3. **Increase shard count** (Kinesis) to enable more parallel Lambda invocations\n4. **Optimize processing time** per record\n5. Check for errors causing retries (`BisectBatchOnFunctionError`)"
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "a6df3318-38c0-5a07-a150-b6c4124dccfc",
+      "type": "flashcard",
+      "prompt": "What CloudWatch feature lets you create alerts when a Lambda error rate exceeds a threshold?",
+      "answer": {
+        "text": "**CloudWatch Alarms** on a **Metric Math** expression.\n\nExample: `Errors / Invocations * 100 > 5` (error rate > 5%).\n\nAlarm states: `OK`, `ALARM`, `INSUFFICIENT_DATA`.\n\nAlarms can trigger:\n- SNS notification\n- Auto Scaling action\n- Systems Manager OpsItem\n- Lambda function (via SNS)"
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "c4333771-2cfa-55c9-9a57-d3c4abd018bf",
+      "type": "flashcard",
+      "prompt": "What is the difference between CloudWatch Logs Insights and CloudWatch Metrics?",
+      "answer": {
+        "text": "- **CloudWatch Metrics**: Pre-aggregated **numerical data points** over time (CPU%, invocation count). Used for dashboards and alarms.\n- **CloudWatch Logs Insights**: **Ad-hoc query engine** for raw log data. Write SQL-like queries to search, filter, aggregate, and visualize log events. Useful for debugging specific errors, counting occurrences, or finding slow requests.\n\nLogs Insights queries are interactive; metrics are time-series."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "28f8bb88-7fa7-51cf-a925-526281b75873",
+      "type": "flashcard",
+      "prompt": "What CloudWatch Logs feature automatically extracts structured fields from JSON log entries for metric filtering?",
+      "answer": {
+        "text": "**Metric Filters** with JSON pattern matching.\n\nA metric filter scans incoming log events matching a pattern and increments a CloudWatch metric. For JSON logs, use `{ $.statusCode = \"ERROR\" }` syntax.\n\nAlso: **CloudWatch Embedded Metrics Format (EMF)** — Lambda functions can emit structured JSON logs that CloudWatch automatically converts to high-resolution metrics without needing metric filters."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "deeb56f4-785c-5541-a73b-507cb5427568",
+      "type": "flashcard",
+      "prompt": "What AWS service records API calls made to AWS services and stores them in S3 for auditing?",
+      "answer": {
+        "text": "**AWS CloudTrail**.\n\nCloudTrail logs:\n- **Management events** (default): Control plane API calls (e.g., `CreateBucket`, `RunInstances`)\n- **Data events** (optional, extra cost): Data plane calls (`s3:GetObject`, `DynamoDB:PutItem`, Lambda invocations)\n- **Insight events** (optional): Anomalous API call rate detection\n\nLogs stored in S3. Use Athena to query CloudTrail logs at scale."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "6672415f-1fc6-5ccc-99c1-91b88799ad13",
+      "type": "flashcard",
+      "prompt": "A DynamoDB query is returning `ProvisionedThroughputExceededException`. What are the immediate options?",
+      "answer": {
+        "text": "**Short-term**:\n1. Implement **exponential backoff with jitter** in the application retry logic (AWS SDKs do this by default)\n2. Use **DAX** (DynamoDB Accelerator) to cache read results and reduce RCU consumption\n\n**Medium-term**:\n3. Increase **provisioned RCUs** on the table or GSI\n4. Switch to **on-demand capacity mode** if traffic is unpredictable\n5. Investigate **hot partition keys** — distribute writes more evenly"
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "ab7743bb-23e4-51a8-9977-86f1b686b0be",
+      "type": "flashcard",
+      "prompt": "What is a DynamoDB hot partition and how do you detect and fix it?",
+      "answer": {
+        "text": "A **hot partition** occurs when a disproportionate number of requests go to a single partition key, exhausting that partition's capacity.\n\n**Detection**: CloudWatch metric `ConsumedWriteCapacityUnits` spiking + `ThrottledRequests` on specific keys. X-Ray traces showing DynamoDB latency outliers.\n\n**Fixes**:\n1. **Randomize/distribute key space** — add a suffix to the partition key (e.g., `userId#0` to `userId#9`)\n2. **Use write sharding** — spread writes across multiple items, aggregate with reads\n3. **Cache hot reads** with DAX or ElastiCache\n4. **Avoid sequential partition keys** (e.g., timestamps) — use random UUIDs"
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "9222bb68-e76b-5a71-9c99-d7a0ba5d3469",
+      "type": "flashcard",
+      "prompt": "What DynamoDB caching service provides microsecond read latency and is fully compatible with DynamoDB API calls?",
+      "answer": {
+        "text": "**Amazon DynamoDB Accelerator (DAX)**.\n\n- In-memory cache cluster sitting in front of DynamoDB\n- Compatible with DynamoDB SDK — minimal code change (swap client from `DynamoDBClient` to `AmazonDaxClient`)\n- Caches `GetItem`, `BatchGetItem`, `Query`, `Scan` results\n- **Write-through**: Writes go to DAX and DynamoDB simultaneously\n- NOT suitable for strongly consistent reads or transactional operations (those bypass DAX)"
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "694d2697-364f-563c-9aa8-f6c11570e117",
+      "type": "flashcard",
+      "prompt": "An API Gateway endpoint returns a 429 Too Many Requests error. What should the developer check?",
+      "answer": {
+        "text": "API Gateway has two throttling levels:\n1. **Account-level default**: 10,000 req/s with 5,000 burst across all APIs in a region\n2. **Stage/method throttling**: Configurable per-stage or per-method limits\n\n**Fixes**:\n- Increase stage throttling limits\n- Implement **Usage Plans** with API keys to set per-client quotas\n- Add client-side **exponential backoff** retry logic\n- Use **caching** (API Gateway cache or DAX) to reduce backend load"
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "8df3e523-6e28-5ba1-89ff-8e51f926b833",
+      "type": "flashcard",
+      "prompt": "What does enabling API Gateway caching do, and what is the default TTL?",
+      "answer": {
+        "text": "API Gateway caching stores backend responses keyed by request parameters.\n\n- Default TTL: **300 seconds** (5 minutes), configurable from 0–3600 seconds\n- Cache capacity: 0.5 GB to 237 GB\n- Clients can bypass cache with `Cache-Control: max-age=0` header (if enabled)\n- Invalidation: flush cache manually or via `aws apigateway flush-stage-cache`\n\nEnabling caching reduces backend invocations but adds cost."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "c31a8078-c6f9-5a53-9ea1-f4a74457e982",
+      "type": "flashcard",
+      "prompt": "What CloudWatch feature allows you to correlate logs across multiple Lambda functions in a distributed system?",
+      "answer": {
+        "text": "**CloudWatch Logs Insights** with cross-log-group queries, combined with **AWS X-Ray** for distributed tracing.\n\nIn X-Ray: trace IDs (`X-Amz-Trace-Id`) propagate through service calls. Use the X-Ray Service Map to visualize dependencies and latency across Lambda, API Gateway, DynamoDB, etc.\n\nAlternative: add a **correlation ID** to log entries and search across log groups with Logs Insights."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "922d514a-64e3-548e-a562-7dfca6dd283e",
+      "type": "flashcard",
+      "prompt": "A Lambda function in a VPC cannot reach the internet or AWS services. What is the most likely cause and fix?",
+      "answer": {
+        "text": "Lambda functions in a VPC lose their default internet access.\n\n**Cause**: The Lambda ENI is in a private subnet without a route to the internet.\n\n**Fix**:\n1. Place Lambda in a **private subnet** with a route to a **NAT Gateway** (in a public subnet) for internet access\n2. For AWS service access: add **VPC Endpoints** (PrivateLink) for services like S3, DynamoDB, Secrets Manager — this avoids NAT Gateway costs\n\nNote: Lambda in a VPC does NOT need a NAT Gateway if using VPC endpoints for all AWS service calls."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "2d901ba7-e727-5d3e-a553-1aba15b4da4c",
+      "type": "flashcard",
+      "prompt": "What does the X-Ray `GetTraceSummaries` API return that helps identify problematic requests?",
+      "answer": {
+        "text": "`GetTraceSummaries` returns **trace summaries** including:\n- Trace ID, duration, HTTP response code\n- **Service graph** nodes involved\n- **Fault** (5xx server error), **Error** (4xx client error), **Throttle** flags\n- **Annotations** for filtering\n\nUse filters like `fault = true AND duration > 2` to find slow, erroring traces. Then call `BatchGetTraces` with trace IDs for full segment details."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "1f6076af-81a8-50b8-aa52-81ae89e9cf90",
+      "type": "flashcard",
+      "prompt": "What CloudWatch feature lets you build dashboards and correlate metrics from multiple AWS services on one screen?",
+      "answer": {
+        "text": "**CloudWatch Dashboards**.\n\n- Cross-account and cross-region dashboards supported\n- Widget types: line charts, number, bar, pie, text, alarm status, log table\n- Can add **Metric Math** widgets (e.g., error rate calculations)\n- Dashboards are global (not region-specific in the console)\n- Shareable publicly or via IAM"
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "09c23266-876a-5d0f-9836-3defd2299903",
+      "type": "flashcard",
+      "prompt": "What is the purpose of Lambda `Destinations` and how does it differ from a Dead Letter Queue (DLQ)?",
+      "answer": {
+        "text": "**Lambda Destinations** route **asynchronous invocation** results to a destination on success OR failure:\n- Supported destinations: SQS, SNS, EventBridge, another Lambda\n- Captures both success and failure with full event context + execution metadata\n\n**DLQ** only handles **failures** and only supports SQS or SNS. It receives just the original event payload, without execution metadata.\n\n**Recommendation**: Use Destinations for new code; DLQ is legacy for this use case."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "d377f3fc-e957-5f74-ba32-ec4ca02b7fff",
+      "type": "flashcard",
+      "prompt": "An S3 event notification triggering a Lambda function is not firing. What are the most common causes?",
+      "answer": {
+        "text": "1. **Lambda resource-based policy** is missing: S3 must have `lambda:InvokeFunction` permission. Check: `aws lambda get-policy --function-name <name>`.\n2. **Event notification not configured** on the correct S3 bucket/prefix/suffix.\n3. **Same-region requirement**: S3 event notifications work cross-region but Lambda must be accessible.\n4. **Throttling**: Lambda is throttled — events are lost for S3 (S3 events are not retried like SQS). Use SQS between S3 and Lambda for reliability.\n5. **Incorrect event type** (e.g., `s3:ObjectCreated:Put` vs. `s3:ObjectCreated:*`)."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "dee5d4b3-0d58-5202-a90c-1e31d0e1ad8b",
+      "type": "flashcard",
+      "prompt": "What does the Lambda `INIT_DURATION` metric in CloudWatch Logs tell you?",
+      "answer": {
+        "text": "`INIT_DURATION` appears in the `REPORT` log line and represents the **cold start initialization time** — time spent running initialization code outside the handler function.\n\nExample:\n```\nREPORT RequestId: ...  Init Duration: 423.45 ms  Duration: 12.33 ms  ...\n```\n\nHigh `INIT_DURATION` suggests:\n- Large deployment package (slow code loading)\n- Heavy initialization (DB connections, loading large configs)\n- VPC attachment latency (ENI provisioning)\n\nFix with Provisioned Concurrency or optimizing init code."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "dc37e3dc-e34e-50d9-943e-c83ffee5f6bc",
+      "type": "flashcard",
+      "prompt": "What is the difference between CloudWatch `PutMetricData` and CloudWatch Embedded Metrics Format (EMF)?",
+      "answer": {
+        "text": "- **`PutMetricData` API**: Explicit SDK call to publish a metric. Synchronous, adds latency, counts against API limits (1,000 req/s per account).\n- **EMF**: Lambda/application writes structured JSON to stdout (CloudWatch Logs). CloudWatch async extracts and creates metrics from the logs — no extra API calls, no added latency, and high-resolution metrics for free.\n\nEMF is preferred for Lambda metric publishing."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "b3035748-bcaf-53df-863d-e5a8f6476293",
+      "type": "flashcard",
+      "prompt": "What CloudTrail feature can alert you when an unusual number of API calls is made, such as a sudden spike in `DescribeInstances`?",
+      "answer": {
+        "text": "**CloudTrail Insights**.\n\nCloudTrail Insights analyzes management events to detect anomalous activity (unusual call volume, error rates). When an anomaly is detected:\n- Creates an Insights event in CloudTrail\n- Can trigger EventBridge rule → SNS/Lambda notification\n\nThis is distinct from Config Rules (configuration compliance) and GuardDuty (threat detection)."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "00f246f1-38de-5eaa-9e5e-252b85a50101",
+      "type": "flashcard",
+      "prompt": "A developer notices a Lambda function's memory usage is consistently at 90% of allocated memory. What should they do?",
+      "answer": {
+        "text": "**Increase the memory allocation**.\n\nLambda memory: 128 MB to 10,240 MB in 1 MB increments.\n\nImportantly: **more memory = more CPU proportionally**. Increasing memory often reduces duration enough to result in the **same or lower cost** (billed = duration × memory).\n\nUse **AWS Lambda Power Tuning** (open-source Step Functions state machine) to find the optimal memory/cost/performance configuration.\n\nCheck: `aws cloudwatch get-metric-statistics` on `MemorySize` and correlate with `Duration`."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "ffa2a3a6-70e6-5ace-a7c9-ebf587da4837",
+      "type": "flashcard",
+      "prompt": "What is the purpose of `xray.capture()` (Python) / `AWSXRay.captureAsyncFunc()` (Node.js) in the X-Ray SDK?",
+      "answer": {
+        "text": "These functions create a **custom subsegment** to trace a specific block of code or external call that isn't automatically instrumented.\n\nExample use cases:\n- Tracing a third-party HTTP call\n- Measuring the duration of a specific algorithm\n- Adding annotations/metadata to a code block\n\nThe subsegment appears in the X-Ray trace as a named node, showing duration and any recorded metadata."
+      },
+      "topics": [
+        "troubleshooting"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    }
+  ],
+  "quizzes": [],
+  "createdAt": "2025-04-01T00:00:00Z",
+  "updatedAt": "2025-04-01T00:00:00Z"
+}

@@ -1,0 +1,432 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "475c8ed1-31ae-5bf4-9f94-ca30fc2bf017",
+  "name": "Section 4 Quiz 1: Model Deployment",
+  "description": "Quiz me with 10 multiple-choice questions on Section 4: Model Deployment, in the style of an actual Databricks certification exam. Don't show answers until I respond.\n\nI checked the endpoint and query APIs against the current docs while writing these. Pick one answer per question.",
+  "source": {
+    "kind": "import",
+    "ref": "section4_quiz1.md",
+    "format": "markdown-quiz"
+  },
+  "taxonomy": {
+    "exam": "databricks-ml-associate",
+    "topics": [
+      {
+        "id": "databricks-ml",
+        "name": "Databricks Machine Learning",
+        "weight": 0.38
+      },
+      {
+        "id": "data-processing",
+        "name": "Data Processing",
+        "weight": 0.19
+      },
+      {
+        "id": "model-development",
+        "name": "Model Development",
+        "weight": 0.31
+      },
+      {
+        "id": "model-deployment",
+        "name": "Model Deployment",
+        "weight": 0.12
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "494252a6-c983-5d5a-8ccd-f37c99c8f587",
+      "type": "mcq_single",
+      "prompt": "Which statement about model serving approaches on Databricks is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Real-time endpoints are the most cost-effective option for high-volume workloads that can tolerate delay"
+        },
+        {
+          "id": "B",
+          "text": "Batch or streaming inference is generally the most cost-effective option for higher-throughput, higher-latency use cases"
+        },
+        {
+          "id": "C",
+          "text": "Batch inference requires a model serving endpoint"
+        },
+        {
+          "id": "D",
+          "text": "Streaming inference can publish predictions only to a REST endpoint"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-20T02:47:57Z"
+    },
+    {
+      "id": "91a779db-d44a-5219-b124-2811504a1874",
+      "type": "mcq_single",
+      "prompt": "A model is registered in Unity Catalog. A nightly job must score 80 million rows already in a Spark table and write the predictions to a Delta table. Which approach scales best?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Call toPandas() on the table and run model.predict on the driver"
+        },
+        {
+          "id": "B",
+          "text": "Loop over the rows and POST each one to a real-time serving endpoint"
+        },
+        {
+          "id": "C",
+          "text": "Create a UDF with mlflow.pyfunc.spark_udf(spark, model_uri), apply it with withColumn, and write the result to a Delta table"
+        },
+        {
+          "id": "D",
+          "text": "Call collect() and score the rows in a Python loop"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-20T02:47:57Z"
+    },
+    {
+      "id": "16a7f37e-ea95-5515-899c-82ad647cd26a",
+      "type": "mcq_single",
+      "prompt": "A web application needs a prediction for a single record in about 100 ms per request, with traffic that varies through the day. Which approach fits?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Deploy the model to a model serving endpoint and call it over REST"
+        },
+        {
+          "id": "B",
+          "text": "Score nightly in batch and store the predictions in a table"
+        },
+        {
+          "id": "C",
+          "text": "Run a streaming job with a five-minute trigger"
+        },
+        {
+          "id": "D",
+          "text": "Score ad hoc from a notebook"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-20T02:47:57Z"
+    },
+    {
+      "id": "d87315af-331f-5664-8e19-2681ed5fe69c",
+      "type": "mcq_single",
+      "prompt": "Events arrive continuously from Kafka. Predictions are needed within a few minutes and must land in a Unity Catalog table, and no per-request API is required. Which is the best fit?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "A real-time model serving endpoint, called once per event"
+        },
+        {
+          "id": "B",
+          "text": "A nightly batch job"
+        },
+        {
+          "id": "C",
+          "text": "Retraining the model on each incoming record"
+        },
+        {
+          "id": "D",
+          "text": "A continuously running streaming pipeline, either Structured Streaming or Lakeflow Spark Declarative Pipelines (the exam guide’s name is Delta Live Tables), that applies the model to new records and writes predictions to a Unity Catalog table or Kafka"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-20T02:47:57Z"
+    },
+    {
+      "id": "67dac674-c2bf-5bf4-bd8e-40dda154f0a2",
+      "type": "mcq_single",
+      "prompt": "Which request correctly creates a serving endpoint for version 3 of the Unity Catalog model catalog.schema.my-ads-model?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "POST /api/2.0/serving-endpoints with {\"name\": \"ads-endpoint\", \"config\": {\"model_path\": \"/dbfs/models/ads\"}}"
+        },
+        {
+          "id": "B",
+          "text": "POST /api/2.0/serving-endpoints with {\"name\": \"ads-endpoint\", \"config\": {\"served_entities\": [{\"entity_name\": \"catalog.schema.my-ads-model\", \"entity_version\": \"3\", \"scale_to_zero_enabled\": true}]}}"
+        },
+        {
+          "id": "C",
+          "text": "POST /api/2.0/serving-endpoints with only {\"name\": \"ads-endpoint\"}, which auto-detects the latest registered model"
+        },
+        {
+          "id": "D",
+          "text": "PUT /api/2.0/registered-models/ads/serve"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-20T02:47:57Z"
+    },
+    {
+      "id": "19ab4e73-7007-597c-890e-e6ba31bf5422",
+      "type": "mcq_single",
+      "prompt": "Which request body can score a pandas DataFrame against a deployed custom model endpoint?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "{\"sql\": \"SELECT * FROM catalog.schema.customers\"}"
+        },
+        {
+          "id": "B",
+          "text": "{\"table_name\": \"catalog.schema.customers\"}"
+        },
+        {
+          "id": "C",
+          "text": "A CSV file uploaded as a multipart form"
+        },
+        {
+          "id": "D",
+          "text": "{\"dataframe_split\": {\"columns\": [...], \"data\": [[...]]}}"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-20T02:47:57Z"
+    },
+    {
+      "id": "4183b47c-05ce-5546-91fc-23a4763913a1",
+      "type": "mcq_single",
+      "prompt": "Which Python call queries a model serving endpoint using the MLflow Deployments SDK?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "mlflow.pyfunc.load_model(\"endpoint:/ads-endpoint\").predict(df)"
+        },
+        {
+          "id": "B",
+          "text": "mlflow.deployments.run_query(\"ads-endpoint\", df)"
+        },
+        {
+          "id": "C",
+          "text": "mlflow.deployments.get_deploy_client(\"databricks\").predict(endpoint=\"ads-endpoint\", inputs={...})"
+        },
+        {
+          "id": "D",
+          "text": "spark.read.format(\"serving\").load(\"ads-endpoint\")"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-20T02:47:57Z"
+    },
+    {
+      "id": "19bc10eb-0f4a-586e-8d16-14a8f9a1be6a",
+      "type": "mcq_single",
+      "prompt": "One endpoint serves two model versions named current and challenger. The team wants 90% of requests to go to current and 10% to challenger. What controls this?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "The traffic_config setting, whose routes map each served_model_name to a traffic_percentage"
+        },
+        {
+          "id": "B",
+          "text": "Giving current a larger workload_size than challenger"
+        },
+        {
+          "id": "C",
+          "text": "Setting entity_version to a fractional value on each served entity"
+        },
+        {
+          "id": "D",
+          "text": "Enabling scale_to_zero_enabled on challenger only"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-20T02:47:57Z"
+    },
+    {
+      "id": "5c151ff4-052f-5251-83c6-3b326d988881",
+      "type": "mcq_single",
+      "prompt": "A data scientist has 5,000 rows in a pandas DataFrame in a notebook and wants predictions from a registered model. No endpoint is required. What is the simplest correct approach?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Create a serving endpoint first, since registered models can’t be scored otherwise"
+        },
+        {
+          "id": "B",
+          "text": "Call mlflow.register_model(...) on the DataFrame"
+        },
+        {
+          "id": "C",
+          "text": "Load the model with mlflow.pyfunc.load_model(model_uri) and call .predict(pdf)"
+        },
+        {
+          "id": "D",
+          "text": "Call model.fit(pdf) first, then .predict"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-20T02:47:57Z"
+    },
+    {
+      "id": "eaf44782-bcab-5f89-9cf7-f6aebff6dfb7",
+      "type": "mcq_single",
+      "prompt": "After validation, the team wants the endpoint from question 8 to send all traffic to challenger. What is the correct change?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Delete the endpoint and recreate it with a new name"
+        },
+        {
+          "id": "B",
+          "text": "Update the endpoint’s traffic_config so challenger gets 100% and current gets 0%"
+        },
+        {
+          "id": "C",
+          "text": "Enable scale_to_zero_enabled on current"
+        },
+        {
+          "id": "D",
+          "text": "Increase the workload_size of challenger"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-20T02:47:57Z"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "c2450649-3f8b-5d55-ab4c-10a905b0bd5b",
+      "name": "Section 4 Quiz 1: Model Deployment",
+      "itemIds": [
+        "494252a6-c983-5d5a-8ccd-f37c99c8f587",
+        "91a779db-d44a-5219-b124-2811504a1874",
+        "16a7f37e-ea95-5515-899c-82ad647cd26a",
+        "d87315af-331f-5664-8e19-2681ed5fe69c",
+        "67dac674-c2bf-5bf4-bd8e-40dda154f0a2",
+        "19ab4e73-7007-597c-890e-e6ba31bf5422",
+        "4183b47c-05ce-5546-91fc-23a4763913a1",
+        "19bc10eb-0f4a-586e-8d16-14a8f9a1be6a",
+        "5c151ff4-052f-5251-83c6-3b326d988881",
+        "eaf44782-bcab-5f89-9cf7-f6aebff6dfb7"
+      ],
+      "timeLimitSec": 1200,
+      "shuffle": false,
+      "shuffleChoices": false
+    }
+  ],
+  "createdAt": "2026-11-20T02:47:57Z",
+  "updatedAt": "2026-11-20T02:47:57Z"
+}

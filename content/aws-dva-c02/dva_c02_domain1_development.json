@@ -1,0 +1,552 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "2cc10cc6-6daf-5cc0-af75-a16e8594c374",
+  "name": "AWS DVA-C02 – Domain 1: Development",
+  "description": "Development with AWS Services (32% of exam). Covers Lambda, API Gateway, DynamoDB, S3, SQS, SNS, Kinesis, Step Functions, ECS, and Elastic Beanstalk.",
+  "source": {
+    "kind": "import",
+    "ref": "dva_c02_domain1_development.json",
+    "format": "studydeck-v1"
+  },
+  "taxonomy": {
+    "exam": "aws-dva-c02",
+    "topics": [
+      {
+        "id": "development",
+        "name": "Development with AWS Services",
+        "weight": 0.32
+      },
+      {
+        "id": "security",
+        "name": "Security",
+        "weight": 0.26
+      },
+      {
+        "id": "deployment",
+        "name": "Deployment",
+        "weight": 0.24
+      },
+      {
+        "id": "troubleshooting",
+        "name": "Troubleshooting and Optimization",
+        "weight": 0.18
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "bfd87291-a800-5fde-9110-49d2907656c9",
+      "type": "flashcard",
+      "prompt": "What is the maximum execution timeout for an AWS Lambda function?",
+      "answer": {
+        "text": "**15 minutes** (900 seconds).\n\nDefault timeout is 3 seconds. Configure via the `Timeout` property in the function configuration."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "1f088717-efa0-517f-925e-1ff422dc97de",
+      "type": "flashcard",
+      "prompt": "A Lambda function is experiencing cold starts. Which two strategies most directly reduce cold start latency?",
+      "answer": {
+        "text": "1. **Provisioned Concurrency** – pre-warms execution environments so they are ready before invocations arrive.\n2. **Keep the deployment package small** – smaller packages initialize faster.\n\nAlso helpful: choose a compiled runtime (Go, Java GraalVM) and move heavy initialization outside the handler."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "f3438731-18d1-596a-a0cd-e05364e32577",
+      "type": "flashcard",
+      "prompt": "What Lambda concurrency setting guarantees a function will never be throttled by other functions in the same account?",
+      "answer": {
+        "text": "**Reserved Concurrency**.\n\nSetting reserved concurrency to `N` allocates that concurrency exclusively to the function, preventing other functions from consuming it. It also acts as a cap — the function itself cannot exceed `N` concurrent executions."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "9d679420-af1d-523f-a286-5f7249f00ac7",
+      "type": "flashcard",
+      "prompt": "What environment variable tells a Lambda function which version alias is currently executing?",
+      "answer": {
+        "text": "`AWS_LAMBDA_FUNCTION_NAME` gives the function name; **`$LATEST`** is the unpublished version.\n\nTo detect the alias at runtime, use the context object: `context.functionVersion` returns the version ARN, and you can parse the alias from the invocation ARN passed as `context.invokedFunctionArn`."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "eb47976a-54ea-504f-9cd1-0ba281e8ed14",
+      "type": "flashcard",
+      "prompt": "DynamoDB read capacity units (RCUs): how many RCUs does a strongly consistent read of a 6 KB item consume?",
+      "answer": {
+        "text": "**2 RCUs**.\n\nFormula: `ceil(item_size_KB / 4)` for strongly consistent reads.\n`ceil(6/4) = 2 RCUs`.\n\nEventually consistent reads cost half: 1 RCU for the same item."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "30d09236-1b6c-56f5-8b5f-98ab8585de5f",
+      "type": "flashcard",
+      "prompt": "DynamoDB write capacity units (WCUs): how many WCUs does writing a 3.5 KB item consume?",
+      "answer": {
+        "text": "**4 WCUs**.\n\nFormula: `ceil(item_size_KB / 1)` — each WCU covers 1 KB.\n`ceil(3.5) = 4 WCUs`."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "3bd7d618-23c3-51aa-9241-dddebfbd4df2",
+      "type": "flashcard",
+      "prompt": "What DynamoDB feature allows you to query across all items by a non-primary-key attribute without a full table scan?",
+      "answer": {
+        "text": "**Global Secondary Index (GSI)**.\n\nA GSI has its own partition key (and optional sort key) different from the base table. It is eventually consistent and has its own provisioned throughput."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "66563c15-7a8f-52c7-bd51-5b97eabeb2f2",
+      "type": "flashcard",
+      "prompt": "What is the difference between a DynamoDB GSI and an LSI?",
+      "answer": {
+        "text": "| | GSI | LSI |\n|---|---|---|\n| Partition key | Different from table | Same as table |\n| Sort key | Any attribute | Different attribute |\n| Consistency | Eventually consistent only | Strongly consistent supported |\n| Created after table | Yes | No (must be defined at creation) |\n| Throughput | Separate capacity | Shares table capacity |"
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "df2566ab-695d-582d-855d-cf4fcc511058",
+      "type": "flashcard",
+      "prompt": "A DynamoDB `TransactWriteItems` call fails with `TransactionCanceledException`. What are the two most common reasons?",
+      "answer": {
+        "text": "1. **Condition check failure** – one of the condition expressions in the transaction evaluated to false.\n2. **Capacity exceeded** – the transaction consumed more RCUs/WCUs than provisioned (or on-demand burst was exhausted).\n\nA transaction spans up to **100 items** across up to **100 tables**."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "ce2bfb84-df02-5985-8f70-c62ee9e17fb7",
+      "type": "flashcard",
+      "prompt": "What S3 consistency model is in effect for all operations since December 2020?",
+      "answer": {
+        "text": "**Strong read-after-write consistency** for all S3 operations (GET, PUT, DELETE, LIST).\n\nPrior to Dec 2020, LIST and overwrite PUTs were only eventually consistent. This is now fully consistent at no extra cost."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "1e843e44-9062-5f00-b0e2-f6085dac1bb8",
+      "type": "flashcard",
+      "prompt": "What S3 feature lets you run SQL queries directly against objects stored in S3 without loading data into a database?",
+      "answer": {
+        "text": "**S3 Select** (for single objects) or **Amazon Athena** (for querying across many objects).\n\nS3 Select filters data server-side, reducing data transfer. Supports CSV, JSON, and Parquet."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "eba15801-a284-5764-889a-304f7507e580",
+      "type": "flashcard",
+      "prompt": "What is the maximum message size in SQS, and how do you handle larger payloads?",
+      "answer": {
+        "text": "**256 KB** per message.\n\nFor larger payloads, use the **SQS Extended Client Library** (Java/Python): store the payload in S3 and send a pointer message in SQS."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "ad010a6d-3132-5c02-89f8-382737f3e097",
+      "type": "flashcard",
+      "prompt": "What SQS setting prevents a message from being consumed by multiple consumers simultaneously after one consumer retrieves it?",
+      "answer": {
+        "text": "**Visibility Timeout**.\n\nWhile a consumer processes the message, it is hidden from others. Default is 30 seconds; max is 12 hours. If processing takes longer, the consumer must call `ChangeMessageVisibility` to extend it, or the message becomes visible again."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "5fbbf317-e1e1-5979-a21d-8bff0cb59ecf",
+      "type": "flashcard",
+      "prompt": "What is the difference between an SQS Standard queue and an SQS FIFO queue?",
+      "answer": {
+        "text": "| | Standard | FIFO |\n|---|---|---|\n| Ordering | Best-effort | Strict (per message group) |\n| Delivery | At-least-once | Exactly-once |\n| Throughput | Unlimited | 300 msg/s (3,000 with batching) |\n| Deduplication | No | Yes (5-min dedup window) |"
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "28f80a66-f40a-5e35-a3ba-253eb5f597fe",
+      "type": "flashcard",
+      "prompt": "An SQS message is processed but keeps reappearing. What should you check first?",
+      "answer": {
+        "text": "The consumer is likely **not deleting the message** after processing.\n\nSQS does not auto-delete messages on receipt. The consumer must call `DeleteMessage` using the receipt handle. If it doesn't, the message reappears after the visibility timeout expires."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "2b846704-ff17-5315-a643-56daa616268f",
+      "type": "flashcard",
+      "prompt": "What SQS feature automatically moves messages that fail processing N times to a separate queue for inspection?",
+      "answer": {
+        "text": "**Dead Letter Queue (DLQ)**.\n\nConfigure `maxReceiveCount` on the source queue's redrive policy. After a message is received that many times without deletion, it is moved to the DLQ."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "5ccc1f0e-964c-5637-a441-6d7ebb534753",
+      "type": "flashcard",
+      "prompt": "What is the key architectural difference between SNS and SQS?",
+      "answer": {
+        "text": "- **SNS** is a **push-based pub/sub** service — it fans out messages to multiple subscribers (SQS, Lambda, HTTP, email, SMS) simultaneously.\n- **SQS** is a **pull-based queue** — consumers poll for messages.\n\n**SNS + SQS fan-out** pattern: SNS publishes to multiple SQS queues for decoupled parallel processing."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "3bd253ba-d10d-57d0-8513-7fb147ebd233",
+      "type": "flashcard",
+      "prompt": "What Kinesis Data Streams shard capacity limits should you know for the exam?",
+      "answer": {
+        "text": "- **Write**: 1 MB/s or 1,000 records/s per shard\n- **Read (standard)**: 2 MB/s per shard, shared across all consumers\n- **Read (enhanced fan-out)**: 2 MB/s per shard **per consumer** (push-based, lower latency)\n\nTo scale, increase shard count (resharding)."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "ec3202b4-3b96-5d8e-943e-d2d08c64523d",
+      "type": "flashcard",
+      "prompt": "What is the retention period for records in Kinesis Data Streams?",
+      "answer": {
+        "text": "Default: **24 hours**. Extendable up to **365 days** (extended data retention, at additional cost).\n\nRecords are NOT deleted after consumption — multiple consumers can read the same records independently."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "cef955d2-59ea-5baa-b161-0f44dac13a12",
+      "type": "flashcard",
+      "prompt": "An API Gateway REST API needs to return a custom error message when a Lambda function throws an exception. What must be configured?",
+      "answer": {
+        "text": "**Integration Response** with a **Mapping Template** and a **Gateway Response** or regex-based **Selection Pattern**.\n\nAPI Gateway maps Lambda's error output (via `errorMessage`) to HTTP status codes using regular expression patterns in the integration response. For Lambda proxy integration, the Lambda function itself must return the status code and body."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "7a243b76-6c18-5547-8ecc-57cf513700b4",
+      "type": "flashcard",
+      "prompt": "What is the difference between API Gateway Lambda Proxy Integration and Lambda Custom Integration?",
+      "answer": {
+        "text": "- **Proxy Integration**: API Gateway passes the entire HTTP request (headers, body, path, query params) as-is to Lambda. Lambda must return a structured response `{ statusCode, headers, body }`. Simple to set up.\n- **Custom Integration**: API Gateway uses mapping templates (VTL) to transform requests/responses. More flexible but more complex."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "56444015-c343-590e-8167-f22a843d4bcc",
+      "type": "flashcard",
+      "prompt": "How do you deploy an API Gateway stage update without causing downtime?",
+      "answer": {
+        "text": "Use **Canary deployments** on the stage.\n\nA percentage of traffic is routed to the new (canary) deployment. Once validated, promote the canary to 100%. API Gateway stage variables can also be used to switch backend Lambda versions/aliases without redeployment."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "5ad0b769-cb57-5927-8f80-49a7a4b956e2",
+      "type": "flashcard",
+      "prompt": "What AWS Step Functions state type is used to wait for an external process to send a callback token before continuing?",
+      "answer": {
+        "text": "**Task state with `.waitForTaskToken`** integration pattern.\n\nThe state machine pauses and sends a `taskToken` to the external system (via SQS, SNS, Lambda, etc.). The external system calls `SendTaskSuccess` or `SendTaskFailure` with the token to resume execution."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "fbd45684-577f-59f6-a7b7-51af1eb1e220",
+      "type": "flashcard",
+      "prompt": "What is the difference between AWS Step Functions Standard and Express workflows?",
+      "answer": {
+        "text": "| | Standard | Express |\n|---|---|---|\n| Duration | Up to 1 year | Up to 5 minutes |\n| Execution model | Exactly-once | At-least-once |\n| Execution history | Full audit in console | CloudWatch Logs only |\n| Pricing | Per state transition | Per execution duration + requests |\n| Use case | Long-running, critical workflows | High-volume, short-duration |"
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "789593e1-d744-50f1-81a6-63ed42b6c940",
+      "type": "flashcard",
+      "prompt": "What Elastic Beanstalk deployment policy updates instances in batches, keeping some instances running old version during deployment?",
+      "answer": {
+        "text": "**Rolling** deployment.\n\nOther policies:\n- **All at once**: Fastest, but causes downtime.\n- **Rolling with additional batch**: Spins up extra capacity first — no reduction in running instances.\n- **Immutable**: Deploys to new instances; swaps only on success. Safest, most expensive.\n- **Blue/Green**: Manual — swap CNAMEs between two environments."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "5164ec8b-3a57-50ce-a992-42051885d394",
+      "type": "flashcard",
+      "prompt": "What file in an Elastic Beanstalk application controls environment configuration, including instance type, environment variables, and scaling settings?",
+      "answer": {
+        "text": "**`.ebextensions/`** directory containing `.config` files (YAML/JSON).\n\nThese are processed in alphabetical order during deployment. Used for: installing packages, running commands, setting environment properties, configuring option settings."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "1e252aaa-765f-554d-ac72-3c2060bd34df",
+      "type": "flashcard",
+      "prompt": "What is the purpose of the `X-Amz-Invocation-Type` header in a Lambda invocation API call?",
+      "answer": {
+        "text": "It controls the **invocation type**:\n- `RequestResponse` (default): Synchronous — waits for the result.\n- `Event`: Asynchronous — Lambda queues the request and returns 202 immediately.\n- `DryRun`: Validates permissions and parameters without executing the function."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "b2e7c7aa-cf64-581d-98fa-35b919409a18",
+      "type": "flashcard",
+      "prompt": "What AWS service should you use to run containers without managing EC2 instances or clusters?",
+      "answer": {
+        "text": "**AWS Fargate** (used with ECS or EKS).\n\nFargate is a serverless compute engine for containers. You define the task CPU/memory, and AWS manages the underlying infrastructure. No need to provision or scale EC2 instances."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "5fdfebb0-70d9-5ef4-8d6b-a0b8bbee1017",
+      "type": "flashcard",
+      "prompt": "A developer wants to share environment-specific configuration (DB connection strings, feature flags) across multiple Lambda functions without hardcoding values. What is the recommended approach?",
+      "answer": {
+        "text": "Use **AWS Systems Manager Parameter Store** (for non-secret config) or **AWS Secrets Manager** (for credentials).\n\nIn Lambda, read parameters at cold start and cache them. Use SSM SDK calls or Lambda Powertools for easy caching. Avoid environment variables for secrets — they are visible in the console."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "103f3cb3-1650-5db4-958d-e87c5500fd27",
+      "type": "flashcard",
+      "prompt": "What DynamoDB operation lets you atomically increment a numeric attribute without reading the item first?",
+      "answer": {
+        "text": "**`UpdateItem` with an `ADD` action** (or `SET #attr = #attr + :val` expression).\n\nExample update expression: `SET viewCount = viewCount + :incr`\n\nThis is an atomic counter — safe for concurrent updates without read-modify-write races."
+      },
+      "topics": [
+        "development"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    }
+  ],
+  "quizzes": [],
+  "createdAt": "2025-04-01T00:00:00Z",
+  "updatedAt": "2025-04-01T00:00:00Z"
+}

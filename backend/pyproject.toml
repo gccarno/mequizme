@@ -1,0 +1,24 @@
+[project]
+name = "mequizme"
+version = "0.1.0"
+description = "Local study tutor: flashcards, quizzes, timed exams, review."
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.7",
+]
+
+[project.scripts]
+studypack = "app.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "jsonschema>=4.22"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

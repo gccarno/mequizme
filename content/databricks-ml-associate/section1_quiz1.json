@@ -1,0 +1,432 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "0e9ec33c-58a4-5c37-8b1c-f74b08d26523",
+  "name": "Section 1 Quiz 1: Databricks Machine Learning",
+  "description": "Section 1 quiz: Databricks Machine Learning\n\nPick one answer per question unless stated otherwise.",
+  "source": {
+    "kind": "import",
+    "ref": "section1_quiz1.md",
+    "format": "markdown-quiz"
+  },
+  "taxonomy": {
+    "exam": "databricks-ml-associate",
+    "topics": [
+      {
+        "id": "databricks-ml",
+        "name": "Databricks Machine Learning",
+        "weight": 0.38
+      },
+      {
+        "id": "data-processing",
+        "name": "Data Processing",
+        "weight": 0.19
+      },
+      {
+        "id": "model-development",
+        "name": "Model Development",
+        "weight": 0.31
+      },
+      {
+        "id": "model-deployment",
+        "name": "Model Deployment",
+        "weight": 0.12
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "a5758afa-7fe4-58c4-aa72-2e2814573f4f",
+      "type": "mcq_single",
+      "prompt": "A team currently runs training jobs on a standard Databricks Runtime and spends time installing and version-matching ML libraries. What is the main advantage of switching to Databricks Runtime for Machine Learning?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "It automatically tunes hyperparameters for any model trained on the cluster"
+        },
+        {
+          "id": "B",
+          "text": "It includes popular ML libraries and MLflow preinstalled and tested together"
+        },
+        {
+          "id": "C",
+          "text": "It removes the need to track experiments, because every run is logged to Unity Catalog automatically"
+        },
+        {
+          "id": "D",
+          "text": "It guarantees higher model accuracy than a standard runtime"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-18T01:54:51Z",
+      "updatedAt": "2026-11-18T01:54:51Z"
+    },
+    {
+      "id": "0fd15ae5-a1b7-5924-853e-647b6df179af",
+      "type": "mcq_single",
+      "prompt": "A data scientist runs Databricks AutoML on a tabular dataset to predict customer churn. Which is a benefit of this approach?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "The best model is deployed to production automatically, with no review step"
+        },
+        {
+          "id": "B",
+          "text": "AutoML eliminates the need for any data exploration or feature engineering"
+        },
+        {
+          "id": "C",
+          "text": "AutoML supports only deep learning models"
+        },
+        {
+          "id": "D",
+          "text": "Each trial generates a notebook with source code that can be inspected and modified, giving a quick, transparent baseline"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-18T01:54:51Z",
+      "updatedAt": "2026-11-18T01:54:51Z"
+    },
+    {
+      "id": "bbf1d3fe-0e64-547f-890b-bd6a04eaf607",
+      "type": "mcq_single",
+      "prompt": "An organization has three workspaces attached to one Unity Catalog metastore. Teams want to share and discover features, with centralized access control and lineage. Which approach fits best?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Feature tables in Unity Catalog, governed by UC privileges, discoverable from any workspace on the metastore, with lineage tracked"
+        },
+        {
+          "id": "B",
+          "text": "Workspace-level feature tables, with notebook ACLs controlling access"
+        },
+        {
+          "id": "C",
+          "text": "Workspace-level feature tables, replicated by Databricks to every workspace in the account"
+        },
+        {
+          "id": "D",
+          "text": "Unity Catalog feature tables, which require Delta Sharing to be read from a second workspace on the same metastore"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-18T01:54:51Z",
+      "updatedAt": "2026-11-18T01:54:51Z"
+    },
+    {
+      "id": "4e789ac0-e816-5a1b-9e64-6c051be1c240",
+      "type": "mcq_single",
+      "prompt": "A data scientist has a Delta table in Unity Catalog with customer features. What must be true for it to be used as a feature table?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "It must be registered with FeatureStoreClient.register_table"
+        },
+        {
+          "id": "B",
+          "text": "It must have a primary key constraint"
+        },
+        {
+          "id": "C",
+          "text": "It must live in a catalog named feature_store"
+        },
+        {
+          "id": "D",
+          "text": "It must be an external table with Change Data Feed enabled"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-18T01:54:51Z",
+      "updatedAt": "2026-11-18T01:54:51Z"
+    },
+    {
+      "id": "693e7687-2b88-5452-8f03-9e5d7b66e97f",
+      "type": "mcq_single",
+      "prompt": "A data scientist builds a training set with FeatureLookup objects and create_training_set, then logs the model with FeatureEngineeringClient.log_model and that training set. What does this enable when scoring later?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "The feature values are stored inside the model as constants, so the feature tables are no longer needed"
+        },
+        {
+          "id": "B",
+          "text": "The model must be retrained every time a feature table is updated"
+        },
+        {
+          "id": "C",
+          "text": "score_batch needs only the lookup keys, and features are retrieved from the feature tables using metadata packaged with the model"
+        },
+        {
+          "id": "D",
+          "text": "The model can be scored only through a real-time endpoint"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-18T01:54:51Z",
+      "updatedAt": "2026-11-18T01:54:51Z"
+    },
+    {
+      "id": "8816e30c-3e4c-5e70-a3e7-f131990826c0",
+      "type": "mcq_single",
+      "prompt": "A real-time endpoint must fetch customer features within milliseconds. The same features are also used for nightly training. Which design is best?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Query the offline Delta feature table directly on every request"
+        },
+        {
+          "id": "B",
+          "text": "Recompute features from raw data inside every request"
+        },
+        {
+          "id": "C",
+          "text": "Use an online store only, and train from it"
+        },
+        {
+          "id": "D",
+          "text": "Keep the offline feature table for training and batch scoring, and publish it to an online store for low-latency lookups"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-18T01:54:51Z",
+      "updatedAt": "2026-11-18T01:54:51Z"
+    },
+    {
+      "id": "0c9bb962-b7ef-50b8-962e-bf7010e0b063",
+      "type": "mcq_single",
+      "prompt": "Several runs in one experiment logged rmse (lower is better). Which MLflow Client API call returns the best run?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "mlflow.get_best_run(experiment_id, metric=\"rmse\")"
+        },
+        {
+          "id": "B",
+          "text": "client.search_runs([exp_id], order_by=[\"metrics.rmse DESC\"], max_results=1)"
+        },
+        {
+          "id": "C",
+          "text": "client.get_run(exp_id).data.metrics[\"rmse\"]"
+        },
+        {
+          "id": "D",
+          "text": "client.search_runs([exp_id], order_by=[\"metrics.rmse ASC\"], max_results=1)"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-18T01:54:51Z",
+      "updatedAt": "2026-11-18T01:54:51Z"
+    },
+    {
+      "id": "2bdc4420-d4a9-5455-b893-8f23dfd0796b",
+      "type": "mcq_single",
+      "prompt": "Inside an active MLflow run, you want to record validation RMSE at each epoch and attach a saved confusion.png file. Which pair of calls is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "mlflow.log_metric(\"rmse\", value, step=epoch) and mlflow.log_artifact(\"confusion.png\")"
+        },
+        {
+          "id": "B",
+          "text": "mlflow.log_param(\"rmse\", value) and mlflow.log_artifact(\"confusion.png\")"
+        },
+        {
+          "id": "C",
+          "text": "mlflow.log_metric(\"confusion.png\", path) and mlflow.log_param(\"rmse\", value)"
+        },
+        {
+          "id": "D",
+          "text": "mlflow.set_tag(\"rmse\", value) and mlflow.log_metric(\"confusion.png\", path)"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-18T01:54:51Z",
+      "updatedAt": "2026-11-18T01:54:51Z"
+    },
+    {
+      "id": "ad4ddf16-a856-5db0-abc0-3317a0df1fff",
+      "type": "mcq_single",
+      "prompt": "While logging a scikit-learn model, you want to register it in Unity Catalog. Which registered_model_name is valid?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "\"iris_model\""
+        },
+        {
+          "id": "B",
+          "text": "\"ml_team.iris_model\""
+        },
+        {
+          "id": "C",
+          "text": "\"prod.ml_team.iris_model\""
+        },
+        {
+          "id": "D",
+          "text": "\"/Shared/models/iris_model\""
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-18T01:54:51Z",
+      "updatedAt": "2026-11-18T01:54:51Z"
+    },
+    {
+      "id": "a0abbea1-23e6-5fe2-afb9-36ed12842842",
+      "type": "mcq_single",
+      "prompt": "Inference jobs load models:/prod.ml.fraud@Champion. Version 7 passed validation and should replace the current champion without changing any inference code. Which call does this?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "client.transition_model_version_stage(\"prod.ml.fraud\", 7, stage=\"Production\")"
+        },
+        {
+          "id": "B",
+          "text": "client.set_registered_model_alias(\"prod.ml.fraud\", \"Champion\", 7)"
+        },
+        {
+          "id": "C",
+          "text": "client.set_model_version_tag(\"prod.ml.fraud\", 7, \"Champion\", \"true\")"
+        },
+        {
+          "id": "D",
+          "text": "Register a new model named fraud_champion and update the inference code to load it"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-18T01:54:51Z",
+      "updatedAt": "2026-11-18T01:54:51Z"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "0dc922d3-e970-54e5-a749-2e1594bf029d",
+      "name": "Section 1 Quiz 1: Databricks Machine Learning",
+      "itemIds": [
+        "a5758afa-7fe4-58c4-aa72-2e2814573f4f",
+        "0fd15ae5-a1b7-5924-853e-647b6df179af",
+        "bbf1d3fe-0e64-547f-890b-bd6a04eaf607",
+        "4e789ac0-e816-5a1b-9e64-6c051be1c240",
+        "693e7687-2b88-5452-8f03-9e5d7b66e97f",
+        "8816e30c-3e4c-5e70-a3e7-f131990826c0",
+        "0c9bb962-b7ef-50b8-962e-bf7010e0b063",
+        "2bdc4420-d4a9-5455-b893-8f23dfd0796b",
+        "ad4ddf16-a856-5db0-abc0-3317a0df1fff",
+        "a0abbea1-23e6-5fe2-afb9-36ed12842842"
+      ],
+      "timeLimitSec": 1200,
+      "shuffle": false,
+      "shuffleChoices": false
+    }
+  ],
+  "createdAt": "2026-11-18T01:54:51Z",
+  "updatedAt": "2026-11-18T01:54:51Z"
+}

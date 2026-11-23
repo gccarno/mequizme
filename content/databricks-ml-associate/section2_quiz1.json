@@ -1,0 +1,432 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "0ab89d75-bd19-531e-8b6b-e45f2e3a63d7",
+  "name": "Section 2 Quiz 1: Data Processing",
+  "description": "Quiz me with 10 multiple-choice questions on Section 2: Data Processing, in the style of an actual Databricks certification exam. Don't show answers until I respond.\n\nPick one answer per question.",
+  "source": {
+    "kind": "import",
+    "ref": "section2_quiz1.md",
+    "format": "markdown-quiz"
+  },
+  "taxonomy": {
+    "exam": "databricks-ml-associate",
+    "topics": [
+      {
+        "id": "databricks-ml",
+        "name": "Databricks Machine Learning",
+        "weight": 0.38
+      },
+      {
+        "id": "data-processing",
+        "name": "Data Processing",
+        "weight": 0.19
+      },
+      {
+        "id": "model-development",
+        "name": "Model Development",
+        "weight": 0.31
+      },
+      {
+        "id": "model-deployment",
+        "name": "Model Deployment",
+        "weight": 0.12
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "3fed20a4-88dd-5898-89ec-e45d45d47f78",
+      "type": "mcq_single",
+      "prompt": "A data scientist has a Spark DataFrame df with numeric columns. They need the count, mean, standard deviation, min, 25th/50th/75th percentiles, and max for each column. Which call returns all of these by default?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "df.describe()"
+        },
+        {
+          "id": "B",
+          "text": "df.printSchema()"
+        },
+        {
+          "id": "C",
+          "text": "df.summary()"
+        },
+        {
+          "id": "D",
+          "text": "df.explain()"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-20T01:48:56Z"
+    },
+    {
+      "id": "30e9507f-49e5-5850-9360-88924ae0fc9d",
+      "type": "mcq_single",
+      "prompt": "In a Databricks notebook, a data scientist wants a quick interactive profile of a DataFrame, with per-column statistics and distribution charts. Which call does this?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "display(df.limit(10))"
+        },
+        {
+          "id": "B",
+          "text": "df.describe().show()"
+        },
+        {
+          "id": "C",
+          "text": "dbutils.fs.ls(\"/\")"
+        },
+        {
+          "id": "D",
+          "text": "dbutils.data.summarize(df)"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-20T01:48:56Z"
+    },
+    {
+      "id": "ed837747-0eb9-5bc6-bc9f-0c00beb5ce2a",
+      "type": "mcq_single",
+      "prompt": "For the column amount, approxQuantile gives Q1 = 10 and Q3 = 30. Using the standard 1.5 × IQR rule, which filter removes the outliers?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Keep rows where amount is between 10 and 30"
+        },
+        {
+          "id": "B",
+          "text": "Keep rows where amount is between −20 and 60"
+        },
+        {
+          "id": "C",
+          "text": "Keep rows where amount is greater than 60"
+        },
+        {
+          "id": "D",
+          "text": "Keep rows where amount is between −50 and 90"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-20T01:48:56Z"
+    },
+    {
+      "id": "38dbbe87-d0bd-5446-bd2a-6bef3a79241b",
+      "type": "mcq_single",
+      "prompt": "The annual_income column is heavily right-skewed. A few very large values pull the average far above a typical value, and some entries are missing. Which imputation value is most appropriate?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "The mean"
+        },
+        {
+          "id": "B",
+          "text": "The mode"
+        },
+        {
+          "id": "C",
+          "text": "Zero"
+        },
+        {
+          "id": "D",
+          "text": "The median"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-20T01:48:56Z"
+    },
+    {
+      "id": "9ea34755-30a8-5293-b38a-2da93465f6f6",
+      "type": "mcq_single",
+      "prompt": "The payment_method column is nominal (card, cash, transfer) and has missing values. Which imputation approach is most appropriate?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "The most frequent category (the mode)"
+        },
+        {
+          "id": "B",
+          "text": "The mean of the category codes"
+        },
+        {
+          "id": "C",
+          "text": "The median of the category codes"
+        },
+        {
+          "id": "D",
+          "text": "The average of the two most frequent categories"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-20T01:48:56Z"
+    },
+    {
+      "id": "7efe6406-a57e-5cc8-a87c-7746be54ec2d",
+      "type": "mcq_single",
+      "prompt": "A string column city must be one-hot encoded for a Spark ML model. Which stage order is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Apply OneHotEncoder directly to the string column"
+        },
+        {
+          "id": "B",
+          "text": "VectorAssembler, then OneHotEncoder"
+        },
+        {
+          "id": "C",
+          "text": "StringIndexer, then OneHotEncoder"
+        },
+        {
+          "id": "D",
+          "text": "StandardScaler, then OneHotEncoder"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-20T01:48:56Z"
+    },
+    {
+      "id": "3c3b2cde-aea6-5583-8d75-afe286a87418",
+      "type": "mcq_single",
+      "prompt": "For which feature is one-hot encoding the least appropriate?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "color, a nominal feature with 4 values, used in a linear regression"
+        },
+        {
+          "id": "B",
+          "text": "zip_code, a nominal feature with about 40,000 distinct values, used in a linear model"
+        },
+        {
+          "id": "C",
+          "text": "region, a nominal feature with 6 values, used in a logistic regression"
+        },
+        {
+          "id": "D",
+          "text": "day_of_week, a nominal feature with 7 values, used in a neural network"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-20T01:48:56Z"
+    },
+    {
+      "id": "82756583-e310-598b-aa79-8cd368734bf5",
+      "type": "mcq_single",
+      "prompt": "Which feature is the best candidate for a log transformation before training a linear regression?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "A feature uniformly distributed between 0 and 1"
+        },
+        {
+          "id": "B",
+          "text": "A binary flag (0 or 1)"
+        },
+        {
+          "id": "C",
+          "text": "A feature symmetric around zero, with both negative and positive values"
+        },
+        {
+          "id": "D",
+          "text": "A strictly positive, right-skewed transaction amount spanning several orders of magnitude"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-20T01:48:56Z"
+    },
+    {
+      "id": "c74767d9-6490-5533-82e0-05884ea6545a",
+      "type": "mcq_single",
+      "prompt": "A data scientist wants to examine the relationship between two categorical features, region and plan_type. Which approach is most appropriate?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "A cross-tabulation (contingency table), shown as stacked or grouped bars, or tested with chi-square"
+        },
+        {
+          "id": "B",
+          "text": "The Pearson correlation coefficient"
+        },
+        {
+          "id": "C",
+          "text": "A scatter plot of the two columns"
+        },
+        {
+          "id": "D",
+          "text": "A separate histogram of each column"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-20T01:48:56Z"
+    },
+    {
+      "id": "275131e3-dfeb-5230-8db8-8ac3f7efe0a3",
+      "type": "mcq_single",
+      "prompt": "Which pairing of feature type and visualization is the most appropriate for exploring a dataset?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Continuous: pie chart. Categorical: histogram"
+        },
+        {
+          "id": "B",
+          "text": "Continuous: line chart of row counts. Categorical: scatter plot"
+        },
+        {
+          "id": "C",
+          "text": "Continuous: histogram or box plot. Categorical: bar chart of category counts"
+        },
+        {
+          "id": "D",
+          "text": "Continuous: pie chart. Categorical: line chart"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-20T01:48:56Z"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "c0d42c4d-5adf-50ef-8f57-f438f82fd598",
+      "name": "Section 2 Quiz 1: Data Processing",
+      "itemIds": [
+        "3fed20a4-88dd-5898-89ec-e45d45d47f78",
+        "30e9507f-49e5-5850-9360-88924ae0fc9d",
+        "ed837747-0eb9-5bc6-bc9f-0c00beb5ce2a",
+        "38dbbe87-d0bd-5446-bd2a-6bef3a79241b",
+        "9ea34755-30a8-5293-b38a-2da93465f6f6",
+        "7efe6406-a57e-5cc8-a87c-7746be54ec2d",
+        "3c3b2cde-aea6-5583-8d75-afe286a87418",
+        "82756583-e310-598b-aa79-8cd368734bf5",
+        "c74767d9-6490-5533-82e0-05884ea6545a",
+        "275131e3-dfeb-5230-8db8-8ac3f7efe0a3"
+      ],
+      "timeLimitSec": 1200,
+      "shuffle": false,
+      "shuffleChoices": false
+    }
+  ],
+  "createdAt": "2026-11-20T01:48:56Z",
+  "updatedAt": "2026-11-20T01:48:56Z"
+}

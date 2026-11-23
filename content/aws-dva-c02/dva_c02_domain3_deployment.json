@@ -1,0 +1,467 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "9f7e2bb0-26d5-5c44-8413-a88acf60512e",
+  "name": "AWS DVA-C02 – Domain 3: Deployment",
+  "description": "Deployment (24% of exam). Covers CodeCommit, CodeBuild, CodeDeploy, CodePipeline, CloudFormation, SAM, CDK, and Elastic Beanstalk deployment strategies.",
+  "source": {
+    "kind": "import",
+    "ref": "dva_c02_domain3_deployment.json",
+    "format": "studydeck-v1"
+  },
+  "taxonomy": {
+    "exam": "aws-dva-c02",
+    "topics": [
+      {
+        "id": "development",
+        "name": "Development with AWS Services",
+        "weight": 0.32
+      },
+      {
+        "id": "security",
+        "name": "Security",
+        "weight": 0.26
+      },
+      {
+        "id": "deployment",
+        "name": "Deployment",
+        "weight": 0.24
+      },
+      {
+        "id": "troubleshooting",
+        "name": "Troubleshooting and Optimization",
+        "weight": 0.18
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "6de90dab-c75a-5401-8fc6-74622d4778dd",
+      "type": "flashcard",
+      "prompt": "What are the four stages in a typical AWS CodePipeline CI/CD pipeline?",
+      "answer": {
+        "text": "1. **Source** – CodeCommit, GitHub, S3, ECR\n2. **Build** – CodeBuild (compile, test, package)\n3. **Test** – Optional: CodeBuild, third-party test tools\n4. **Deploy** – CodeDeploy, Elastic Beanstalk, ECS, CloudFormation, S3\n\nEach stage has one or more **actions**. Stages run sequentially; actions within a stage can run in parallel."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "84c8a446-5ed5-57d9-a503-5491b26e3a29",
+      "type": "flashcard",
+      "prompt": "What file does CodeBuild use to define build phases, environment variables, and artifacts?",
+      "answer": {
+        "text": "`buildspec.yml` — placed in the **root of the source repository**.\n\nKey sections:\n- `version`: buildspec version (0.2)\n- `env`: environment variables, parameter-store or secrets-manager references\n- `phases`: `install`, `pre_build`, `build`, `post_build`\n- `artifacts`: files to upload to S3 output bucket\n- `cache`: directories to cache between builds"
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "8ef40cc4-439e-5558-8a6c-3081f6d11fd1",
+      "type": "flashcard",
+      "prompt": "What CodeDeploy deployment configuration causes traffic to shift 10% immediately, then the remaining 90% after a wait period?",
+      "answer": {
+        "text": "**`CodeDeployDefault.LambdaLinear10PercentEvery1Minute`** (for Lambda) or a custom **Linear** configuration.\n\nCodeDeploy traffic shifting types:\n- **All-at-once**: 100% immediately\n- **Linear**: Equal increments over time (e.g., 10% every 1 minute)\n- **Canary**: Two increments — a small % first, then the rest after a bake period (e.g., `Canary10Percent5Minutes`)"
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "b633d1ba-ec5a-5f94-a96f-7b293d5689f6",
+      "type": "flashcard",
+      "prompt": "What file does CodeDeploy require in the root of the application revision for EC2/on-premises deployments?",
+      "answer": {
+        "text": "`appspec.yml`\n\nKey sections:\n- `version`: 0.0\n- `os`: linux or windows\n- `files`: source → destination file mappings\n- `hooks`: lifecycle event scripts (`BeforeInstall`, `AfterInstall`, `ApplicationStart`, `ApplicationStop`, `ValidateService`)"
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "3f063a9c-c2e3-5a1c-9cd0-85823a02e5ba",
+      "type": "flashcard",
+      "prompt": "What is the CodeDeploy lifecycle event order for an EC2/on-premises in-place deployment?",
+      "answer": {
+        "text": "1. `ApplicationStop`\n2. `DownloadBundle`\n3. `BeforeInstall`\n4. `Install`\n5. `AfterInstall`\n6. `ApplicationStart`\n7. `ValidateService`\n\nScripts in `appspec.yml` hooks run at these points. If any script returns a non-zero exit code, the deployment fails and can trigger a rollback."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "a9b9e51e-8099-5379-ab47-399e1232aa81",
+      "type": "flashcard",
+      "prompt": "What CodeDeploy deployment type creates a new Auto Scaling Group with the new version, then shifts traffic, instead of updating in-place?",
+      "answer": {
+        "text": "**Blue/Green deployment**.\n\n- **Blue** = current production environment\n- **Green** = new environment with the updated version\n\nCodeDeploy provisions the green fleet, waits for health checks, shifts load balancer traffic, then terminates the blue fleet (after a configurable wait)."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "07dcf698-f086-5081-91a4-d02b946c61e5",
+      "type": "flashcard",
+      "prompt": "What CloudFormation section defines the parameters that can be passed to a template at stack creation or update time?",
+      "answer": {
+        "text": "**`Parameters`** section.\n\nExample:\n```yaml\nParameters:\n  InstanceType:\n    Type: String\n    Default: t3.micro\n    AllowedValues: [t3.micro, t3.small]\n    Description: EC2 instance type\n```\n\nReferenced in the template with `!Ref InstanceType` or `{ Ref: InstanceType }`."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "d30aa748-a16e-5342-bbd1-65632ba26a59",
+      "type": "flashcard",
+      "prompt": "What CloudFormation intrinsic function returns the value of an output exported from another stack?",
+      "answer": {
+        "text": "`Fn::ImportValue` (shorthand: `!ImportValue`)\n\nUsed for **cross-stack references**:\n```yaml\nVpcId: !ImportValue MyNetworkStack-VpcId\n```\n\nThe exporting stack must use the `Export` field in its `Outputs` section. Stacks with imported values cannot be deleted until all importing stacks are removed."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "2b485dd4-538d-5697-9c93-7c2444d47e58",
+      "type": "flashcard",
+      "prompt": "What CloudFormation resource type represents a custom provisioning action implemented by a Lambda function?",
+      "answer": {
+        "text": "`AWS::CloudFormation::CustomResource` (or `Custom::<ResourceName>`)\n\nCloudFormation sends Create/Update/Delete events to a Lambda function (or SNS topic). The Lambda must respond via a pre-signed S3 URL with `SUCCESS` or `FAILED`.\n\nUse case: provisioning resources not natively supported by CloudFormation."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "46241b15-5ac0-5f7b-983d-86979356d225",
+      "type": "flashcard",
+      "prompt": "What is the difference between `UpdateStack` and a CloudFormation Change Set?",
+      "answer": {
+        "text": "- **`UpdateStack`**: Immediately applies changes to the stack. You don't preview what will change.\n- **Change Set**: A **preview** of proposed changes (which resources will be added, modified, replaced, or deleted) before applying. You review, then execute or discard it.\n\nBest practice: always use change sets in production to avoid unexpected resource replacements."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "0fa76e40-1640-50e9-8cdd-c0b0cb76260a",
+      "type": "flashcard",
+      "prompt": "What happens to resources in a CloudFormation stack when a `DeletionPolicy: Retain` is set on a resource?",
+      "answer": {
+        "text": "The resource is **kept (not deleted)** when the stack is deleted or when the resource is removed from the template.\n\nOther `DeletionPolicy` options:\n- `Delete` (default): Resource is deleted with the stack\n- `Snapshot`: Creates a snapshot before deleting (RDS, EBS, Redshift, ElastiCache)\n\nUse `Retain` for critical data resources like S3 buckets and RDS databases."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "468d388e-b4ba-55e8-8ec9-aa04c07b753b",
+      "type": "flashcard",
+      "prompt": "What CloudFormation feature lets you define a stack that is used as a template for multiple identical stacks across accounts and regions?",
+      "answer": {
+        "text": "**CloudFormation StackSets**.\n\nA StackSet creates/updates/deletes stacks across multiple AWS accounts and regions in a single operation. Requires a service-managed or self-managed permission model.\n\nUse case: deploying org-wide baseline security controls or logging configurations."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "8ae29024-65a0-5ca3-8237-392dd920be86",
+      "type": "flashcard",
+      "prompt": "What is AWS SAM (Serverless Application Model) and how does it relate to CloudFormation?",
+      "answer": {
+        "text": "AWS SAM is an **extension of CloudFormation** with shorthand syntax for serverless resources.\n\nSAM transforms (`AWS::Serverless::*` resource types) expand into standard CloudFormation resources during deployment:\n- `AWS::Serverless::Function` → Lambda function + IAM role + event source mappings\n- `AWS::Serverless::Api` → API Gateway REST API\n- `AWS::Serverless::SimpleTable` → DynamoDB table\n\nDeploy with `sam build && sam deploy`."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "2f0b6790-1078-597e-82ae-85a6d9a34f54",
+      "type": "flashcard",
+      "prompt": "What SAM CLI command packages and deploys a SAM application to AWS, prompting for deployment parameters?",
+      "answer": {
+        "text": "`sam deploy --guided`\n\nThis command:\n1. Packages artifacts (uploads to S3)\n2. Prompts for stack name, region, parameters\n3. Creates/updates the CloudFormation stack\n4. Saves configuration to `samconfig.toml` for future deploys\n\nSubsequent deploys: `sam deploy` (uses saved config)."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "4ea7ee8a-503b-5be3-83a5-a15dc9e4c04a",
+      "type": "flashcard",
+      "prompt": "What SAM resource type and property enables automatic traffic shifting with CodeDeploy for a Lambda function deployment?",
+      "answer": {
+        "text": "Set `DeploymentPreference` on `AWS::Serverless::Function`:\n\n```yaml\nMyFunction:\n  Type: AWS::Serverless::Function\n  Properties:\n    DeploymentPreference:\n      Type: Canary10Percent10Minutes\n```\n\nSAM automatically creates a CodeDeploy application and deployment group. Supported types: `Canary`, `Linear`, `AllAtOnce`."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "c7cda84c-06e4-5329-99fd-9f709f78ae9e",
+      "type": "flashcard",
+      "prompt": "What AWS CDK concept represents a deployable unit containing AWS resources?",
+      "answer": {
+        "text": "A **Stack** (`cdk.Stack`).\n\nCDK hierarchy:\n- **App** → one or more Stacks\n- **Stack** → contains Constructs (AWS resources)\n- **Construct** → building block (L1: raw CloudFormation, L2: high-level with defaults, L3/Patterns: multi-resource patterns)\n\n`cdk synth` generates CloudFormation templates. `cdk deploy` deploys them."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "73b308a4-8641-5885-8698-fb97b009289d",
+      "type": "flashcard",
+      "prompt": "A CodePipeline pipeline needs to deploy to multiple environments (dev, staging, prod) with a manual approval between staging and prod. How is this configured?",
+      "answer": {
+        "text": "Add a **Manual Approval action** as a stage between staging deploy and prod deploy.\n\nIn CodePipeline:\n1. Add an `Approval` action type in a stage\n2. Optionally specify an SNS topic for notifications\n3. A reviewer approves/rejects in the console or via CLI\n4. On approval, the pipeline continues to the prod deploy stage\n\nOn rejection, the pipeline stops and can be retried."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "3f7faca9-4d8c-5428-be68-586912ae079e",
+      "type": "flashcard",
+      "prompt": "What CodeCommit event can trigger a CodePipeline pipeline to start automatically when code is pushed to a branch?",
+      "answer": {
+        "text": "An **Amazon EventBridge rule** monitoring the CodeCommit `referenceUpdated` event.\n\nEventBridge detects the push → triggers the pipeline. (Older method: CodeCommit triggers via SNS. The recommended approach is EventBridge.)\n\nThe pipeline source stage references the CodeCommit repository and branch."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "4f5c4f47-af9f-581b-b570-ffe7fe94482c",
+      "type": "flashcard",
+      "prompt": "What is the purpose of the `--no-execute-changeset` flag in the `aws cloudformation deploy` CLI command?",
+      "answer": {
+        "text": "It creates a **change set but does NOT execute it**.\n\nThis allows you to review the proposed changes before applying. You then execute manually:\n```bash\naws cloudformation execute-change-set --change-set-name <name> --stack-name <stack>\n```\n\nUseful in automated pipelines with a manual approval gate between change set creation and execution."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "f7646e74-2188-5866-bf78-28a1e3c4d99e",
+      "type": "flashcard",
+      "prompt": "What Elastic Beanstalk deployment policy minimizes deployment risk by launching new instances with the new version before terminating old ones?",
+      "answer": {
+        "text": "**Immutable** deployment.\n\nProcess:\n1. Launch a new temporary Auto Scaling Group with new instances running the new version\n2. Health checks pass → transfer new instances to the main ASG\n3. Terminate old instances and the temporary ASG\n\nSafest option — easy rollback (terminate new ASG). Most expensive (double capacity temporarily)."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "1deeb236-5968-52cb-98ac-894ebc883d61",
+      "type": "flashcard",
+      "prompt": "What file in a SAM or CodeBuild project defines the pipeline as code, including which actions run in parallel vs. sequentially?",
+      "answer": {
+        "text": "For **CodePipeline**: pipeline definition is in a `pipeline.json` or defined via CloudFormation/CDK/SAM — not a standalone file by convention.\n\nFor **CodeBuild**: `buildspec.yml` defines build phases.\n\nKey distinction: CodePipeline orchestrates stages/actions (parallelism at stage level); CodeBuild `buildspec.yml` defines what runs within a single build action."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "cab40799-d965-5b20-8233-971d431aa3eb",
+      "type": "flashcard",
+      "prompt": "What CloudFormation stack status indicates a stack update failed and was automatically rolled back to the previous state?",
+      "answer": {
+        "text": "`UPDATE_ROLLBACK_COMPLETE`\n\nCommon CloudFormation terminal states:\n- `CREATE_COMPLETE` / `UPDATE_COMPLETE`\n- `CREATE_FAILED` / `UPDATE_FAILED`\n- `ROLLBACK_COMPLETE` (creation rollback completed)\n- `UPDATE_ROLLBACK_COMPLETE` (update failed, rolled back successfully)\n- `UPDATE_ROLLBACK_FAILED` (rollback also failed — requires manual intervention)"
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "62dc22be-1eb2-5fa7-833c-120c671e0e2b",
+      "type": "flashcard",
+      "prompt": "What is the AWS CDK `cdk bootstrap` command used for?",
+      "answer": {
+        "text": "It provisions the **CDK Toolkit stack** in your AWS account/region, creating resources needed for CDK deployments:\n- An **S3 bucket** to store CloudFormation templates and Lambda code\n- An **ECR repository** for Docker image assets\n- **IAM roles** for CDK deployment\n\nMust be run once per account/region before `cdk deploy`. Creates a stack named `CDKToolkit`."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "8c2418aa-757f-57b9-b09f-58d71873d455",
+      "type": "flashcard",
+      "prompt": "What CodeDeploy deployment configuration is used for ECS blue/green deployments, and how does it differ from EC2/Lambda?",
+      "answer": {
+        "text": "For ECS, CodeDeploy uses the **`ECS`** compute platform with:\n- A new **task set** (green) replacing the existing one (blue)\n- Traffic shifted via the **load balancer** between target groups\n- Configurations: `CodeDeployDefault.ECSLinear10PercentEvery1Minute`, `ECSCanary10Percent5Minutes`, `ECSAllAtOnce`\n\nDifference: ECS deployments use task sets and target groups; EC2 uses instances; Lambda uses aliases and weighted routing."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "fb571180-6853-5017-ba7b-ed7340a5c768",
+      "type": "flashcard",
+      "prompt": "A CloudFormation template creates an RDS instance. How do you prevent the RDS password from appearing in CloudFormation template parameters in plaintext?",
+      "answer": {
+        "text": "Use **AWS Secrets Manager** or **SSM Parameter Store** (SecureString) and reference via dynamic references:\n\n```yaml\nMasterUserPassword: '{{resolve:secretsmanager:MyRDSSecret:SecretString:password}}'\n```\nor\n```yaml\nMasterUserPassword: '{{resolve:ssm-secure:/prod/rds/password}}'\n```\n\nCloudFormation resolves the value at deploy time without storing it in the template."
+      },
+      "topics": [
+        "deployment"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    }
+  ],
+  "quizzes": [],
+  "createdAt": "2025-04-01T00:00:00Z",
+  "updatedAt": "2025-04-01T00:00:00Z"
+}

@@ -13,7 +13,7 @@ from urllib.parse import urlsplit
 from starlette.responses import JSONResponse
 from starlette.types import ASGIApp, Receive, Scope, Send
 
-LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1", "testserver"}  # testserver: FastAPI's TestClient
+LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
 SAFE_METHODS = {"GET", "HEAD", "OPTIONS"}
 
 

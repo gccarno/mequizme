@@ -18,6 +18,11 @@ def test_cross_site_writes_are_refused(client):
     assert r.status_code == 201
 
 
+def test_test_host_is_not_allowed_in_the_real_app():
+    from app.core.localguard import LOCAL_HOSTS
+    assert LOCAL_HOSTS == {"127.0.0.1", "localhost", "::1"}
+
+
 def test_dns_rebinding_is_refused(client):
     assert client.get("/api/packs", headers={"Host": "evil.example"}).status_code == 421
     assert client.get("/api/packs", headers={"Host": "127.0.0.1:8000"}).status_code == 200

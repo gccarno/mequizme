@@ -15,6 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from app.api import ai, drafts, packs, quiz, stats, study
 from app.core.db import Database
 from app.core.ingest import ingest_dir
+from app.core.localguard import LocalOnly
 from app.llm import provider
 from app.llm.jobs import JobRunner, mark_interrupted
 
@@ -47,6 +48,8 @@ def create_app(content_dir: Path | None = None, db_path: Path | str | None = Non
             app.state.jobs.shutdown()
 
     app = FastAPI(title="mequizme", lifespan=lifespan)
+    extra = {h.strip().lower() for h in os.environ.get("MEQUIZME_ALLOWED_HOSTS", "").split(",") if h.strip()}
+    app.add_middleware(LocalOnly, extra_hosts=extra)
     app.state.db = Database(db_path)
     app.state.content_dir = content_dir
     if llm is _FROM_ENV:

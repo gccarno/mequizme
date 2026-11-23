@@ -64,7 +64,12 @@ Off unless a model is available. By default the app uses, in order:
 Settings: `MEQUIZME_LLM` = `auto` | `claude-code` | `api` | `off` | `fake` (canned answers, used
 by the e2e tests); `MEQUIZME_LLM_MODEL` (default `sonnet` for Claude Code, `claude-sonnet-5-5` for
 the API); `MEQUIZME_LLM_CONCURRENCY` (parallel calls for bulk jobs, default 3);
-`MEQUIZME_CHECK_LINKS=0` to skip checking that suggested links exist.
+`MEQUIZME_CHECK_LINKS=0` to skip checking that suggested links exist (the check only fetches
+public https hosts, never addresses on your machine or network).
+
+The API only answers requests addressed to this computer (`localhost`, `127.0.0.1`), and refuses
+changes sent from other websites. To reach it under another host name, list it in
+`MEQUIZME_ALLOWED_HOSTS` (comma-separated).
 
 How drafts work: AI output is written into the pack files in `content/` with a `draft` marker
 listing the fields it wrote, what they replaced, and any doubt about the answer key. Accepting

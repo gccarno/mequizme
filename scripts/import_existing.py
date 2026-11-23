@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 DATABRICKS_ML = Taxonomy(
     exam="databricks-ml-associate",
+    name="Databricks Certified Machine Learning Associate",
     topics=[
         Topic(id="databricks-ml", name="Databricks Machine Learning", weight=0.38),
         Topic(id="data-processing", name="Data Processing", weight=0.19),
@@ -45,6 +46,7 @@ QUIZ_NAMES = {
 
 AWS_DVA = Taxonomy(
     exam="aws-dva-c02",
+    name="AWS Certified Developer – Associate (DVA-C02)",
     topics=[
         Topic(id="development", name="Development with AWS Services", weight=0.32),
         Topic(id="security", name="Security", weight=0.26),

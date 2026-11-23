@@ -7,3 +7,6 @@ dist/
 *.db
 *.sqlite3
 .env
+data/
+test-results/
+playwright-report/

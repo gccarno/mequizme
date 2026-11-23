@@ -417,6 +417,18 @@
           "default": null,
           "title": "Exam"
         },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
         "topics": {
           "items": {
             "$ref": "#/$defs/Topic"

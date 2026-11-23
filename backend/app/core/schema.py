@@ -123,7 +123,8 @@ class Topic(_Open):
 
 
 class Taxonomy(_Open):
-    exam: str | None = None
+    exam: str | None = None  # stable id, e.g. aws-dva-c02; packs sharing it form one exam
+    name: str | None = None  # display name, e.g. "AWS Certified Developer – Associate"
     topics: list[Topic] = Field(default_factory=list)
 
 

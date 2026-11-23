@@ -15,6 +15,10 @@ export type Ref = string | null;
 export type Format1 = string | null;
 export type Exam = string | null;
 export type Name1 = string | null;
+/**
+ * Share needed to pass the real exam
+ */
+export type Passingscore = number | null;
 export type Id1 = string;
 export type Name2 = string;
 /**
@@ -63,7 +67,7 @@ export type Itemids = string[];
 export type Timelimitsec = number | null;
 export type Shuffle = boolean;
 export type Shufflechoices = boolean;
-export type Passingscore = number | null;
+export type Passingscore1 = number | null;
 export type Quizzes = Quiz[];
 export type Createdat1 = string | null;
 export type Updatedat1 = string | null;
@@ -91,6 +95,7 @@ export interface Source {
 export interface Taxonomy {
   exam?: Exam;
   name?: Name1;
+  passingScore?: Passingscore;
   topics?: Topics;
   [k: string]: unknown;
 }
@@ -149,6 +154,6 @@ export interface Quiz {
   timeLimitSec?: Timelimitsec;
   shuffle?: Shuffle;
   shuffleChoices?: Shufflechoices;
-  passingScore?: Passingscore;
+  passingScore?: Passingscore1;
   [k: string]: unknown;
 }

@@ -12,6 +12,7 @@
   "taxonomy": {
     "exam": "aws-dva-c02",
     "name": "AWS Certified Developer – Associate (DVA-C02)",
+    "passingScore": 0.72,
     "topics": [
       {
         "id": "development",

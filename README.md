@@ -3,7 +3,7 @@
 A local study tutor for certifications: flashcards, quizzes, timed exams, answer review,
 topic analytics, and (optionally) LLM-generated explanations and new questions.
 
-Status: **Phase 2 – core study loop.** See the full plan in `docs/plan.md`.
+Status: **Phase 3 – tutor analytics.** See the full plan in `docs/plan.md`.
 
 ## Run it
 
@@ -36,15 +36,23 @@ Content is read from `content/` at startup (`MEQUIZME_CONTENT` to override). You
   correct one, explanations and links, and one-click retake of the missed questions.
 - **Spaced repetition**: flashcards use FSRS (Again/Hard/Good/Easy). Quiz answers feed the same
   scheduler, so missed questions come back under "Review missed questions".
-- Keyboard: A–H or 1–9 to choose, Enter to check/continue, F to flag, arrows to move; Space and
-  1–4 for flashcards.
+- **Confidence**: mark each answer Guessing, Unsure or Sure. Correct guesses earn half credit and
+  are scheduled sooner; review filters show "sure but wrong" and "lucky guesses".
+- **Progress** (per exam): an estimated exam score weighted by the exam blueprint, against the
+  passing line; mastery per topic (recent answers weigh most, only the latest three per question
+  count, unknown topics start at 50%); score per quiz over time; how often you're right at each
+  confidence level; and a reading list built from the links on questions you've missed.
+- **Drills**: one click builds a practice set from your weakest topics (or one topic you pick),
+  mixing in questions due for review and favouring ones you missed or haven't seen.
+- Keyboard: A–H or 1–9 to choose, G/U/S for confidence, Enter to check/continue, F to flag,
+  arrows to move; Space and 1–4 for flashcards.
 
 ## Tests
 
 ```sh
-cd backend && uv run pytest                      # format, adapters, scheduler, grading, API
+cd backend && uv run pytest                      # format, adapters, scheduler, grading, analytics, API
 cd frontend && npm test                          # unit tests
-cd frontend && npm run build && npm run e2e      # Playwright: exam, practice, flashcards end to end
+cd frontend && npm run build && npm run e2e      # Playwright: exam, practice, flashcards, progress
 ```
 
 ## Study Pack format (v2)

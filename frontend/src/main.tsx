@@ -11,6 +11,7 @@ import { AttemptReview } from "./pages/AttemptReview";
 import { Flashcards } from "./pages/Flashcards";
 import { History } from "./pages/History";
 import { Library } from "./pages/Library";
+import { Progress } from "./pages/Progress";
 import { QuizRunner } from "./pages/QuizRunner";
 
 const queryClient = new QueryClient({
@@ -31,6 +32,7 @@ function App() {
           <NavLink to="/" end>
             Library
           </NavLink>
+          <NavLink to="/progress">Progress</NavLink>
           <NavLink to="/history">History</NavLink>
         </nav>
       </header>
@@ -40,6 +42,7 @@ function App() {
           <Route path="/study" element={<Flashcards />} />
           <Route path="/attempt/:id" element={<QuizRunner />} />
           <Route path="/attempt/:id/review" element={<AttemptReview />} />
+          <Route path="/progress" element={<Progress />} />
           <Route path="/history" element={<History />} />
           <Route
             path="*"

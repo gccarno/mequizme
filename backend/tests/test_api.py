@@ -1,22 +1,10 @@
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
 
-import pytest
-from fastapi.testclient import TestClient
 
 from app.api import quiz as quiz_api
-from app.main import create_app
 
-CONTENT = Path(__file__).resolve().parents[2] / "content"
 SECTION1 = "0e9ec33c-58a4-5c37-8b1c-f74b08d26523"
 SECTION1_KEYS = "B D A B C D D A C B".split()
-
-
-@pytest.fixture
-def client(tmp_path):
-    app = create_app(content_dir=CONTENT, db_path=tmp_path / "t.db", static_dir=tmp_path / "none")
-    with TestClient(app) as c:
-        yield c
 
 
 def _section1(client):

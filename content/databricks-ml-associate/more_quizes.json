@@ -12,6 +12,7 @@
   "taxonomy": {
     "exam": "databricks-ml-associate",
     "name": "Databricks Certified Machine Learning Associate",
+    "passingScore": 0.7,
     "topics": [
       {
         "id": "databricks-ml",

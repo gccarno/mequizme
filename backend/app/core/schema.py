@@ -126,6 +126,7 @@ class Topic(_Open):
 class Taxonomy(_Open):
     exam: str | None = None  # stable id, e.g. aws-dva-c02; packs sharing it form one exam
     name: str | None = None  # display name, e.g. "AWS Certified Developer – Associate"
+    passingScore: float | None = Field(default=None, ge=0, le=1, description="Share needed to pass the real exam")
     topics: list[Topic] = Field(default_factory=list)
 
 

@@ -38,3 +38,7 @@ export function relativeFromNow(iso: string, now = Date.now()): string {
   const d = Math.round(h / 24);
   return `in ${d} day${d === 1 ? "" : "s"}`;
 }
+
+export function formatDay(iso: string): string {
+  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}

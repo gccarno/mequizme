@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { api, type Attempt, type AttemptEntry, type ResponseIn } from "../api";
+import { api, type Attempt, type AttemptEntry, type Confidence, type ResponseIn } from "../api";
 import { Bubbles, marksFor } from "../components/Bubbles";
+import { CONFIDENCE_KEYS, ConfidencePicker } from "../components/Confidence";
 import { Feedback } from "../components/Feedback";
 import { Markdown } from "../components/Markdown";
 import { Timer } from "../components/Timer";
@@ -28,6 +29,7 @@ function Runner({ attempt }: { attempt: Attempt }) {
   const isExam = attempt.mode === "exam";
   const [index, setIndex] = useState(() => firstOpenIndex(attempt));
   const [drafts, setDrafts] = useState<Record<string, string[]>>({});
+  const [sureness, setSureness] = useState<Record<string, Confidence>>({});
   const [confirming, setConfirming] = useState(false);
   const shownAt = useRef(Date.now());
 
@@ -35,6 +37,7 @@ function Runner({ attempt }: { attempt: Attempt }) {
   const item = entry.item;
   const saved = entry.response?.choiceIds ?? [];
   const selected = drafts[item.id] ?? saved;
+  const confidence = sureness[item.id] ?? (entry.response?.confidence as Confidence | null) ?? null;
   const revealed = !!entry.revealed;
   const multi = item.type === "mcq_multi";
   const isLast = index === attempt.items.length - 1;
@@ -68,6 +71,7 @@ function Runner({ attempt }: { attempt: Attempt }) {
       qc.setQueryData(["attempt", attempt.id], a);
       qc.invalidateQueries({ queryKey: ["packs"] });
       qc.invalidateQueries({ queryKey: ["due-questions"] });
+      qc.invalidateQueries({ queryKey: ["stats"] });
       navigate(`/attempt/${attempt.id}/review`, { replace: true });
     },
   });
@@ -96,7 +100,17 @@ function Runner({ attempt }: { attempt: Attempt }) {
 
   const check = () => {
     if (!selected.length || revealed) return;
-    save.mutate({ itemId: item.id, body: { choiceIds: selected, timeMs: elapsed() } });
+    save.mutate({
+      itemId: item.id,
+      body: { choiceIds: selected, timeMs: elapsed(), ...(confidence ? { confidence } : {}) },
+    });
+  };
+
+  const rate = (c: Confidence) => {
+    if (revealed) return;
+    setSureness((s) => ({ ...s, [item.id]: c }));
+    // Exam answers save as you go; in practice the rating goes with "Check answer".
+    if (isExam) save.mutate({ itemId: item.id, body: { confidence: c } });
   };
 
   const go = (i: number) => setIndex(Math.max(0, Math.min(attempt.items.length - 1, i)));
@@ -121,7 +135,9 @@ function Runner({ attempt }: { attempt: Attempt }) {
       if (byLetter || byNumber) {
         e.preventDefault();
         toggle((byLetter ?? byNumber)!.id);
-      } else if (e.key === "Enter" && t.tagName !== "BUTTON") {
+      } else if (CONFIDENCE_KEYS[key]) {
+        rate(CONFIDENCE_KEYS[key]);
+      } else if (e.key === "Enter" && (t.tagName !== "BUTTON" || t.classList.contains("confidence-opt"))) {
         e.preventDefault();
         primary();
       } else if (key === "F") {
@@ -216,6 +232,7 @@ function Runner({ attempt }: { attempt: Attempt }) {
                   onToggle={toggle}
                 />
               )}
+              <ConfidencePicker value={confidence} onChange={rate} disabled={revealed} />
               {revealed && !isExam && <Feedback item={item} correct={entry.response?.correct ?? false} />}
             </>
           )}
@@ -248,7 +265,7 @@ function Runner({ attempt }: { attempt: Attempt }) {
             </button>
           </div>
           <p className="hint muted">
-            Keys: A–{item.choices?.at(-1)?.id ?? "D"} to choose, Enter to {isExam ? "move on" : "check and continue"}, F
+            Keys: A–{item.choices?.at(-1)?.id ?? "D"} to choose, G/U/S for guessing, unsure or sure, Enter to {isExam ? "move on" : "check and continue"}, F
             to flag{isExam && ", arrows to move"}.
           </p>
         </article>

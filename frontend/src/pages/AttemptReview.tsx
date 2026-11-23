@@ -3,11 +3,12 @@ import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api, type Attempt, type AttemptCreate } from "../api";
 import { Bubbles, marksFor } from "../components/Bubbles";
-import { Feedback } from "../components/Feedback";
+import { CONFIDENCE_LABELS } from "../components/Confidence";
+import { Feedback, isWebUrl } from "../components/Feedback";
 import { Markdown } from "../components/Markdown";
 import { formatDuration, percent } from "../lib/format";
 
-type Filter = "all" | "missed" | "flagged";
+type Filter = "all" | "missed" | "flagged" | "lucky" | "sureWrong";
 
 export function AttemptReview() {
   const { id = "" } = useParams();
@@ -24,6 +25,21 @@ export function AttemptReview() {
       </div>
     );
   return <Review attempt={attempt.data} />;
+}
+
+/** Reading links from the missed questions, most-cited first. */
+export function missedResources(a: Attempt) {
+  const rows = new Map<string, { title: string; url: string; count: number }>();
+  for (const e of a.items) {
+    if (e.response?.correct) continue;
+    for (const r of e.item.resources ?? []) {
+      if (!isWebUrl(r.url)) continue;
+      const row = rows.get(r.url) ?? { title: r.title, url: r.url, count: 0 };
+      row.count += 1;
+      rows.set(r.url, row);
+    }
+  }
+  return [...rows.values()].sort((x, y) => y.count - x.count || x.title.localeCompare(y.title));
 }
 
 export function topicBreakdown(a: Attempt) {
@@ -50,7 +66,10 @@ function Review({ attempt }: { attempt: Attempt }) {
 
   const missed = attempt.items.filter((e) => !e.response?.correct);
   const flagged = attempt.items.filter((e) => e.response?.flagged);
-  const shown = { all: attempt.items, missed, flagged }[filter];
+  const lucky = attempt.items.filter((e) => e.response?.correct && e.response.confidence === 1);
+  const sureWrong = attempt.items.filter((e) => e.response && !e.response.correct && e.response.confidence === 3);
+  const shown = { all: attempt.items, missed, flagged, lucky, sureWrong }[filter];
+  const reading = useMemo(() => missedResources(attempt), [attempt]);
   const score = attempt.score ?? 0;
   const took = new Date(attempt.submittedAt!).getTime() - new Date(attempt.startedAt).getTime();
   const topics = useMemo(() => topicBreakdown(attempt), [attempt]);
@@ -128,11 +147,29 @@ function Review({ attempt }: { attempt: Attempt }) {
         </section>
       )}
 
+      {reading.length > 0 && (
+        <section className="reading" aria-labelledby="reading-title">
+          <h2 id="reading-title">Read before you retake</h2>
+          <ul>
+            {reading.map((r) => (
+              <li key={r.url}>
+                <a href={r.url} target="_blank" rel="noreferrer">
+                  {r.title}
+                </a>
+                {r.count > 1 && <span className="muted"> covers {r.count} missed questions</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <div className="filters" role="tablist" aria-label="Show questions">
         {(
           [
             ["missed", `Missed (${missed.length})`],
             ["flagged", `Flagged (${flagged.length})`],
+            ...(sureWrong.length ? [["sureWrong", `Sure but wrong (${sureWrong.length})`] as const] : []),
+            ...(lucky.length ? [["lucky", `Lucky guesses (${lucky.length})`] as const] : []),
             ["all", `All (${attempt.items.length})`],
           ] as const
         ).map(([key, label]) => (
@@ -149,7 +186,17 @@ function Review({ attempt }: { attempt: Attempt }) {
       </div>
 
       {shown.length === 0 && (
-        <p className="muted">{filter === "missed" ? "Nothing missed. Every answer was correct." : "No flagged questions."}</p>
+        <p className="muted">
+          {
+            {
+              missed: "Nothing missed. Every answer was correct.",
+              flagged: "No flagged questions.",
+              lucky: "No lucky guesses.",
+              sureWrong: "No answers you were sure of turned out wrong.",
+              all: "",
+            }[filter]
+          }
+        </p>
       )}
       <ol className="review-list">
         {shown.map((e) => {
@@ -160,6 +207,7 @@ function Review({ attempt }: { attempt: Attempt }) {
               <p className="question-meta">
                 Question {n}
                 {!e.response?.answered && ". Not answered"}
+                {e.response?.confidence ? `. ${CONFIDENCE_LABELS[e.response.confidence as 1 | 2 | 3]}` : ""}
                 {e.response?.flagged && <span className="flag-note"> Flagged</span>}
                 {e.item.topics?.length ? `. ${e.item.topics.map((t) => attempt.topicNames[t] ?? t).join(", ")}` : ""}
               </p>

@@ -430,6 +430,21 @@
           "default": null,
           "title": "Name"
         },
+        "passingScore": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Share needed to pass the real exam",
+          "title": "Passingscore"
+        },
         "topics": {
           "items": {
             "$ref": "#/$defs/Topic"

@@ -12,7 +12,7 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.api import packs, quiz, study
+from app.api import packs, quiz, stats, study
 from app.core.db import Database
 from app.core.ingest import ingest_dir
 
@@ -38,7 +38,7 @@ def create_app(content_dir: Path | None = None, db_path: Path | str | None = Non
     app = FastAPI(title="mequizme", lifespan=lifespan)
     app.state.db = Database(db_path)
     app.state.content_dir = content_dir
-    for r in (packs.router, quiz.router, study.router):
+    for r in (packs.router, quiz.router, stats.router, study.router):
         app.include_router(r)
 
     @app.get("/api/health")

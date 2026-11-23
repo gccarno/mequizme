@@ -14,6 +14,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
 from app.api.deps import get_conn, load_items, topic_names
+from app.core.analytics import build_drill, exam_context
 from app.core.db import dumps
 from app.core.grading import grade, is_gradable
 from app.core.scheduler import now_utc, record_review
@@ -35,6 +36,7 @@ class AttemptCreate(BaseModel):
     timeLimitSec: int | None = Field(default=None, ge=30)
     shuffle: bool | None = None
     name: str | None = None
+    drill: bool = False  # with exam: target the weakest topics (or `topics`) and due reviews
     seed: int | None = None  # deterministic draws for tests
 
 
@@ -84,6 +86,14 @@ def weighted_draw(items: list[dict], topics: list[dict], count: int, rng: random
 def select_items(conn, req: AttemptCreate) -> tuple[list[str], str, int | None, bool]:
     """Returns (item ids, attempt name, quiz time limit, shuffle default)."""
     rng = random.Random(req.seed)
+    if req.drill:
+        ctx = exam_context(conn, req.exam) if req.exam else None
+        if ctx is None:
+            raise HTTPException(422, "drill needs a known exam")
+        ids, name = build_drill(conn, ctx, now_utc(), req.count or 10, req.topics, rng)
+        if not ids:
+            raise HTTPException(422, "no questions to drill yet")
+        return ids, req.name or name, None, False
     if req.itemIds:
         items = _gradable_rows(conn, f"id IN ({','.join('?' * len(req.itemIds))})", tuple(req.itemIds))
         order = {i: n for n, i in enumerate(req.itemIds)}
@@ -161,8 +171,9 @@ def _submit(conn, att: sqlite3.Row, now: datetime) -> None:
         r = responses.get(iid)
         correct = bool(r and r["correct"])
         score += correct
-        if iid in items:
+        if iid in items and (att["mode"] == "exam" or (r and r["answered_at"])):
             # Misses come back soon via SRS; low-confidence hits get a shorter interval.
+            # Questions skipped by ending practice early aren't misses, so they stay unscheduled.
             rating = 1 if not correct else 2 if (r and r["confidence"] == 1) else 3
             record_review(conn, iid, rating, "quiz", now)
     conn.execute(
@@ -290,7 +301,8 @@ def save_response(attempt_id: str, item_id: str, body: ResponseIn,
         "SELECT * FROM responses WHERE attempt_id = ? AND item_id = ?", (attempt_id, item_id)
     ).fetchone()
     answering = body.choiceIds is not None or body.text is not None
-    if answering and att["mode"] == "practice" and prev and prev["answered_at"]:
+    # Confidence locks with the answer too: rating it after seeing feedback would be meaningless.
+    if (answering or body.confidence is not None) and att["mode"] == "practice" and prev and prev["answered_at"]:
         raise HTTPException(409, "already answered (practice answers lock after feedback)")
     if body.choiceIds is not None and item.get("choices"):
         valid = {c["id"] for c in item["choices"]}

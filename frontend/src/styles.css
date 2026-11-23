@@ -182,7 +182,7 @@ pre code { background: none; padding: 0; }
 .prompt p:last-child { margin-bottom: 0; }
 .question-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 1.5rem; }
 .question-actions .btn.primary { margin-left: auto; }
-.review-head .question-actions .btn.primary { margin-left: 0; }
+.review-head .question-actions .btn.primary, .report-actions .btn.primary { margin-left: 0; }
 .runner-foot { margin-top: 3rem; font-size: var(--t-sm); }
 
 /* Bubbles: the memorable part. A choice letter in a printed ring that fills like pencil. */
@@ -281,3 +281,93 @@ pre code { background: none; padding: 0; }
   * { transition: none !important; }
 }
 .note { font-size: var(--t-sm); margin: 1rem 0 0; }
+
+/* --- confidence ------------------------------------------------------------------------- */
+.confidence { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-top: 1rem; font-size: var(--t-sm); }
+.confidence-label { color: var(--graphite); margin-right: 0.35rem; }
+.confidence-opt {
+  font: inherit; font-weight: 700; color: var(--graphite); background: transparent; cursor: pointer;
+  border: 1.5px solid var(--rule); border-radius: 99px; padding: 0.2rem 0.75rem; min-height: 2rem;
+}
+.confidence-opt:hover { border-color: var(--graphite); }
+.confidence-opt.is-on { background: var(--pencil); border-color: var(--pencil); color: var(--sheet); }
+.confidence-note { font-size: var(--t-sm); margin: 0.75rem 0 0; }
+
+/* --- reading lists ---------------------------------------------------------------------- */
+.reading { margin-bottom: 2rem; max-width: var(--measure); }
+.reading h2 { font-size: var(--t-base); }
+.reading ul, .reading-list { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.3rem; }
+
+/* --- progress: a printed score report --------------------------------------------------- */
+.readiness-line { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; margin: 0; font-size: var(--t-sm); }
+.progress .filters { margin-bottom: 2rem; }
+.report { padding-bottom: 1.5rem; border-bottom: 2px solid var(--ink); margin-bottom: 2rem; }
+.report-body { max-width: 44rem; }
+.report-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1rem; margin-bottom: 0.5rem; }
+.report-label { color: var(--graphite); }
+.report-score { font-size: var(--t-xl); font-variant-numeric: tabular-nums; }
+.status { display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 700; font-size: var(--t-sm); }
+.status-icon { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
+.tone-on_track { --tone: var(--correct); }
+.tone-borderline { --tone: var(--flag); }
+.tone-below { --tone: var(--miss); }
+.tone-early, .tone-no_topics { --tone: var(--graphite); }
+.status { color: var(--tone); }
+
+.scale { margin: 0.75rem 0 0.5rem; }
+.scale-track { position: relative; height: 0.75rem; background: var(--form-soft); border-radius: 99px; }
+.scale-fill { position: absolute; inset: 0 auto 0 0; background: var(--tone); border-radius: 99px; }
+.scale-pass { position: absolute; top: -0.35rem; bottom: -0.35rem; width: 2px; margin-left: -1px; background: var(--ink); }
+.scale-pass span {
+  position: absolute; bottom: calc(100% + 0.15rem); left: 50%; transform: translateX(-50%);
+  font-size: var(--t-sm); color: var(--ink); white-space: nowrap; font-weight: 700;
+}
+.scale { padding-top: 1.4rem; }
+.scale-ticks { display: flex; justify-content: space-between; font-size: var(--t-sm); color: var(--graphite); font-variant-numeric: tabular-nums; margin-top: 0.2rem; }
+
+.panel { margin-bottom: 2.5rem; }
+.panel h2 { font-size: var(--t-md); }
+.table-wrap { overflow-x: auto; }
+.topic-table { width: 100%; border-collapse: collapse; font-size: var(--t-sm); }
+.topic-table th, .topic-table td { text-align: left; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+.topic-table thead th { color: var(--graphite); font-weight: 700; white-space: nowrap; }
+.topic-table tbody th { font-weight: 700; }
+.topic-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mastery { display: flex; align-items: center; gap: 0.6rem; }
+.mastery .num { min-width: 4.5rem; text-align: left; }
+.mastery-bar { position: relative; width: 8rem; height: 0.5rem; background: var(--form-soft); border-radius: 99px; flex: none; }
+.mastery-fill { position: absolute; inset: 0 auto 0 0; background: var(--form); border-radius: 99px; }
+.mastery-pass { position: absolute; top: -0.25rem; bottom: -0.25rem; width: 2px; margin-left: -1px; background: var(--ink); }
+
+.spark { display: block; overflow: visible; }
+.spark-pass { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 2; }
+.spark-line { fill: none; stroke: var(--form); stroke-width: 1.5; stroke-linejoin: round; }
+.spark-dot { fill: var(--form); stroke: var(--paper); stroke-width: 1; }
+.spark-empty { font-size: var(--t-sm); white-space: nowrap; }
+
+.trend-box { max-width: 44rem; }
+.trend { display: block; max-width: 100%; height: auto; }
+.trend-grid { stroke: var(--rule); stroke-width: 1; }
+.trend-pass { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 4 3; }
+.trend-axis { fill: var(--graphite); font-size: 12px; font-family: var(--font); }
+.trend-line { fill: none; stroke: var(--form); stroke-width: 2; stroke-linejoin: round; }
+.trend-dot { fill: var(--paper); stroke: var(--form); stroke-width: 2; }
+.trend-dot.is-exam { fill: var(--form); }
+.trend-hit { fill: transparent; cursor: default; }
+.trend-point:hover .trend-dot { stroke-width: 3; }
+
+.calibration { list-style: none; padding: 0; margin: 0 0 0.5rem; display: grid; gap: 0.3rem; max-width: 28rem; }
+.calibration li { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--rule); padding: 0.35rem 0; }
+.cal-label { font-weight: 700; }
+.cal-value { font-variant-numeric: tabular-nums; }
+.report-empty { max-width: var(--measure); }
+
+@media (max-width: 40rem) {
+  /* Phone: drop the share, sparkline and seen columns so the drill button stays on screen. */
+  .topic-table th:nth-child(2), .topic-table td:nth-child(2),
+  .topic-table th:nth-child(4), .topic-table td:nth-child(4),
+  .topic-table th:nth-child(5), .topic-table td:nth-child(5) { display: none; }
+  .topic-table th, .topic-table td { padding: 0.5rem 0.3rem; }
+  .mastery { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+  .mastery-bar { width: 5.5rem; }
+}

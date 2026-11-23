@@ -67,6 +67,12 @@ function ExamActions({ exam, packs }: { exam: ExamSummary; packs: PackSummary[] 
   const start = useStartAttempt();
   const navigate = useNavigate();
   const due = useQuery({ queryKey: ["due-questions", exam.exam], queryFn: () => api.dueQuestions({ exam: exam.exam }) });
+  const stats = useQuery({
+    queryKey: ["stats", exam.exam],
+    queryFn: () => api.examStats(exam.exam),
+    enabled: exam.questionCount > 0,
+  });
+  const r = stats.data?.readiness;
   const [count, setCount] = useState(Math.min(45, exam.questionCount));
   const cardsDue = packs.reduce((n, p) => n + p.dueCount, 0);
   const cardsNew = packs.reduce((n, p) => n + p.newCount, 0);
@@ -119,6 +125,24 @@ function ExamActions({ exam, packs }: { exam: ExamSummary; packs: PackSummary[] 
           </button>
         )}
       </div>
+      {r && r.answered > 0 && r.score !== null && (
+        <p className="readiness-line">
+          <span>
+            Estimated score <strong>{Math.round(r.score * 100)}%</strong>, passing is {Math.round(r.passingScore * 100)}%
+            {r.status === "early" && " (early estimate)"}.
+          </span>
+          <Link to={`/progress?exam=${encodeURIComponent(exam.exam)}`}>See progress by topic</Link>
+          {stats.data!.weakTopics.length > 0 && (
+            <button
+              className="btn"
+              disabled={start.isPending}
+              onClick={() => start.mutate({ mode: "practice", exam: exam.exam, drill: true, count: 10 })}
+            >
+              Drill weak topics
+            </button>
+          )}
+        </p>
+      )}
       {start.error && <p className="error">{start.error.message}</p>}
     </div>
   );

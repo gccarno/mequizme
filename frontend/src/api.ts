@@ -75,6 +75,7 @@ export interface AttemptCreate {
   timeLimitSec?: number;
   shuffle?: boolean;
   name?: string;
+  drill?: boolean;
 }
 
 export interface ResponseIn {
@@ -90,6 +91,58 @@ export interface StudyQueue {
   newCount: number;
   topicNames: Record<string, string>;
   cards: Item[];
+}
+
+export type Confidence = 1 | 2 | 3; // guessing, unsure, sure
+
+export interface TrendPoint {
+  attemptId: string;
+  name: string;
+  mode: "practice" | "exam";
+  at: string;
+  correct: number;
+  total: number;
+}
+
+export interface TopicStats {
+  id: string;
+  name: string;
+  weight: number | null;
+  itemCount: number;
+  seen: number;
+  answered: number;
+  correct: number;
+  mastery: number;
+  trend: TrendPoint[];
+}
+
+export type ReadinessStatus = "early" | "on_track" | "borderline" | "below" | "no_topics";
+
+export interface ExamStats {
+  exam: string;
+  name: string;
+  questionCount: number;
+  untopicedCount: number;
+  readiness: {
+    score: number | null;
+    coverage: number;
+    answered: number;
+    passingScore: number;
+    status: ReadinessStatus;
+  };
+  topics: TopicStats[];
+  weakTopics: string[];
+  trend: TrendPoint[];
+  calibration: {
+    levels: { confidence: Confidence; correct: number; total: number }[];
+    unrated: number;
+    confidentlyWrong: string[];
+    luckyGuesses: string[];
+  };
+  missedCount: number;
+  resources: { title: string; url: string; kind?: string; missCount: number; topics: string[] }[];
+  missedWithoutResources: number;
+  dueCount: number;
 }
 
 export class ApiError extends Error {
@@ -144,6 +197,7 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ itemId, rating, durationMs }),
     }),
+  examStats: (exam: string) => request<ExamStats>(`/api/stats/exams/${encodeURIComponent(exam)}`),
   dueQuestions: (params: { packId?: string; exam?: string }) =>
     request<{ count: number; itemIds: string[] }>(`/api/study/due-questions${qs(params)}`),
 };

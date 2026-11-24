@@ -1,0 +1,486 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "1a9cbcd2-ba0c-536b-91c9-9fcfa5e09fdc",
+  "name": "AWS DVA-C02 – Domain 2: Security",
+  "description": "Security (26% of exam). Covers IAM policies, STS, Cognito, KMS, Secrets Manager, Parameter Store, S3 bucket policies, and Lambda security.",
+  "source": {
+    "kind": "import",
+    "ref": "dva_c02_domain2_security.json",
+    "format": "studydeck-v1"
+  },
+  "taxonomy": {
+    "exam": "aws-dva-c02",
+    "name": "AWS Certified Developer – Associate (DVA-C02)",
+    "passingScore": 0.72,
+    "topics": [
+      {
+        "id": "development",
+        "name": "Development with AWS Services",
+        "weight": 0.32
+      },
+      {
+        "id": "security",
+        "name": "Security",
+        "weight": 0.26
+      },
+      {
+        "id": "deployment",
+        "name": "Deployment",
+        "weight": 0.24
+      },
+      {
+        "id": "troubleshooting",
+        "name": "Troubleshooting and Optimization",
+        "weight": 0.18
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "15d1526b-ca33-554c-a6fd-eee3037dd33d",
+      "type": "flashcard",
+      "prompt": "What is the evaluation order when AWS determines whether to allow or deny an IAM request?",
+      "answer": {
+        "text": "1. **Explicit Deny** (anywhere in any policy) → DENY\n2. **Service Control Policy (SCP)** must allow\n3. **Resource-based policy** (if present) can allow\n4. **Identity-based policy** must allow\n5. **Session policy** (if using STS) must allow\n6. **Default**: implicit DENY\n\nAn explicit deny always wins over any allow."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "bf8e2397-0f48-516c-9877-c319d8580256",
+      "type": "flashcard",
+      "prompt": "What is the difference between an IAM role's trust policy and its permissions policy?",
+      "answer": {
+        "text": "- **Trust Policy**: Defines **who** can assume the role (`Principal`). It's a resource-based policy attached to the role itself.\n- **Permissions Policy**: Defines **what** the role can do — the actions and resources allowed.\n\nBoth must be correct for a successful `AssumeRole` call."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "506005a8-0147-5464-8c71-d2a43009f4f8",
+      "type": "flashcard",
+      "prompt": "A Lambda function needs to read from an S3 bucket in a different AWS account. What must be configured?",
+      "answer": {
+        "text": "**Both sides** must allow:\n1. **Lambda's execution role** (identity-based policy): must have `s3:GetObject` permission for the bucket ARN.\n2. **S3 bucket policy** (resource-based policy): must allow the Lambda execution role's ARN as a principal.\n\nCross-account access requires explicit permission from both the caller's identity policy and the resource's bucket policy."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "183dfe04-3ccf-53fc-9465-a8408715c27e",
+      "type": "flashcard",
+      "prompt": "What STS API call does an EC2 instance use to obtain temporary credentials from an attached IAM role?",
+      "answer": {
+        "text": "The EC2 instance metadata service automatically calls **`AssumeRole`** internally.\n\nApplications retrieve credentials from the **Instance Metadata Service (IMDS)**: `http://169.254.169.254/latest/meta-data/iam/security-credentials/<role-name>`. AWS SDKs do this automatically via the credential provider chain."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "62c66a10-1135-5091-9efb-01fce78ea3e3",
+      "type": "flashcard",
+      "prompt": "What is the AWS credential provider chain order for the AWS SDK?",
+      "answer": {
+        "text": "Order (first match wins):\n1. **Environment variables** (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`)\n2. **Java system properties** (JVM only)\n3. **AWS credentials file** (`~/.aws/credentials`)\n4. **ECS container credentials** (if running on ECS)\n5. **EC2 instance profile** / **Lambda execution role**\n\nNever hardcode credentials — rely on roles (items 4–5)."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "7a8dca9c-f379-5fc0-b916-cc0120e57e21",
+      "type": "flashcard",
+      "prompt": "What IAM policy condition key restricts access to AWS resources to requests originating from a specific IP range?",
+      "answer": {
+        "text": "`aws:SourceIp`\n\nExample:\n```json\n\"Condition\": {\n  \"IpAddress\": {\n    \"aws:SourceIp\": \"203.0.113.0/24\"\n  }\n}\n```\n\nNote: For VPC endpoint requests, use `aws:SourceVpc` or `aws:SourceVpce` instead."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "b00bd53d-0e2b-50aa-91ba-ebc678854403",
+      "type": "flashcard",
+      "prompt": "What is the difference between Cognito User Pools and Cognito Identity Pools?",
+      "answer": {
+        "text": "- **User Pools**: Authentication/identity store. Provides sign-up, sign-in, MFA, and JWT tokens (`id_token`, `access_token`). Think: **who you are**.\n- **Identity Pools** (Federated Identities): Authorization. Exchanges third-party tokens (including User Pool tokens) for **temporary AWS credentials** via STS. Think: **what AWS resources you can access**.\n\nCommon pattern: User Pool authenticates → Identity Pool exchanges token for IAM role credentials."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "7ad9ca9f-5cd5-5186-8581-150236e7e1e8",
+      "type": "flashcard",
+      "prompt": "A mobile app uses Cognito User Pools. An API Gateway endpoint should only accept requests from authenticated users. What authorizer type should be used?",
+      "answer": {
+        "text": "**Cognito User Pool Authorizer**.\n\nAPI Gateway validates the `Authorization` header JWT token directly against the User Pool. No Lambda authorizer needed. The token is the `id_token` or `access_token` from Cognito."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "f7262fad-c6aa-5a0a-8695-45b98da8440e",
+      "type": "flashcard",
+      "prompt": "What is the purpose of a Lambda Authorizer (formerly Custom Authorizer) in API Gateway?",
+      "answer": {
+        "text": "A Lambda Authorizer is a Lambda function that API Gateway calls **before** routing the request to the backend.\n\nIt receives the request token (or headers/query params) and returns an **IAM policy** allowing or denying access to the API.\n\nTwo types:\n- **Token-based**: Receives a Bearer token (JWT, OAuth)\n- **Request-based**: Receives full request context (headers, query, stage vars)\n\nResults can be **cached** by TTL."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "9cedfe01-e1bc-597e-98f2-55f4f1413187",
+      "type": "flashcard",
+      "prompt": "What AWS KMS key type must be used if you need to perform cryptographic operations using your own key material?",
+      "answer": {
+        "text": "**Customer Managed Key (CMK)** with **imported key material** (BYOK — Bring Your Own Key).\n\nYou generate the key material externally, wrap it using a KMS-provided public key, and import it. You are responsible for the key material's security and durability outside AWS."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "46babfa6-349e-50f7-bd60-626c1b881d8b",
+      "type": "flashcard",
+      "prompt": "What is the difference between KMS `Encrypt`/`Decrypt` and envelope encryption?",
+      "answer": {
+        "text": "- **Direct KMS Encrypt/Decrypt**: The data is sent to KMS to be encrypted. Limited to **4 KB** per call. Slow for large data.\n- **Envelope Encryption**: \n  1. Generate a **data key** (`GenerateDataKey`)\n  2. Encrypt your data locally with the plaintext data key\n  3. Discard the plaintext key; store the encrypted data key with the ciphertext\n  4. To decrypt: call KMS `Decrypt` on the encrypted data key, then decrypt data locally\n\nSDKs (like AWS Encryption SDK) handle this automatically."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "87ec4534-bda1-5886-9fc2-c8093aa20dc2",
+      "type": "flashcard",
+      "prompt": "What KMS API call generates a data encryption key and returns both the plaintext key and an encrypted copy of the key?",
+      "answer": {
+        "text": "`GenerateDataKey`\n\nReturns:\n- `Plaintext`: The raw data key (use to encrypt, then discard from memory)\n- `CiphertextBlob`: The data key encrypted under the specified KMS key (store alongside ciphertext)\n\nFor encrypt-only without needing the plaintext: `GenerateDataKeyWithoutPlaintext`."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "66e2941c-273f-5e1a-a703-3b5863c359a4",
+      "type": "flashcard",
+      "prompt": "What is the maximum number of days that AWS Secrets Manager can automatically rotate a secret?",
+      "answer": {
+        "text": "Secrets Manager supports rotation schedules from **1 day to 365 days** (using a cron or rate expression).\n\nRotation uses a Lambda function to update the secret value and propagate changes to the service. AWS provides rotation Lambda templates for common databases (RDS, Redshift, DocumentDB)."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "f2474991-f84e-50cc-b60d-35f2a8299629",
+      "type": "flashcard",
+      "prompt": "When should you use AWS Systems Manager Parameter Store vs. AWS Secrets Manager?",
+      "answer": {
+        "text": "| | Parameter Store | Secrets Manager |\n|---|---|---|\n| Cost | Free (Standard tier) | ~$0.40/secret/month |\n| Auto rotation | No (manual only) | Yes (built-in Lambda rotation) |\n| Secret versioning | Yes | Yes |\n| Cross-account | Limited | Yes |\n| Use case | Config values, non-secret params | Database passwords, API keys, credentials |\n\n**Rule of thumb**: secrets requiring automatic rotation → Secrets Manager. General config → Parameter Store."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "5c9f7975-3c57-521d-b0a1-66216c038548",
+      "type": "flashcard",
+      "prompt": "What S3 feature ensures only encrypted objects can be stored in a bucket?",
+      "answer": {
+        "text": "A **bucket policy** with a `Deny` condition on `s3:PutObject` when `s3:x-amz-server-side-encryption` is absent or not set to an approved value.\n\nExample condition:\n```json\n\"Condition\": {\n  \"StringNotEquals\": {\n    \"s3:x-amz-server-side-encryption\": \"AES256\"\n  }\n}\n```\n\nAlternatively, enable **Default Encryption** on the bucket (SSE-S3 or SSE-KMS) to auto-encrypt objects on upload."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "eb345abc-64a6-5b81-872f-3cb1f3778c62",
+      "type": "flashcard",
+      "prompt": "What is the difference between S3 SSE-S3, SSE-KMS, and SSE-C?",
+      "answer": {
+        "text": "| | SSE-S3 | SSE-KMS | SSE-C |\n|---|---|---|---|\n| Key managed by | AWS | AWS KMS (CMK) | Customer |\n| Audit trail | No | Yes (CloudTrail) | No |\n| Key rotation | Automatic | Configurable | You control |\n| Header | `AES256` | `aws:kms` | Must provide key in request |\n| Extra cost | No | Yes (KMS API calls) | No |\n\nFor compliance/audit requirements → SSE-KMS."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "bd9e8799-1394-5c9a-ad6b-253fc612c77f",
+      "type": "flashcard",
+      "prompt": "What must a developer do to access a pre-signed S3 URL after it expires?",
+      "answer": {
+        "text": "Generate a **new pre-signed URL**.\n\nPre-signed URLs embed the signer's credentials and expiration time. After expiry, the URL is invalid. The generating identity (IAM user or role) must still have permissions to the object when the URL is used."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "d49cc785-db68-57c7-82b9-56c9318e3e31",
+      "type": "flashcard",
+      "prompt": "What IAM policy element restricts which services can be used within an AWS Organization's member accounts?",
+      "answer": {
+        "text": "**Service Control Policies (SCPs)**.\n\nSCPs are attached to OUs or accounts in AWS Organizations. They define the maximum permissions — even if an IAM policy allows an action, if the SCP denies it, the action is blocked. SCPs do NOT apply to the management (root) account."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "54e48206-de19-550f-a1cc-24c2a5454565",
+      "type": "flashcard",
+      "prompt": "A developer needs to grant temporary AWS console access to a contractor without creating an IAM user. What is the recommended approach?",
+      "answer": {
+        "text": "Use **AWS IAM Identity Center (SSO)** or create an **IAM role** and provide the contractor a link to assume it via `AssumeRoleWithWebIdentity` or `AssumeRoleWithSAML`.\n\nFor quick access: generate a **console sign-in URL** using STS `GetFederationToken` or `AssumeRole` + the AWS federation endpoint."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "585673bb-f603-5056-9092-ce9cafc2a4fc",
+      "type": "flashcard",
+      "prompt": "What does the IAM `sts:AssumeRoleWithWebIdentity` API call allow?",
+      "answer": {
+        "text": "It allows users authenticated via a **web identity provider** (Amazon Cognito, Google, Facebook, any OIDC provider) to assume an IAM role and receive temporary AWS credentials.\n\nCommon use: mobile apps — user logs in with Google → app calls `AssumeRoleWithWebIdentity` → gets temporary credentials to access S3 or DynamoDB directly."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "b5382cfa-864f-5759-9f83-41395dec53b4",
+      "type": "flashcard",
+      "prompt": "What is the purpose of the `aws:SecureTransport` condition key in an S3 bucket policy?",
+      "answer": {
+        "text": "It enforces **HTTPS-only access** to the bucket.\n\nSet a `Deny` on all actions when `aws:SecureTransport` is `false`:\n```json\n\"Condition\": {\n  \"Bool\": { \"aws:SecureTransport\": \"false\" }\n}\n```\nThis blocks any request made over HTTP (plaintext), ensuring data in transit is encrypted."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "fadfda9b-607d-5d82-9d83-bc23dd16b2e0",
+      "type": "flashcard",
+      "prompt": "How does Lambda access secrets from Secrets Manager securely without storing them in environment variables?",
+      "answer": {
+        "text": "Retrieve secrets at **runtime** using the Secrets Manager SDK:\n```python\nclient.get_secret_value(SecretId='my-secret')\n```\nBest practices:\n1. **Cache** the secret in memory after the first cold-start call (avoid per-invocation API calls)\n2. Implement **cache TTL** with refresh to pick up rotated secrets\n3. Use **Lambda Powertools** `SecretsProvider` for built-in caching\n4. Ensure the Lambda execution role has `secretsmanager:GetSecretValue` permission"
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "2bceed34-6a29-54da-acd9-19a0004087c5",
+      "type": "flashcard",
+      "prompt": "What is an IAM permissions boundary and when would you use it?",
+      "answer": {
+        "text": "A **permissions boundary** is an IAM managed policy that sets the **maximum** permissions an IAM entity (user or role) can have, regardless of what identity-based policies grant.\n\n**Use case**: Allow developers to create IAM roles for their Lambda functions, but prevent privilege escalation — the developer can only grant permissions up to the boundary.\n\nEffective permissions = intersection of identity-based policy AND permissions boundary."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "a813e5db-1c7f-53c8-b9aa-ae5f770acafa",
+      "type": "flashcard",
+      "prompt": "What Cognito feature allows you to add custom attributes and run custom logic (e.g., block sign-ups from certain email domains) during authentication?",
+      "answer": {
+        "text": "**Cognito Lambda Triggers**.\n\nKey triggers:\n- `Pre sign-up`: Validate and auto-confirm users\n- `Post confirmation`: Send welcome emails\n- `Pre token generation`: Customize JWT token claims\n- `Define auth challenge` / `Verify auth challenge`: Implement custom auth flows (e.g., OTP)\n- `Pre authentication`: Block sign-in attempts"
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "86084942-42a5-5fa1-9fb6-e5fc24a90017",
+      "type": "flashcard",
+      "prompt": "What happens to Lambda environment variable values at rest? How should you protect sensitive values?",
+      "answer": {
+        "text": "Lambda **encrypts environment variables at rest** using KMS (default: AWS-managed key).\n\nFor additional security:\n1. Use a **customer-managed KMS key** for encryption\n2. Enable **encryption helpers** in the console to encrypt values client-side before sending to Lambda\n3. **Better**: Don't put secrets in env vars at all — retrieve from Secrets Manager or Parameter Store at runtime"
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    },
+    {
+      "id": "10556f55-de9a-59b7-bf4f-18eb87c97949",
+      "type": "flashcard",
+      "prompt": "What AWS service provides a managed directory for LDAP-compatible enterprise authentication that can federate with IAM?",
+      "answer": {
+        "text": "**AWS Directory Service** (specifically **AWS Managed Microsoft AD** or **AD Connector**).\n\nFor IAM federation with on-premises AD: configure **SAML 2.0** identity federation using AD FS → `AssumeRoleWithSAML`."
+      },
+      "topics": [
+        "security"
+      ],
+      "tags": [],
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2025-04-01T00:00:00Z",
+      "updatedAt": "2025-04-01T00:00:00Z"
+    }
+  ],
+  "quizzes": [],
+  "createdAt": "2025-04-01T00:00:00Z",
+  "updatedAt": "2025-04-01T00:00:00Z"
+}

@@ -1,0 +1,679 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "475c8ed1-31ae-5bf4-9f94-ca30fc2bf017",
+  "name": "Section 4 Quiz 1: Model Deployment",
+  "description": "Quiz me with 10 multiple-choice questions on Section 4: Model Deployment, in the style of an actual Databricks certification exam. Don't show answers until I respond.\n\nI checked the endpoint and query APIs against the current docs while writing these. Pick one answer per question.",
+  "source": {
+    "kind": "import",
+    "ref": "section4_quiz1.md",
+    "format": "markdown-quiz"
+  },
+  "taxonomy": {
+    "exam": "databricks-ml-associate",
+    "name": "Databricks Certified Machine Learning Associate",
+    "passingScore": 0.7,
+    "topics": [
+      {
+        "id": "databricks-ml",
+        "name": "Databricks Machine Learning",
+        "weight": 0.38
+      },
+      {
+        "id": "data-processing",
+        "name": "Data Processing",
+        "weight": 0.19
+      },
+      {
+        "id": "model-development",
+        "name": "Model Development",
+        "weight": 0.31
+      },
+      {
+        "id": "model-deployment",
+        "name": "Model Deployment",
+        "weight": 0.12
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "494252a6-c983-5d5a-8ccd-f37c99c8f587",
+      "type": "mcq_single",
+      "prompt": "Which statement about model serving approaches on Databricks is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Real-time endpoints are the most cost-effective option for high-volume workloads that can tolerate delay"
+        },
+        {
+          "id": "B",
+          "text": "Batch or streaming inference is generally the most cost-effective option for higher-throughput, higher-latency use cases"
+        },
+        {
+          "id": "C",
+          "text": "Batch inference requires a model serving endpoint"
+        },
+        {
+          "id": "D",
+          "text": "Streaming inference can publish predictions only to a REST endpoint"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "Databricks guidance ties serving approach to latency needs. Batch and streaming inference process many records together on scheduled or continuous jobs. They use cluster resources efficiently and don't need an always-on endpoint, so they cost the least per prediction when high throughput matters and latency can be higher. Real-time serving endpoints cost more because they keep compute available to return low-latency responses to individual requests.",
+      "choiceRationales": {
+        "A": "This reverses the tradeoff: real-time endpoints are built for low latency, so they are the costlier choice when delay is acceptable, and batch is the cheaper fit.",
+        "C": "Batch inference doesn't need a serving endpoint. You typically load the model, for example as a Spark UDF with mlflow.pyfunc.spark_udf, and score a table in a job, or use ai_query or similar batch functions.",
+        "D": "Streaming inference isn't limited to REST endpoints. Predictions from a Structured Streaming job can be written to sinks such as Delta tables, Kafka, or other supported destinations."
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Deploy models for inference and prediction (Databricks docs)",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/model-inference/",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:10Z"
+      },
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-23T15:19:10Z"
+    },
+    {
+      "id": "91a779db-d44a-5219-b124-2811504a1874",
+      "type": "mcq_single",
+      "prompt": "A model is registered in Unity Catalog. A nightly job must score 80 million rows already in a Spark table and write the predictions to a Delta table. Which approach scales best?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Call toPandas() on the table and run model.predict on the driver"
+        },
+        {
+          "id": "B",
+          "text": "Loop over the rows and POST each one to a real-time serving endpoint"
+        },
+        {
+          "id": "C",
+          "text": "Create a UDF with mlflow.pyfunc.spark_udf(spark, model_uri), apply it with withColumn, and write the result to a Delta table"
+        },
+        {
+          "id": "D",
+          "text": "Call collect() and score the rows in a Python loop"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "mlflow.pyfunc.spark_udf wraps the registered model (for example a models:/catalog.schema.model@alias URI) as a Spark UDF. Spark then distributes the scoring across executors and runs it in parallel on partitions of the data. The data never has to be pulled onto one machine, and the predictions can be written straight to a Delta table. This is the standard pattern for batch inference on large Spark tables.",
+      "choiceRationales": {
+        "A": "toPandas() pulls all 80 million rows into driver memory, which risks out-of-memory errors and leaves scoring single-node instead of distributed.",
+        "B": "Sending one HTTP request per row to a real-time serving endpoint adds huge network overhead and serial latency, and the endpoint is designed for low-latency online requests rather than bulk batch scoring.",
+        "D": "collect() brings every row to the driver as Python objects, so it has the same memory limits as A and is even slower because it scores row by row in a loop."
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Databricks: Deploy models for batch inference and prediction",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/model-inference/",
+          "kind": "doc"
+        },
+        {
+          "title": "MLflow: mlflow.pyfunc.spark_udf API",
+          "url": "https://mlflow.org/docs/latest/api_reference/python_api/mlflow.pyfunc.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:14Z"
+      },
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-23T15:19:14Z"
+    },
+    {
+      "id": "16a7f37e-ea95-5515-899c-82ad647cd26a",
+      "type": "mcq_single",
+      "prompt": "A web application needs a prediction for a single record in about 100 ms per request, with traffic that varies through the day. Which approach fits?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Deploy the model to a model serving endpoint and call it over REST"
+        },
+        {
+          "id": "B",
+          "text": "Score nightly in batch and store the predictions in a table"
+        },
+        {
+          "id": "C",
+          "text": "Run a streaming job with a five-minute trigger"
+        },
+        {
+          "id": "D",
+          "text": "Score ad hoc from a notebook"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "explanation": "This is an online (real-time) inference need: one record, low latency, and variable traffic. A Databricks Model Serving endpoint hosts the registered model behind a REST API, so the web app can send a request and get a prediction back in milliseconds. Serverless model serving also scales up and down with request volume, which suits traffic that changes through the day. Batch and streaming approaches produce results on a schedule rather than on demand.",
+      "choiceRationales": {
+        "B": "Nightly batch scoring precomputes predictions on a schedule, so it can't score new or changed records on demand and is stale for per-request needs.",
+        "C": "A streaming job with a five-minute trigger processes micro-batches every few minutes, so latency is minutes, not about 100 ms, and it isn't a request/response interface.",
+        "D": "Ad hoc notebook scoring is manual and interactive, so it can't serve a web application's automated requests or scale with traffic."
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "Model serving with Databricks",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/model-serving/",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:13Z"
+      },
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-23T15:19:13Z"
+    },
+    {
+      "id": "d87315af-331f-5664-8e19-2681ed5fe69c",
+      "type": "mcq_single",
+      "prompt": "Events arrive continuously from Kafka. Predictions are needed within a few minutes and must land in a Unity Catalog table, and no per-request API is required. Which is the best fit?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "A real-time model serving endpoint, called once per event"
+        },
+        {
+          "id": "B",
+          "text": "A nightly batch job"
+        },
+        {
+          "id": "C",
+          "text": "Retraining the model on each incoming record"
+        },
+        {
+          "id": "D",
+          "text": "A continuously running streaming pipeline, either Structured Streaming or Lakeflow Spark Declarative Pipelines (the exam guide’s name is Delta Live Tables), that applies the model to new records and writes predictions to a Unity Catalog table or Kafka"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "explanation": "When data arrives continuously and results are needed within minutes, a streaming pipeline is the best fit. It is near-real-time and there is no per-request API. Structured Streaming or Lakeflow Spark Declarative Pipelines (formerly Delta Live Tables) can read from Kafka and apply a registered model, for example as a Spark UDF or with `ai_query`. They then write predictions to a Unity Catalog table. This gives minutes-level latency, checkpointed fault tolerance, and no need to run an endpoint that something must call.",
+      "choiceRationales": {
+        "A": "A real-time serving endpoint is built for low-latency, per-request REST calls. You would have to write extra code to call it for every event and store the results, which adds cost and complexity when no per-request API is needed.",
+        "B": "A nightly batch job produces predictions only once a day, which misses the requirement of results within a few minutes.",
+        "C": "Retraining on each record is not inference. It produces no predictions, and it would be costly and unstable."
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Structured Streaming on Databricks",
+          "url": "https://docs.databricks.com/en/structured-streaming/index.html",
+          "kind": "doc"
+        },
+        {
+          "title": "Deploy models for batch inference and prediction",
+          "url": "https://docs.databricks.com/en/machine-learning/model-inference/index.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:18Z"
+      },
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-23T15:19:18Z"
+    },
+    {
+      "id": "67dac674-c2bf-5bf4-bd8e-40dda154f0a2",
+      "type": "mcq_single",
+      "prompt": "Which request correctly creates a serving endpoint for version 3 of the Unity Catalog model catalog.schema.my-ads-model?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "POST /api/2.0/serving-endpoints with {\"name\": \"ads-endpoint\", \"config\": {\"model_path\": \"/dbfs/models/ads\"}}"
+        },
+        {
+          "id": "B",
+          "text": "POST /api/2.0/serving-endpoints with {\"name\": \"ads-endpoint\", \"config\": {\"served_entities\": [{\"entity_name\": \"catalog.schema.my-ads-model\", \"entity_version\": \"3\", \"scale_to_zero_enabled\": true}]}}"
+        },
+        {
+          "id": "C",
+          "text": "POST /api/2.0/serving-endpoints with only {\"name\": \"ads-endpoint\"}, which auto-detects the latest registered model"
+        },
+        {
+          "id": "D",
+          "text": "PUT /api/2.0/registered-models/ads/serve"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "Model Serving endpoints are created with POST /api/2.0/serving-endpoints. The body needs a name and a config that lists served_entities. Each served entity names the Unity Catalog model with entity_name (the three-level catalog.schema.model name) and pins a version with entity_version. Options such as scale_to_zero_enabled control compute behavior. Choice B is the only request that has this structure.",
+      "choiceRationales": {
+        "A": "The config has no served_entities, and a DBFS file path like model_path isn't how Model Serving finds a model. Serving references registered models by Unity Catalog name and version.",
+        "C": "A request with only a name gives the endpoint nothing to serve. The API doesn't auto-detect a model, so config with served_entities is required.",
+        "D": "This isn't a Model Serving endpoint-creation route. Serving endpoints are created with POST on /api/2.0/serving-endpoints, and the path also lacks the three-level model name and version."
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Create custom model serving endpoints",
+          "url": "https://docs.databricks.com/en/machine-learning/model-serving/create-manage-serving-endpoints.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:19Z"
+      },
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-23T15:19:19Z"
+    },
+    {
+      "id": "19ab4e73-7007-597c-890e-e6ba31bf5422",
+      "type": "mcq_single",
+      "prompt": "Which request body can score a pandas DataFrame against a deployed custom model endpoint?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "{\"sql\": \"SELECT * FROM catalog.schema.customers\"}"
+        },
+        {
+          "id": "B",
+          "text": "{\"table_name\": \"catalog.schema.customers\"}"
+        },
+        {
+          "id": "C",
+          "text": "A CSV file uploaded as a multipart form"
+        },
+        {
+          "id": "D",
+          "text": "{\"dataframe_split\": {\"columns\": [...], \"data\": [[...]]}}"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "explanation": "Databricks Model Serving endpoints for custom (MLflow) models accept JSON over REST. For a pandas DataFrame, the supported formats are `dataframe_split` (column names plus rows of data) and `dataframe_records` (a list of row dictionaries). You can produce the split format with `df.to_json(orient='split')`, which is the same orientation MLflow uses for scoring servers. The endpoint scores only the data sent in the request. It does not read tables or run queries for you.",
+      "choiceRationales": {
+        "A": "A SQL string isn't a valid scoring payload, because the endpoint expects input data such as `dataframe_split`, `dataframe_records`, or `inputs`, and it doesn't execute SQL.",
+        "B": "A table name is only a reference, and a custom model endpoint doesn't resolve it into data, so the request would be rejected as an invalid input format.",
+        "C": "The scoring REST API takes a JSON body, not a multipart CSV upload, so the DataFrame must be serialized into JSON first."
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Databricks: Query serving endpoints for custom models",
+          "url": "https://docs.databricks.com/en/machine-learning/model-serving/score-custom-model-endpoints.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:20Z"
+      },
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-23T15:19:20Z"
+    },
+    {
+      "id": "4183b47c-05ce-5546-91fc-23a4763913a1",
+      "type": "mcq_single",
+      "prompt": "Which Python call queries a model serving endpoint using the MLflow Deployments SDK?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "mlflow.pyfunc.load_model(\"endpoint:/ads-endpoint\").predict(df)"
+        },
+        {
+          "id": "B",
+          "text": "mlflow.deployments.run_query(\"ads-endpoint\", df)"
+        },
+        {
+          "id": "C",
+          "text": "mlflow.deployments.get_deploy_client(\"databricks\").predict(endpoint=\"ads-endpoint\", inputs={...})"
+        },
+        {
+          "id": "D",
+          "text": "spark.read.format(\"serving\").load(\"ads-endpoint\")"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "The MLflow Deployments SDK uses a deployment client. You create it with `mlflow.deployments.get_deploy_client(\"databricks\")`. The client's `predict(endpoint=..., inputs=...)` method sends a scoring request to the named Databricks model serving endpoint. The `inputs` argument is a dictionary in a supported payload format, such as `dataframe_records`, `dataframe_split`, or `inputs`. The same client also manages endpoints with methods like `create_endpoint` and `get_endpoint`.",
+      "choiceRationales": {
+        "A": "`mlflow.pyfunc.load_model` loads a model from a model URI such as `models:/` or `runs:/`, and `endpoint:/` is not a valid URI scheme, so this would fail and would not query a serving endpoint.",
+        "B": "There is no `mlflow.deployments.run_query` function. Querying goes through a client returned by `get_deploy_client`.",
+        "D": "Spark's `read.format(...)` loads data sources, and there is no \"serving\" format for calling a model serving endpoint. To score data with Spark you would use `ai_query` in SQL or a UDF."
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Databricks: Query serving endpoints for custom models",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/model-serving/score-custom-model-endpoints",
+          "kind": "doc"
+        },
+        {
+          "title": "MLflow Deployments",
+          "url": "https://mlflow.org/docs/latest/ml/deployment/",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:25Z"
+      },
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-23T15:19:25Z"
+    },
+    {
+      "id": "19bc10eb-0f4a-586e-8d16-14a8f9a1be6a",
+      "type": "mcq_single",
+      "prompt": "One endpoint serves two model versions named current and challenger. The team wants 90% of requests to go to current and 10% to challenger. What controls this?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "The traffic_config setting, whose routes map each served_model_name to a traffic_percentage"
+        },
+        {
+          "id": "B",
+          "text": "Giving current a larger workload_size than challenger"
+        },
+        {
+          "id": "C",
+          "text": "Setting entity_version to a fractional value on each served entity"
+        },
+        {
+          "id": "D",
+          "text": "Enabling scale_to_zero_enabled on challenger only"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "explanation": "A Databricks Model Serving endpoint can host several served models or entities. The endpoint config's `traffic_config` decides how requests are split between them. Each route names a `served_model_name` and gives a `traffic_percentage`. For this case you would route 90 to current and 10 to challenger, and the percentages should sum to 100. This setup is used for A/B tests and canary-style rollouts of a new model version.",
+      "choiceRationales": {
+        "B": "`workload_size` sets the compute concurrency (Small, Medium or Large) provisioned for a served entity. It affects capacity, not how requests are split between models.",
+        "C": "`entity_version` selects which registered model version a served entity uses, and it is a specific version identifier, not a fractional weight. It has no effect on traffic splitting.",
+        "D": "`scale_to_zero_enabled` lets an entity's compute scale down to zero when idle to save cost. It does not set a share of traffic, and it can add cold-start latency."
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Create and manage Model Serving endpoints (Databricks docs)",
+          "url": "https://docs.databricks.com/en/machine-learning/model-serving/create-manage-serving-endpoints.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:29Z"
+      },
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-23T15:19:29Z"
+    },
+    {
+      "id": "5c151ff4-052f-5251-83c6-3b326d988881",
+      "type": "mcq_single",
+      "prompt": "A data scientist has 5,000 rows in a pandas DataFrame in a notebook and wants predictions from a registered model. No endpoint is required. What is the simplest correct approach?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Create a serving endpoint first, since registered models can’t be scored otherwise"
+        },
+        {
+          "id": "B",
+          "text": "Call mlflow.register_model(...) on the DataFrame"
+        },
+        {
+          "id": "C",
+          "text": "Load the model with mlflow.pyfunc.load_model(model_uri) and call .predict(pdf)"
+        },
+        {
+          "id": "D",
+          "text": "Call model.fit(pdf) first, then .predict"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "A registered model can be loaded straight into a notebook with `mlflow.pyfunc.load_model(model_uri)`, for example `models:/name/version` or `models:/name@alias`. This returns a generic PyFunc wrapper whose `.predict()` accepts a pandas DataFrame. For 5,000 rows, which is small enough to fit in driver memory, this is the simplest way to do batch scoring. You don't need a serving endpoint. For much larger data, use `mlflow.pyfunc.spark_udf` or a similar distributed approach.",
+      "choiceRationales": {
+        "A": "Registered models can be loaded and scored directly in a notebook, so a serving endpoint is only needed for real-time REST inference, and the question says none is required.",
+        "B": "`mlflow.register_model` registers a model artifact from a run URI in the Model Registry, and it doesn't take a DataFrame or produce predictions.",
+        "D": "Calling `fit` retrains the model on the data, which needs labels and would discard the registered model's trained state, so it's not how you get predictions from an existing model."
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "MLflow Models (PyFunc and loading models)",
+          "url": "https://mlflow.org/docs/latest/models.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:25Z"
+      },
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-23T15:19:25Z"
+    },
+    {
+      "id": "eaf44782-bcab-5f89-9cf7-f6aebff6dfb7",
+      "type": "mcq_single",
+      "prompt": "After validation, the team wants the endpoint from question 8 to send all traffic to challenger. What is the correct change?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Delete the endpoint and recreate it with a new name"
+        },
+        {
+          "id": "B",
+          "text": "Update the endpoint’s traffic_config so challenger gets 100% and current gets 0%"
+        },
+        {
+          "id": "C",
+          "text": "Enable scale_to_zero_enabled on current"
+        },
+        {
+          "id": "D",
+          "text": "Increase the workload_size of challenger"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "A Databricks Model Serving endpoint can host multiple served entities (model versions), and the traffic configuration controls what percentage of requests goes to each one. To promote a validated challenger, you update the endpoint config so challenger receives 100% and the current model receives 0%. This is an in-place update, so the endpoint name and URL stay the same and clients don't need to change. Traffic percentages across served entities must sum to 100.",
+      "choiceRationales": {
+        "A": "Deleting and recreating the endpoint with a new name causes downtime and breaks clients that call the old endpoint URL, and it isn't needed because traffic can be changed with an in-place update.",
+        "C": "scale_to_zero_enabled only lets a served entity scale down to zero when idle to save cost; it doesn't change how traffic is split.",
+        "D": "workload_size sets the compute capacity (concurrency) of a served entity, so increasing it doesn't route any traffic to challenger."
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Databricks Model Serving",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/model-serving/",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:31Z"
+      },
+      "createdAt": "2026-11-20T02:47:57Z",
+      "updatedAt": "2026-11-23T15:19:31Z"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "c2450649-3f8b-5d55-ab4c-10a905b0bd5b",
+      "name": "Section 4 Quiz 1: Model Deployment",
+      "itemIds": [
+        "494252a6-c983-5d5a-8ccd-f37c99c8f587",
+        "91a779db-d44a-5219-b124-2811504a1874",
+        "16a7f37e-ea95-5515-899c-82ad647cd26a",
+        "d87315af-331f-5664-8e19-2681ed5fe69c",
+        "67dac674-c2bf-5bf4-bd8e-40dda154f0a2",
+        "19ab4e73-7007-597c-890e-e6ba31bf5422",
+        "4183b47c-05ce-5546-91fc-23a4763913a1",
+        "19bc10eb-0f4a-586e-8d16-14a8f9a1be6a",
+        "5c151ff4-052f-5251-83c6-3b326d988881",
+        "eaf44782-bcab-5f89-9cf7-f6aebff6dfb7"
+      ],
+      "timeLimitSec": 1200,
+      "shuffle": false,
+      "shuffleChoices": false
+    }
+  ],
+  "createdAt": "2026-11-20T02:47:57Z",
+  "updatedAt": "2026-11-23T15:19:31Z"
+}

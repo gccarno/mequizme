@@ -1,0 +1,633 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "cab847a4-7680-518b-83c9-fc30e4f4fa63",
+  "name": "Section 3 Quiz 1: Model Development",
+  "description": "Quiz me with 10 multiple-choice questions on Section 3: Model Development , in the style of an actual Databricks certification exam. Don't show answers until I respond.\n\nPick one answer per question.",
+  "source": {
+    "kind": "import",
+    "ref": "section3_quiz1.md",
+    "format": "markdown-quiz"
+  },
+  "taxonomy": {
+    "exam": "databricks-ml-associate",
+    "name": "Databricks Certified Machine Learning Associate",
+    "passingScore": 0.7,
+    "topics": [
+      {
+        "id": "databricks-ml",
+        "name": "Databricks Machine Learning",
+        "weight": 0.38
+      },
+      {
+        "id": "data-processing",
+        "name": "Data Processing",
+        "weight": 0.19
+      },
+      {
+        "id": "model-development",
+        "name": "Model Development",
+        "weight": 0.31
+      },
+      {
+        "id": "model-deployment",
+        "name": "Model Deployment",
+        "weight": 0.12
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "dcee97f6-7489-5e78-8fc1-56b0e15af04e",
+      "type": "mcq_single",
+      "prompt": "A Spark ML CrossValidator uses a ParamGridBuilder with 3 values for regParam and 4 values for maxIter, and numFolds=5. How many models are trained during the search itself, before the final refit of the best model on the full training set?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "12"
+        },
+        {
+          "id": "B",
+          "text": "20"
+        },
+        {
+          "id": "C",
+          "text": "60"
+        },
+        {
+          "id": "D",
+          "text": "61"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "The grid has 3 × 4 = 12 parameter combinations. CrossValidator trains one model per combination for each fold, so the search trains 12 × 5 = 60 models. After the search it picks the combination with the best average metric across folds. It then refits that combination on the full training set, which is one extra model and isn't part of the 60.",
+      "choiceRationales": {
+        "A": "12 is only the number of parameter combinations in the grid; it ignores that each combination is trained once per fold.",
+        "B": "20 is 4 × 5, which leaves out the 3 regParam values (3 × 4 × 5 is the correct product).",
+        "D": "61 counts the 60 search models plus the final refit, but the question asks only for models trained before that refit."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Spark ML Tuning: model selection and hyperparameter tuning",
+          "url": "https://spark.apache.org/docs/latest/ml-tuning.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:45Z"
+      },
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-23T15:18:45Z"
+    },
+    {
+      "id": "378e445d-5c86-5285-9df2-7d4b2b262137",
+      "type": "mcq_single",
+      "prompt": "Which statement about estimators and transformers in Spark ML is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "VectorAssembler is an estimator, because it must learn column ranges from the data"
+        },
+        {
+          "id": "B",
+          "text": "StringIndexer is an estimator. Calling fit() learns the label-to-index mapping and returns a StringIndexerModel, which is a transformer"
+        },
+        {
+          "id": "C",
+          "text": "LogisticRegression is a transformer, and calling transform() on raw data trains it"
+        },
+        {
+          "id": "D",
+          "text": "A fitted StringIndexerModel is an estimator, because it can be refit with fit()"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "In Spark ML, an estimator implements fit(), which learns from data and returns a model. A transformer implements transform(), which maps one DataFrame to another. StringIndexer is an estimator because it must scan the data to learn the label-to-index mapping. Its fit() returns a StringIndexerModel, a transformer that applies that mapping.",
+      "choiceRationales": {
+        "A": "VectorAssembler is a pure transformer: it just concatenates columns into a vector and learns nothing from the data, so it has no fit().",
+        "C": "LogisticRegression is an estimator, and training happens when you call fit(), which returns a LogisticRegressionModel. That model is the transformer whose transform() adds predictions.",
+        "D": "A fitted StringIndexerModel is a transformer with no fit(). To learn a new mapping, you fit a new StringIndexer estimator."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Spark ML Pipelines (Apache Spark docs)",
+          "url": "https://spark.apache.org/docs/latest/ml-pipeline.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:49Z"
+      },
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-23T15:18:49Z"
+    },
+    {
+      "id": "fcd77d6a-2366-52a2-ab7d-38446abca263",
+      "type": "mcq_single",
+      "prompt": "What is a downside of k-fold cross-validation compared with a single train-validation split?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "It leaks validation rows into the training set in every fold"
+        },
+        {
+          "id": "B",
+          "text": "It cannot be combined with hyperparameter search"
+        },
+        {
+          "id": "C",
+          "text": "It gives a less reliable performance estimate than one split"
+        },
+        {
+          "id": "D",
+          "text": "Training cost grows roughly k-fold, because the model is fit k times per hyperparameter combination"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "explanation": "In k-fold cross-validation, the data is split into k folds. Each fold serves once as the validation set while the model is trained on the other k-1 folds. That means k fits for every hyperparameter combination, instead of one fit with a single split. In a grid search with many combinations, or with large models, this multiplies compute time and cost. In return, you get a performance estimate that is usually more stable and less dependent on one lucky or unlucky split. On Databricks, Spark ML's CrossValidator has this same cost, and you can reduce it with parallelism or by using TrainValidationSplit.",
+      "choiceRationales": {
+        "A": "Within each fold the validation rows are held out of training, so there is no leakage. Leakage only happens if you misuse the method, for example by fitting preprocessing on all the data first.",
+        "B": "Cross-validation is the standard way to evaluate hyperparameter candidates, for example with GridSearchCV or Spark ML's CrossValidator, so the two combine easily.",
+        "C": "Averaging over k validation folds usually gives a more reliable, lower-variance estimate than one split, so this is an advantage and not a downside."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "scikit-learn: Cross-validation",
+          "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:53Z"
+      },
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-23T15:18:53Z"
+    },
+    {
+      "id": "85aa71ac-4649-5dfc-bc6a-c4ea5b549dd8",
+      "type": "mcq_single",
+      "prompt": "A fraud dataset is 98% non-fraud. Which approach to mitigating the class imbalance is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Oversample the minority class or undersample the majority class, applied to the training set only"
+        },
+        {
+          "id": "B",
+          "text": "Resample the entire dataset before splitting it into train and test sets"
+        },
+        {
+          "id": "C",
+          "text": "Drop all minority-class rows so the model learns the dominant pattern"
+        },
+        {
+          "id": "D",
+          "text": "Evaluate with accuracy, since it reflects overall correctness"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "explanation": "Class imbalance can be mitigated by rebalancing the training data, either by oversampling the minority class (for example with SMOTE or random duplication) or by undersampling the majority class. Resampling must be applied only to the training set. The test set has to keep the real-world class distribution so that evaluation metrics reflect how the model will perform in production. If you resample before splitting, duplicated or synthetic minority rows can end up in both train and test, which causes data leakage and inflated results.",
+      "choiceRationales": {
+        "B": "Resampling before the split leaks duplicated or synthetic samples into the test set and distorts its class distribution, so the evaluation is over-optimistic and unrepresentative.",
+        "C": "Dropping the minority class removes all fraud examples, so the model can never learn to detect fraud and would only predict non-fraud.",
+        "D": "With 98% non-fraud, a model that always predicts non-fraud scores 98% accuracy while catching no fraud, so metrics like precision, recall, F1, or PR-AUC are more appropriate."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:51Z"
+      },
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-23T15:18:51Z"
+    },
+    {
+      "id": "6ec21de3-1caa-5e04-8974-87d81c603ba7",
+      "type": "mcq_single",
+      "prompt": "For the fraud dataset in question 4, which metric is the least appropriate as the only model-selection metric?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Recall"
+        },
+        {
+          "id": "B",
+          "text": "Accuracy"
+        },
+        {
+          "id": "C",
+          "text": "Area under the precision-recall curve"
+        },
+        {
+          "id": "D",
+          "text": "F1 score"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "Accuracy is the trap on imbalanced data. If 1% of transactions are fraud, a model that predicts \"not fraud\" every time is 99% accurate and catches nothing, so choosing models by accuracy alone rewards ignoring the class you care about. Recall, F1 and the area under the precision-recall curve all focus on the rare positive class, which is why they are the usual choices for fraud detection. PR AUC in particular is the standard threshold-free metric when positives are rare.\n\n*Answer key corrected: the original quiz file marked C.*",
+      "choiceRationales": {
+        "A": "Recall measures how much of the fraud you catch. On its own it can be gamed by flagging everything, but it at least looks at the rare class, so it is not the least appropriate.",
+        "C": "PR AUC is one of the best choices here: it summarizes precision and recall across thresholds and is not inflated by the large number of legitimate transactions.",
+        "D": "F1 balances precision and recall on the fraud class, so it holds up well under class imbalance."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "scikit-learn: Model evaluation metrics",
+          "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-24T00:08:52Z"
+    },
+    {
+      "id": "077ab62f-489f-55a9-8b5a-6e30e2b73f51",
+      "type": "mcq_single",
+      "prompt": "A data scientist builds a regression model where large prediction errors are disproportionately costly. Which metric best reflects this?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Log loss"
+        },
+        {
+          "id": "B",
+          "text": "ROC AUC"
+        },
+        {
+          "id": "C",
+          "text": "RMSE"
+        },
+        {
+          "id": "D",
+          "text": "MAE"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "RMSE squares each residual before averaging and then takes the square root. A single large error therefore contributes much more than several small ones, so RMSE penalizes large mistakes disproportionately. This matches a cost structure where big misses are especially expensive. RMSE is also in the same units as the target, so it is easy to interpret.",
+      "choiceRationales": {
+        "A": "Log loss (cross-entropy) evaluates predicted probabilities for classification models, so it does not apply to a regression model.",
+        "B": "ROC AUC measures how well a classifier ranks positive cases above negative ones, so it is a classification metric and not a regression metric.",
+        "D": "MAE averages absolute errors, so each unit of error counts the same and large errors are not penalized more heavily than small ones."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "scikit-learn: Metrics and scoring (regression metrics)",
+          "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:57Z"
+      },
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-23T15:18:57Z"
+    },
+    {
+      "id": "728a877d-1f7e-544f-9f00-29b86af91da1",
+      "type": "mcq_single",
+      "prompt": "A model is trained to predict ln(price). The validation RMSE, computed directly on predicted and actual log values, is 0.21. Stakeholders want the error in dollars. What should the data scientist do?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Report 0.21 as the error in dollars"
+        },
+        {
+          "id": "B",
+          "text": "Compute RMSE on the log values, then take exp(0.21) and report it as dollars"
+        },
+        {
+          "id": "C",
+          "text": "Take the log of the predictions again before computing RMSE"
+        },
+        {
+          "id": "D",
+          "text": "Exponentiate both the predictions and the actual values back to the original scale, then recompute RMSE"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "explanation": "RMSE is expressed in the units of the values it was computed on. An RMSE of 0.21 on ln(price) is a measure in log units, so it isn't dollars. To get an error in dollars, back-transform both predictions and actuals with exp() and recompute RMSE on the original scale. Error on the log scale is roughly a relative (percentage) error, so it doesn't convert to a fixed dollar amount, and exponentiating the RMSE itself doesn't work either. Note that exp() of a log-scale prediction gives a median-type estimate, which can be biased low for the mean, but recomputing RMSE on the original scale is still the right way to report dollar error.",
+      "choiceRationales": {
+        "A": "0.21 is in log-price units, not dollars, so reporting it as a dollar error is a units mistake.",
+        "B": "exp(0.21) ≈ 1.23 is a multiplicative factor (about 23% relative error), not a dollar amount, because exp does not map an average of squared log errors to a dollar error.",
+        "C": "Taking the log again moves the values further from the dollar scale (log of a log), which makes the error even less interpretable."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:00Z"
+      },
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-23T15:19:00Z"
+    },
+    {
+      "id": "337aa8cd-2792-5552-91bc-4f00347a81bc",
+      "type": "mcq_single",
+      "prompt": "A model reaches 99% training accuracy but only 72% validation accuracy. Which diagnosis and fix is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "High variance (overfitting): reduce model complexity, add regularization, or add training data"
+        },
+        {
+          "id": "B",
+          "text": "High bias (underfitting): use a more complex model"
+        },
+        {
+          "id": "C",
+          "text": "High bias: remove features"
+        },
+        {
+          "id": "D",
+          "text": "The model is well fit: deploy it"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "explanation": "A large gap between training accuracy (99%) and validation accuracy (72%) is the classic sign of high variance, or overfitting. The model has memorized the training data, including its noise, so it doesn't generalize to unseen data. Fixes reduce the model's effective capacity or give it more signal to learn from. You can simplify the model (for example, limit tree depth or use fewer parameters), add regularization (L1/L2, dropout), add more training data, or use early stopping. Underfitting (high bias) looks different: both training and validation scores are poor.",
+      "choiceRationales": {
+        "B": "Underfitting shows poor performance on the training set too, but here training accuracy is 99%, and a more complex model would make the overfitting worse.",
+        "C": "The diagnosis is wrong because high bias would show low training accuracy, and removing features is only a fix for overfitting (feature selection), not for bias, where it would reduce capacity further.",
+        "D": "A 27-point gap between training and validation accuracy shows the model doesn't generalize, so it isn't well fit and deploying it would likely give poor real-world performance."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:04Z"
+      },
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-23T15:19:04Z"
+    },
+    {
+      "id": "f2f505fe-2897-537c-a5c2-c04431735dbc",
+      "type": "mcq_single",
+      "prompt": "Which approach chooses each new set of hyperparameters using the results of previous trials, in the style of Bayesian optimization?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "fmin(objective, space, algo=rand.suggest, max_evals=32)"
+        },
+        {
+          "id": "B",
+          "text": "fmin(objective, space, algo=tpe.suggest, max_evals=32)"
+        },
+        {
+          "id": "C",
+          "text": "scikit-learn GridSearchCV, which tries every combination"
+        },
+        {
+          "id": "D",
+          "text": "ParamGridBuilder with CrossValidator"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "Hyperopt's Tree-structured Parzen Estimator (`tpe.suggest`) is a sequential model-based optimization algorithm, a Bayesian-style method. It uses the losses from earlier trials to model which regions of the search space give good and poor results. It then proposes new hyperparameters likely to improve on them. This usually finds good settings in fewer evaluations than random or exhaustive search. Passing `algo=tpe.suggest` to `fmin` is how you select it.",
+      "choiceRationales": {
+        "A": "`rand.suggest` is random search in Hyperopt: it samples each trial independently and ignores the results of earlier trials.",
+        "C": "`GridSearchCV` exhaustively evaluates every combination in a fixed grid, so it doesn't use earlier results to guide later choices.",
+        "D": "`ParamGridBuilder` with `CrossValidator` in Spark ML runs a predefined grid with cross-validation, and the grid doesn't adapt to earlier trial results."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Databricks: Hyperparameter tuning",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/automl-hyperparam-tuning/",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:07Z"
+      },
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-23T15:19:07Z"
+    },
+    {
+      "id": "dc35b5ed-1d51-5217-9f65-ccf02c98442b",
+      "type": "mcq_single",
+      "prompt": "A data scientist is tuning a scikit-learn random forest on a Databricks cluster and wants many Hyperopt trials to run in parallel across the workers. Which setup is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Pass Trials() to fmin, which runs trials in parallel on the workers"
+        },
+        {
+          "id": "B",
+          "text": "Use SparkTrials, which is only for Spark ML models"
+        },
+        {
+          "id": "C",
+          "text": "Pass SparkTrials(parallelism=8) to fmin"
+        },
+        {
+          "id": "D",
+          "text": "Wrap fmin in a CrossValidator"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "Hyperopt's SparkTrials distributes individual trials across Spark workers, and its parallelism argument sets how many trials run at once. It is designed for single-machine libraries such as scikit-learn, where each trial trains one model on one worker. You pass it to fmin with trials=SparkTrials(parallelism=8). Higher parallelism finishes sooner, but adaptive algorithms like TPE get fewer completed results to learn from between suggestions.",
+      "choiceRationales": {
+        "A": "Trials() is the default in-memory store that runs trials sequentially on the driver, so nothing is distributed to the workers.",
+        "B": "This is backwards: SparkTrials is meant for single-node libraries like scikit-learn, while distributed Spark ML models should use Trials (not SparkTrials) because they already parallelize training.",
+        "D": "CrossValidator is a Spark ML tool for cross-validation over a ParamGrid and is not a wrapper for fmin, so it does not give Hyperopt parallel trials."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Databricks: Hyperparameter tuning",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/automl-hyperparam-tuning/",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:19:07Z"
+      },
+      "createdAt": "2026-11-20T01:48:54Z",
+      "updatedAt": "2026-11-23T15:19:07Z"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "59968ab2-d4ad-5424-87ca-5f654e9acfac",
+      "name": "Section 3 Quiz 1: Model Development",
+      "itemIds": [
+        "dcee97f6-7489-5e78-8fc1-56b0e15af04e",
+        "378e445d-5c86-5285-9df2-7d4b2b262137",
+        "fcd77d6a-2366-52a2-ab7d-38446abca263",
+        "85aa71ac-4649-5dfc-bc6a-c4ea5b549dd8",
+        "6ec21de3-1caa-5e04-8974-87d81c603ba7",
+        "077ab62f-489f-55a9-8b5a-6e30e2b73f51",
+        "728a877d-1f7e-544f-9f00-29b86af91da1",
+        "337aa8cd-2792-5552-91bc-4f00347a81bc",
+        "f2f505fe-2897-537c-a5c2-c04431735dbc",
+        "dc35b5ed-1d51-5217-9f65-ccf02c98442b"
+      ],
+      "timeLimitSec": 1200,
+      "shuffle": false,
+      "shuffleChoices": false
+    }
+  ],
+  "createdAt": "2026-11-20T01:48:54Z",
+  "updatedAt": "2026-11-23T15:19:07Z"
+}

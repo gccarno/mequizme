@@ -1,0 +1,679 @@
+{
+  "$defs": {
+    "Answer": {
+      "additionalProperties": true,
+      "properties": {
+        "choiceIds": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Choiceids"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "accepted": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Accepted"
+        }
+      },
+      "title": "Answer",
+      "type": "object"
+    },
+    "Choice": {
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "text"
+      ],
+      "title": "Choice",
+      "type": "object"
+    },
+    "Draft": {
+      "additionalProperties": true,
+      "description": "Fields written by an AI (or another tool) that a person hasn't reviewed yet.\n\nAccepting removes this marker. Rejecting restores `previous` for each listed field\n(fields absent from `previous` are removed). An item whose `status` is `draft` was\nwholly generated, and rejecting it deletes the item.",
+      "properties": {
+        "fields": {
+          "description": "Item fields awaiting review, e.g. explanation, resources",
+          "items": {
+            "type": "string"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Who wrote them, e.g. a model name",
+          "title": "By"
+        },
+        "at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "At"
+        },
+        "previous": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Values the draft replaced",
+          "title": "Previous"
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Concerns for the reviewer, e.g. a doubtful answer key",
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "fields"
+      ],
+      "title": "Draft",
+      "type": "object"
+    },
+    "Item": {
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/ItemType"
+        },
+        "prompt": {
+          "description": "Markdown. For cloze, use {{c1::text}} deletions.",
+          "title": "Prompt",
+          "type": "string"
+        },
+        "choices": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Choice"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Choices"
+        },
+        "answer": {
+          "$ref": "#/$defs/Answer"
+        },
+        "explanation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Explanation"
+        },
+        "choiceRationales": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Choicerationales"
+        },
+        "topics": {
+          "description": "Topic ids from the pack taxonomy",
+          "items": {
+            "type": "string"
+          },
+          "title": "Topics",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "difficulty": {
+          "anyOf": [
+            {
+              "maximum": 5,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Difficulty"
+        },
+        "resources": {
+          "items": {
+            "$ref": "#/$defs/Resource"
+          },
+          "title": "Resources",
+          "type": "array"
+        },
+        "media": {
+          "items": {
+            "$ref": "#/$defs/Media"
+          },
+          "title": "Media",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/ItemStatus",
+          "default": "reviewed"
+        },
+        "draft": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "createdAt": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Createdat"
+        },
+        "updatedAt": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Updatedat"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "prompt",
+        "answer"
+      ],
+      "title": "Item",
+      "type": "object"
+    },
+    "ItemStatus": {
+      "enum": [
+        "reviewed",
+        "draft"
+      ],
+      "title": "ItemStatus",
+      "type": "string"
+    },
+    "ItemType": {
+      "enum": [
+        "flashcard",
+        "cloze",
+        "mcq_single",
+        "mcq_multi",
+        "true_false",
+        "short_answer"
+      ],
+      "title": "ItemType",
+      "type": "string"
+    },
+    "Media": {
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "role": {
+          "default": "prompt",
+          "enum": [
+            "prompt",
+            "answer",
+            "explanation"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "alt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alt"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "title": "Media",
+      "type": "object"
+    },
+    "Quiz": {
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "itemIds": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Itemids",
+          "type": "array"
+        },
+        "timeLimitSec": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timelimitsec"
+        },
+        "shuffle": {
+          "default": false,
+          "title": "Shuffle",
+          "type": "boolean"
+        },
+        "shuffleChoices": {
+          "default": false,
+          "title": "Shufflechoices",
+          "type": "boolean"
+        },
+        "passingScore": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Passingscore"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "itemIds"
+      ],
+      "title": "Quiz",
+      "type": "object"
+    },
+    "Resource": {
+      "additionalProperties": true,
+      "properties": {
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "url": {
+          "pattern": "^https?://",
+          "title": "Url",
+          "type": "string"
+        },
+        "kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Kind"
+        }
+      },
+      "required": [
+        "title",
+        "url"
+      ],
+      "title": "Resource",
+      "type": "object"
+    },
+    "Source": {
+      "additionalProperties": true,
+      "properties": {
+        "kind": {
+          "default": "authored",
+          "enum": [
+            "authored",
+            "llm",
+            "import"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ref"
+        },
+        "format": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format"
+        }
+      },
+      "title": "Source",
+      "type": "object"
+    },
+    "Taxonomy": {
+      "additionalProperties": true,
+      "properties": {
+        "exam": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exam"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "passingScore": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Share needed to pass the real exam",
+          "title": "Passingscore"
+        },
+        "topics": {
+          "items": {
+            "$ref": "#/$defs/Topic"
+          },
+          "title": "Topics",
+          "type": "array"
+        }
+      },
+      "title": "Taxonomy",
+      "type": "object"
+    },
+    "Topic": {
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "weight": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Share of the exam",
+          "title": "Weight"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Topic",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "format": {
+      "const": "studypack",
+      "default": "studypack",
+      "title": "Format",
+      "type": "string"
+    },
+    "formatVersion": {
+      "default": 2,
+      "title": "Formatversion",
+      "type": "integer"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "title": "Description",
+      "type": "string"
+    },
+    "source": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Source"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "taxonomy": {
+      "$ref": "#/$defs/Taxonomy"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/Item"
+      },
+      "title": "Items",
+      "type": "array"
+    },
+    "quizzes": {
+      "items": {
+        "$ref": "#/$defs/Quiz"
+      },
+      "title": "Quizzes",
+      "type": "array"
+    },
+    "createdAt": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Createdat"
+    },
+    "updatedAt": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Updatedat"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "items"
+  ],
+  "title": "StudyPack",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mequizme.local/schema/studypack.v2.schema.json"
+}

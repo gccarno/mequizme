@@ -1,0 +1,645 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "0ab89d75-bd19-531e-8b6b-e45f2e3a63d7",
+  "name": "Section 2 Quiz 1: Data Processing",
+  "description": "Quiz me with 10 multiple-choice questions on Section 2: Data Processing, in the style of an actual Databricks certification exam. Don't show answers until I respond.\n\nPick one answer per question.",
+  "source": {
+    "kind": "import",
+    "ref": "section2_quiz1.md",
+    "format": "markdown-quiz"
+  },
+  "taxonomy": {
+    "exam": "databricks-ml-associate",
+    "name": "Databricks Certified Machine Learning Associate",
+    "passingScore": 0.7,
+    "topics": [
+      {
+        "id": "databricks-ml",
+        "name": "Databricks Machine Learning",
+        "weight": 0.38
+      },
+      {
+        "id": "data-processing",
+        "name": "Data Processing",
+        "weight": 0.19
+      },
+      {
+        "id": "model-development",
+        "name": "Model Development",
+        "weight": 0.31
+      },
+      {
+        "id": "model-deployment",
+        "name": "Model Deployment",
+        "weight": 0.12
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "3fed20a4-88dd-5898-89ec-e45d45d47f78",
+      "type": "mcq_single",
+      "prompt": "A data scientist has a Spark DataFrame df with numeric columns. They need the count, mean, standard deviation, min, 25th/50th/75th percentiles, and max for each column. Which call returns all of these by default?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "df.describe()"
+        },
+        {
+          "id": "B",
+          "text": "df.printSchema()"
+        },
+        {
+          "id": "C",
+          "text": "df.summary()"
+        },
+        {
+          "id": "D",
+          "text": "df.explain()"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "`DataFrame.summary()` computes count, mean, stddev, min, approximate 25%/50%/75% percentiles, and max by default. You can pass specific statistics, such as `df.summary(\"count\", \"min\", \"75%\")`, to change the output. `describe()` is similar but returns only count, mean, stddev, min and max. It leaves out the percentiles. Both methods return a new DataFrame of statistics, and the percentiles are approximate.",
+      "choiceRationales": {
+        "A": "`describe()` returns only count, mean, stddev, min and max, so it omits the 25th, 50th and 75th percentiles.",
+        "B": "`printSchema()` prints the column names, data types and nullability as a tree, and computes no statistics.",
+        "D": "`explain()` prints the query's logical and physical execution plans, not summary statistics of the data."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "PySpark DataFrame.summary",
+          "url": "https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.summary.html",
+          "kind": "doc"
+        },
+        {
+          "title": "PySpark DataFrame.describe",
+          "url": "https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.describe.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:23Z"
+      },
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-23T15:18:23Z"
+    },
+    {
+      "id": "30e9507f-49e5-5850-9360-88924ae0fc9d",
+      "type": "mcq_single",
+      "prompt": "In a Databricks notebook, a data scientist wants a quick interactive profile of a DataFrame, with per-column statistics and distribution charts. Which call does this?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "display(df.limit(10))"
+        },
+        {
+          "id": "B",
+          "text": "df.describe().show()"
+        },
+        {
+          "id": "C",
+          "text": "dbutils.fs.ls(\"/\")"
+        },
+        {
+          "id": "D",
+          "text": "dbutils.data.summarize(df)"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "explanation": "`dbutils.data.summarize(df)` renders Databricks' interactive data profile in a notebook. It shows per-column summary statistics (count, missing values, mean, standard deviation, min, max and so on) along with distribution charts. It's the same profile you get from the \"Data Profile\" tab on a displayed DataFrame. It's a quick way to do exploratory data analysis before feature engineering or training. Note that it's a notebook-only utility, so it doesn't work in plain Spark code outside Databricks.",
+      "choiceRationales": {
+        "A": "`display(df.limit(10))` only renders the first 10 rows as an interactive table, with no per-column statistics or distribution profile unless you add one separately.",
+        "B": "`df.describe().show()` prints a plain-text table of count, mean, stddev, min and max for numeric and string columns, with no charts and no interactivity.",
+        "C": "`dbutils.fs.ls(\"/\")` lists files and directories in the Databricks file system root and has nothing to do with profiling a DataFrame."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "Databricks Utilities (dbutils) reference",
+          "url": "https://docs.databricks.com/aws/en/dev-tools/databricks-utils.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:25Z"
+      },
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-23T15:18:25Z"
+    },
+    {
+      "id": "ed837747-0eb9-5bc6-bc9f-0c00beb5ce2a",
+      "type": "mcq_single",
+      "prompt": "For the column amount, approxQuantile gives Q1 = 10 and Q3 = 30. Using the standard 1.5 × IQR rule, which filter removes the outliers?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Keep rows where amount is between 10 and 30"
+        },
+        {
+          "id": "B",
+          "text": "Keep rows where amount is between −20 and 60"
+        },
+        {
+          "id": "C",
+          "text": "Keep rows where amount is greater than 60"
+        },
+        {
+          "id": "D",
+          "text": "Keep rows where amount is between −50 and 90"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "The 1.5 × IQR rule first computes IQR = Q3 − Q1 = 30 − 10 = 20. The lower fence is Q1 − 1.5 × IQR = 10 − 30 = −20, and the upper fence is Q3 + 1.5 × IQR = 30 + 30 = 60. Rows with amount inside [−20, 60] are kept, and anything outside is treated as an outlier. In PySpark, you can get Q1 and Q3 from `df.approxQuantile(\"amount\", [0.25, 0.75], relativeError)` and then use these fences in a `filter`.",
+      "choiceRationales": {
+        "A": "Keeping only values between Q1 and Q3 retains just the middle 50% of the data and would discard many legitimate non-outlier rows; the fences must be extended by 1.5 × IQR.",
+        "C": "Keeping values greater than 60 would keep only the upper outliers and remove all normal data, which is the opposite of the goal.",
+        "D": "The bounds −50 and 90 correspond to 3 × IQR beyond the quartiles (10 − 60 and 30 + 60), the stricter 'extreme outlier' fence, not the standard 1.5 × IQR rule."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "PySpark DataFrame.approxQuantile",
+          "url": "https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.approxQuantile.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:30Z"
+      },
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-23T15:18:30Z"
+    },
+    {
+      "id": "38dbbe87-d0bd-5446-bd2a-6bef3a79241b",
+      "type": "mcq_single",
+      "prompt": "The annual_income column is heavily right-skewed. A few very large values pull the average far above a typical value, and some entries are missing. Which imputation value is most appropriate?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "The mean"
+        },
+        {
+          "id": "B",
+          "text": "The mode"
+        },
+        {
+          "id": "C",
+          "text": "Zero"
+        },
+        {
+          "id": "D",
+          "text": "The median"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "explanation": "The median is the middle value of the sorted data, so a few extreme values barely change it. For a right-skewed column like annual_income, the median reflects a typical value, while the mean gets pulled upward by outliers. Filling missing entries with the median keeps the imputed values realistic and avoids distorting the distribution. In Spark ML, `pyspark.ml.feature.Imputer` supports `strategy=\"median\"` for this.",
+      "choiceRationales": {
+        "A": "The mean is pulled far above a typical value by the few very large incomes, so imputing with it would overstate income for most missing rows.",
+        "B": "The mode is the most frequent value, which for a continuous column like income is unstable or arbitrary and doesn't represent the center of the distribution.",
+        "C": "Zero would insert an unrealistic income and distort the distribution, adding a spurious spike at the low end."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "PySpark ML Imputer API",
+          "url": "https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.Imputer.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:30Z"
+      },
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-23T15:18:30Z"
+    },
+    {
+      "id": "9ea34755-30a8-5293-b38a-2da93465f6f6",
+      "type": "mcq_single",
+      "prompt": "The payment_method column is nominal (card, cash, transfer) and has missing values. Which imputation approach is most appropriate?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "The most frequent category (the mode)"
+        },
+        {
+          "id": "B",
+          "text": "The mean of the category codes"
+        },
+        {
+          "id": "C",
+          "text": "The median of the category codes"
+        },
+        {
+          "id": "D",
+          "text": "The average of the two most frequent categories"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "explanation": "Use the mode. payment_method is nominal: card, cash and transfer have no order and no distance between them. Any integer codes you give them are arbitrary labels, so arithmetic on those codes means nothing. The mean or median of the codes depends on how the categories happened to be numbered, and the mean can be a fraction that matches no category at all. The most frequent category is always a real value and changes the distribution the least. In scikit-learn that is `SimpleImputer(strategy='most_frequent')`; in Spark you can fill with the most common value (for example with `fillna` after a `groupBy().count()`), or use `Imputer(strategy='mode')` on an indexed column.\n\n*Answer key corrected: the original quiz file marked B.*",
+      "choiceRationales": {
+        "B": "Category codes are arbitrary labels. Their mean depends on the numbering and is often a fraction that is no category at all.",
+        "C": "The median needs an order, and nominal categories have none. The result depends on how the codes were assigned.",
+        "D": "You can't average two categories. There is no value halfway between card and cash."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "scikit-learn SimpleImputer",
+          "url": "https://scikit-learn.org/stable/modules/generated/sklearn.impute.SimpleImputer.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-24T00:08:52Z"
+    },
+    {
+      "id": "7efe6406-a57e-5cc8-a87c-7746be54ec2d",
+      "type": "mcq_single",
+      "prompt": "A string column city must be one-hot encoded for a Spark ML model. Which stage order is correct?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Apply OneHotEncoder directly to the string column"
+        },
+        {
+          "id": "B",
+          "text": "VectorAssembler, then OneHotEncoder"
+        },
+        {
+          "id": "C",
+          "text": "StringIndexer, then OneHotEncoder"
+        },
+        {
+          "id": "D",
+          "text": "StandardScaler, then OneHotEncoder"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "In Spark ML, OneHotEncoder works on numeric category indices, not raw strings. StringIndexer first maps each distinct city string to a numeric index (0.0, 1.0, ...). OneHotEncoder then turns each index into a sparse binary vector. The encoded vectors can then go into VectorAssembler with the other features.",
+      "choiceRationales": {
+        "A": "OneHotEncoder expects numeric category indices as input, so applying it directly to a string column raises an error.",
+        "B": "VectorAssembler combines columns into a single feature vector and doesn't index strings, so it can't prepare the city column for encoding. It belongs after the encoding step.",
+        "D": "StandardScaler scales numeric vector features and can't take a string column. It also has no role in preparing categories for one-hot encoding."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "Spark ML Feature Transformers (StringIndexer, OneHotEncoder)",
+          "url": "https://spark.apache.org/docs/latest/ml-features.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:36Z"
+      },
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-23T15:18:36Z"
+    },
+    {
+      "id": "3c3b2cde-aea6-5583-8d75-afe286a87418",
+      "type": "mcq_single",
+      "prompt": "For which feature is one-hot encoding the least appropriate?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "color, a nominal feature with 4 values, used in a linear regression"
+        },
+        {
+          "id": "B",
+          "text": "zip_code, a nominal feature with about 40,000 distinct values, used in a linear model"
+        },
+        {
+          "id": "C",
+          "text": "region, a nominal feature with 6 values, used in a logistic regression"
+        },
+        {
+          "id": "D",
+          "text": "day_of_week, a nominal feature with 7 values, used in a neural network"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "One-hot encoding creates one binary column per category. With about 40,000 distinct zip codes, that produces roughly 40,000 sparse columns. This inflates dimensionality, memory and training cost, and it invites overfitting because many categories have few rows. It also leaves many levels unseen at inference time. For high-cardinality nominal features, alternatives such as target encoding, hashing, embeddings, or grouping into regions are usually better. One-hot encoding suits low-cardinality nominal features.",
+      "choiceRationales": {
+        "A": "Four categories add only a few columns, and one-hot encoding is the standard way to give a linear regression a nominal feature without implying an order.",
+        "C": "Six regions is low cardinality, and one-hot encoding works well for logistic regression, with one column dropped if collinearity is a concern.",
+        "D": "Seven days adds only seven binary inputs, which a neural network handles easily, and it avoids implying a false numeric order."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "scikit-learn: Preprocessing data (encoding categorical features)",
+          "url": "https://scikit-learn.org/stable/modules/preprocessing.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:38Z"
+      },
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-23T15:18:38Z"
+    },
+    {
+      "id": "82756583-e310-598b-aa79-8cd368734bf5",
+      "type": "mcq_single",
+      "prompt": "Which feature is the best candidate for a log transformation before training a linear regression?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "A feature uniformly distributed between 0 and 1"
+        },
+        {
+          "id": "B",
+          "text": "A binary flag (0 or 1)"
+        },
+        {
+          "id": "C",
+          "text": "A feature symmetric around zero, with both negative and positive values"
+        },
+        {
+          "id": "D",
+          "text": "A strictly positive, right-skewed transaction amount spanning several orders of magnitude"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "explanation": "A log transform compresses large values and pulls in a long right tail. This makes a right-skewed feature more symmetric and makes relationships closer to linear. Linear regression works best when relationships are roughly linear and when a few extreme values don't dominate the fit. A strictly positive amount spanning several orders of magnitude fits this case well, because log is defined for positive values and shrinks the huge range. If zeros are possible, use log1p.",
+      "choiceRationales": {
+        "A": "A uniform feature on 0 to 1 has no skew or wide range to correct, and log would only introduce a skew and send values near 0 toward large negative numbers.",
+        "B": "A binary flag has only two values, so a log transform just maps them to two other values (and log(0) is undefined), which gives no benefit.",
+        "C": "Log is undefined for zero and negative values, so a feature with negative values can't be log-transformed directly, and a symmetric feature doesn't need it anyway."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:38Z"
+      },
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-23T15:18:38Z"
+    },
+    {
+      "id": "c74767d9-6490-5533-82e0-05884ea6545a",
+      "type": "mcq_single",
+      "prompt": "A data scientist wants to examine the relationship between two categorical features, region and plan_type. Which approach is most appropriate?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "A cross-tabulation (contingency table), shown as stacked or grouped bars, or tested with chi-square"
+        },
+        {
+          "id": "B",
+          "text": "The Pearson correlation coefficient"
+        },
+        {
+          "id": "C",
+          "text": "A scatter plot of the two columns"
+        },
+        {
+          "id": "D",
+          "text": "A separate histogram of each column"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "explanation": "Region and plan_type are both categorical, so the question is whether the frequency of one category depends on the other. A cross-tabulation counts how many rows fall into each region and plan_type combination. You can show it as stacked or grouped bars, or test it with a chi-square test of independence. Numeric tools such as Pearson correlation and scatter plots assume ordered, continuous values, so they don't suit nominal categories.",
+      "choiceRationales": {
+        "B": "Pearson correlation measures the linear relationship between two numeric variables, and nominal categories like region have no meaningful numeric order or distance.",
+        "C": "A scatter plot of two categorical columns only shows overlapping points on a grid of category pairs, so it hides the counts and doesn't show any association.",
+        "D": "Separate histograms (bar counts) show each variable's own distribution, but they say nothing about how the two variables relate to each other."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:41Z"
+      },
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-23T15:18:41Z"
+    },
+    {
+      "id": "275131e3-dfeb-5230-8db8-8ac3f7efe0a3",
+      "type": "mcq_single",
+      "prompt": "Which pairing of feature type and visualization is the most appropriate for exploring a dataset?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Continuous: pie chart. Categorical: histogram"
+        },
+        {
+          "id": "B",
+          "text": "Continuous: line chart of row counts. Categorical: scatter plot"
+        },
+        {
+          "id": "C",
+          "text": "Continuous: histogram or box plot. Categorical: bar chart of category counts"
+        },
+        {
+          "id": "D",
+          "text": "Continuous: pie chart. Categorical: line chart"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "Continuous features take many numeric values, so you need to see their distribution. Histograms show shape, skew and modality, and box plots show median, spread and outliers. Categorical features have a limited set of discrete levels, so a bar chart of counts per category shows class balance and rare levels. Matching the plot to the data type is the first step of exploratory data analysis, and Databricks data profiles (`dbutils.data.summarize` and the notebook Data Profile tab) use the same kinds of plots.",
+      "choiceRationales": {
+        "A": "This reverses the correct pairing: a pie chart can't show the distribution of a continuous variable, and a histogram bins numeric values, so it's a poor fit for discrete categories.",
+        "B": "A line chart of row counts implies an ordered axis and doesn't show a continuous feature's distribution well, and a scatter plot needs two variables, so it doesn't summarize a single categorical feature.",
+        "D": "A pie chart can't show the distribution of a continuous feature, and a line chart implies ordering or trend between categories that have no natural order."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "Databricks notebooks: data profiles and visualizations",
+          "url": "https://docs.databricks.com/en/notebooks/visualizations/index.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:18:45Z"
+      },
+      "createdAt": "2026-11-20T01:48:56Z",
+      "updatedAt": "2026-11-23T15:18:45Z"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "c0d42c4d-5adf-50ef-8f57-f438f82fd598",
+      "name": "Section 2 Quiz 1: Data Processing",
+      "itemIds": [
+        "3fed20a4-88dd-5898-89ec-e45d45d47f78",
+        "30e9507f-49e5-5850-9360-88924ae0fc9d",
+        "ed837747-0eb9-5bc6-bc9f-0c00beb5ce2a",
+        "38dbbe87-d0bd-5446-bd2a-6bef3a79241b",
+        "9ea34755-30a8-5293-b38a-2da93465f6f6",
+        "7efe6406-a57e-5cc8-a87c-7746be54ec2d",
+        "3c3b2cde-aea6-5583-8d75-afe286a87418",
+        "82756583-e310-598b-aa79-8cd368734bf5",
+        "c74767d9-6490-5533-82e0-05884ea6545a",
+        "275131e3-dfeb-5230-8db8-8ac3f7efe0a3"
+      ],
+      "timeLimitSec": 1200,
+      "shuffle": false,
+      "shuffleChoices": false
+    }
+  ],
+  "createdAt": "2026-11-20T01:48:56Z",
+  "updatedAt": "2026-11-23T15:18:45Z"
+}

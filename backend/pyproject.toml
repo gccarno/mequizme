@@ -1,0 +1,35 @@
+[project]
+name = "mequizme"
+version = "0.1.0"
+description = "Local study tutor: flashcards, quizzes, timed exams, review."
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.165.0",
+    "fsrs>=6.3.3",
+    "pydantic>=2.7",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[project.optional-dependencies]
+api = ["anthropic>=0.40"]  # only for the Anthropic API provider; Claude Code needs nothing extra
+
+[project.scripts]
+studypack = "app.cli:main"
+mequizme = "app.server:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "jsonschema>=4.22",
+    "httpx>=0.28.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

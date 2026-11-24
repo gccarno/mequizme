@@ -1,0 +1,1301 @@
+{
+  "format": "studypack",
+  "formatVersion": 2,
+  "id": "55688cc7-3527-59f5-b3c9-ed01bb251f9b",
+  "name": "Mixed Practice Exam 1",
+  "description": "Mixed practice exam: 20 questions\n\nThe mix follows the real section weights: about 8 on Databricks ML, 4 on data processing, 6 on model development, and 2 on deployment. The questions are shuffled and don’t repeat the earlier quizzes. They lean on the objectives we skipped, such as MLOps practices, the MLflow UI, outliers, and algorithm selection. Pick one answer each.",
+  "source": {
+    "kind": "import",
+    "ref": "more_quizes.md",
+    "format": "markdown-quiz"
+  },
+  "taxonomy": {
+    "exam": "databricks-ml-associate",
+    "name": "Databricks Certified Machine Learning Associate",
+    "passingScore": 0.7,
+    "topics": [
+      {
+        "id": "databricks-ml",
+        "name": "Databricks Machine Learning",
+        "weight": 0.38
+      },
+      {
+        "id": "data-processing",
+        "name": "Data Processing",
+        "weight": 0.19
+      },
+      {
+        "id": "model-development",
+        "name": "Model Development",
+        "weight": 0.31
+      },
+      {
+        "id": "model-deployment",
+        "name": "Model Deployment",
+        "weight": 0.12
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "e8f5d807-2d8b-5dd8-a941-ca32ea259c22",
+      "type": "mcq_single",
+      "prompt": "A column has a mean of 50 and a standard deviation of 10. Which range keeps the rows left after removing values more than 3 standard deviations from the mean?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "40 to 60"
+        },
+        {
+          "id": "B",
+          "text": "20 to 80"
+        },
+        {
+          "id": "C",
+          "text": "30 to 70"
+        },
+        {
+          "id": "D",
+          "text": "0 to 100"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "Values within 3 standard deviations of the mean fall in the range mean ± 3σ. With a mean of 50 and σ of 10, that is 50 − 30 = 20 to 50 + 30 = 80. Rows outside this range are treated as outliers and removed, so the rows that remain lie between 20 and 80. This is the common \"3-sigma rule\" for outlier filtering, and for roughly normal data it keeps about 99.7% of values.",
+      "choiceRationales": {
+        "A": "40 to 60 is mean ± 1 standard deviation... actually it is mean ± 1σ (50 ± 10) would be 40 to 60, so this keeps only about 68% of normally distributed data and is far too strict for a 3σ cutoff.",
+        "C": "30 to 70 is mean ± 2 standard deviations (50 ± 20), which would remove values between 2 and 3 standard deviations away that the 3σ rule keeps.",
+        "D": "0 to 100 is mean ± 5 standard deviations (50 ± 50), so it is too wide and would keep values that are more than 3σ from the mean."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:15Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:15Z"
+    },
+    {
+      "id": "c35b135e-e964-54ac-8e17-713fb22bcb78",
+      "type": "mcq_single",
+      "prompt": "Why does Databricks recommend, in most situations, promoting code rather than models between environments?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Model artifacts cannot be copied between catalogs"
+        },
+        {
+          "id": "B",
+          "text": "Code promotion removes the need for a model registry"
+        },
+        {
+          "id": "C",
+          "text": "All code goes through the same review and integration testing, and the production model is trained on production code"
+        },
+        {
+          "id": "D",
+          "text": "Retraining in production is always cheaper than copying a model"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "In the \"deploy code\" pattern from Databricks MLOps guidance, the training code is promoted through dev, staging and prod. Every change goes through the same code review and integration tests. The production model is then trained in production on the production data by that vetted code. This gives a consistent, auditable process. It also helps when production data is access-restricted, because the model is trained where that data lives. Deploying models is the alternative, and it suits cases where training is very expensive or one-off.",
+      "choiceRationales": {
+        "A": "Models can be copied between catalogs, for example with Unity Catalog model copy in MLflow. Copying is the \"deploy models\" pattern, which is an option but not the default recommendation.",
+        "B": "A model registry is still needed in the deploy-code approach to version and govern the models trained in each environment.",
+        "D": "Retraining is often more costly than copying a model. Databricks recommends code promotion for consistency and testing, not for cost, and \"always\" makes this claim wrong."
+      },
+      "topics": [
+        "databricks-ml",
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "MLOps workflows on Databricks",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/mlops/mlops-workflow",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:15Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:15Z"
+    },
+    {
+      "id": "eb520d74-493e-5fe1-92e1-ebf3ef46fff8",
+      "type": "mcq_single",
+      "prompt": "A Spark ML pipeline has the stages StringIndexer, OneHotEncoder, VectorAssembler, and LogisticRegression. What does pipeline.fit(train_df) return?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "A PipelineModel whose stages are fitted transformers"
+        },
+        {
+          "id": "B",
+          "text": "The same Pipeline object, unchanged"
+        },
+        {
+          "id": "C",
+          "text": "Only a LogisticRegressionModel"
+        },
+        {
+          "id": "D",
+          "text": "A DataFrame of predictions"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "explanation": "Pipeline is an Estimator, so calling fit() on a DataFrame runs the stages in order. Each Estimator stage (StringIndexer, OneHotEncoder, LogisticRegression) is fitted and replaced by its model, and Transformer stages such as VectorAssembler pass through as they are. The result is a PipelineModel holding the fitted stages. You then call transform() on it to produce predictions, and it applies the same preprocessing to new data.",
+      "choiceRationales": {
+        "B": "fit() doesn't return the original Pipeline. It returns a new PipelineModel, and the Pipeline stays an unfitted definition.",
+        "C": "The LogisticRegressionModel is only the last stage inside the returned PipelineModel. fit() returns the whole fitted pipeline, including the fitted indexer and encoder.",
+        "D": "Predictions come from calling transform() on the fitted PipelineModel. fit() returns a model, not a DataFrame."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "Spark ML Pipelines",
+          "url": "https://spark.apache.org/docs/latest/ml-pipeline.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:15Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:15Z"
+    },
+    {
+      "id": "076c72f8-db3b-5c62-b0d8-0d31dcb66aac",
+      "type": "mcq_single",
+      "prompt": "A Unity Catalog feature table holds features for 1 million customers. A job has fresh values for only 10,000 of them. How should the table be updated?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Call fe.create_table(...) again"
+        },
+        {
+          "id": "B",
+          "text": "Call fe.write_table(..., mode=\"overwrite\")"
+        },
+        {
+          "id": "C",
+          "text": "Drop the table and recreate it with SQL"
+        },
+        {
+          "id": "D",
+          "text": "Call fe.write_table(name=..., df=updates_df, mode=\"merge\")"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "explanation": "`FeatureEngineeringClient.write_table` supports `mode=\"merge\"`, which upserts rows by primary key. Rows whose keys already exist are updated, and new keys are inserted. All other rows stay unchanged. Here that means only the 10,000 fresh rows are written, and the other 990,000 customers keep their existing values. This is cheaper and safer than rewriting the whole table. The table's history and its links to models and lineage are also preserved.",
+      "choiceRationales": {
+        "A": "`create_table` defines a new feature table, and it fails or conflicts when the table already exists. It is not the way to update values in an existing table.",
+        "B": "Overwrite mode replaces the entire table contents with the 10,000-row DataFrame, so the other 990,000 customers' features would be lost.",
+        "C": "Dropping and recreating the table deletes all existing data, history and lineage. It would also break models and other consumers that reference the table, and it is unnecessary for a partial update."
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Work with feature tables in Unity Catalog",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/feature-store/uc/feature-tables-uc",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:21Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:21Z"
+    },
+    {
+      "id": "0759f584-fd5e-51aa-ab4f-b275ef3738b6",
+      "type": "mcq_single",
+      "prompt": "Which option invokes a model serving endpoint directly from SQL?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "serving_call()"
+        },
+        {
+          "id": "B",
+          "text": "ai_query"
+        },
+        {
+          "id": "C",
+          "text": "mlflow_predict()"
+        },
+        {
+          "id": "D",
+          "text": "ENDPOINT() as a table function"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "`ai_query` is a built-in Databricks SQL AI function. It sends a request to an existing model serving endpoint, such as a custom model, a foundation model or an external model, and returns the response as a SQL value. You call it like `SELECT ai_query('endpoint_name', request) FROM table`. This lets you run batch inference over table rows without leaving SQL or writing Python.",
+      "choiceRationales": {
+        "A": "`serving_call()` is not a Databricks SQL function, so the call would fail as an undefined function.",
+        "C": "`mlflow_predict()` is not a SQL function. MLflow scoring in Databricks goes through `mlflow.pyfunc.spark_udf` or the serving REST API, not a SQL function with this name.",
+        "D": "There is no `ENDPOINT()` table function for querying serving endpoints. `ai_query` is a scalar function, not a table function."
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "ai_query function (Databricks SQL)",
+          "url": "https://docs.databricks.com/aws/en/sql/language-manual/functions/ai_query",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:22Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:22Z"
+    },
+    {
+      "id": "973899bd-6d77-57f0-aaad-b9689aa6f2cb",
+      "type": "mcq_single",
+      "prompt": "Which classification metric does not depend on a chosen decision threshold?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "F1 score"
+        },
+        {
+          "id": "B",
+          "text": "Precision"
+        },
+        {
+          "id": "C",
+          "text": "Recall"
+        },
+        {
+          "id": "D",
+          "text": "ROC AUC"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "explanation": "ROC AUC is computed from the model's predicted scores or probabilities. It measures how well those scores rank positives above negatives across every possible threshold. The ROC curve plots true positive rate against false positive rate as the threshold varies, and AUC summarizes the whole curve in one number. No single cutoff is chosen. It can be read as the probability that a random positive example scores higher than a random negative one.",
+      "choiceRationales": {
+        "A": "F1 is the harmonic mean of precision and recall, and both are computed from hard class predictions, so it changes whenever the threshold changes.",
+        "B": "Precision is TP/(TP+FP), and the TP and FP counts depend on which scores are labeled positive, so it varies with the threshold.",
+        "C": "Recall is TP/(TP+FN), and lowering or raising the threshold changes how many positives are caught, so it depends on the threshold."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "scikit-learn: Model evaluation (ROC and metrics)",
+          "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:23Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:23Z"
+    },
+    {
+      "id": "749ec5ae-eb19-59d8-8927-564d37971c45",
+      "type": "mcq_single",
+      "prompt": "Which is a benefit of registering a model in the Unity Catalog registry rather than the workspace registry?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Models are governed securables with Unity Catalog access control, usable from any workspace attached to the same metastore"
+        },
+        {
+          "id": "B",
+          "text": "Models support fixed Staging and Production stages natively"
+        },
+        {
+          "id": "C",
+          "text": "Registered models are deployed to a serving endpoint automatically"
+        },
+        {
+          "id": "D",
+          "text": "Models can be registered without a three-level name"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "explanation": "Models in Unity Catalog are securables in the catalog.schema.model hierarchy. You manage them with the same GRANT-based permissions and governance as tables and volumes. Because Unity Catalog is scoped to a metastore, any workspace attached to that metastore can access the model, subject to permissions. This allows centralized governance, lineage and cross-workspace sharing. The workspace registry is scoped to one workspace and uses workspace-level ACLs.",
+      "choiceRationales": {
+        "B": "Unity Catalog does not use fixed Staging and Production stages. Those are a feature of the legacy workspace registry, and Unity Catalog uses aliases such as Champion instead.",
+        "C": "Registering a model never deploys it. You must create a Model Serving endpoint separately.",
+        "D": "It's the reverse. Unity Catalog models require a three-level name (catalog.schema.model), while the workspace registry uses a simple name."
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Manage model lifecycle in Unity Catalog",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/manage-model-lifecycle/",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:28Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:28Z"
+    },
+    {
+      "id": "7306f379-29cc-52ae-be6d-c52593efcd9e",
+      "type": "mcq_single",
+      "prompt": "Why is one-hot encoding preferred over integer category indices for a nominal feature in a linear regression?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Integer indices use more memory"
+        },
+        {
+          "id": "B",
+          "text": "Linear models cannot accept numeric inputs"
+        },
+        {
+          "id": "C",
+          "text": "Integer indices imply an order and magnitude between categories that does not exist"
+        },
+        {
+          "id": "D",
+          "text": "One-hot encoding reduces the number of features"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "A nominal feature has no natural order, such as color or city. If you encode it as integers (red=0, blue=1, green=2), a linear regression treats it as one numeric feature with a single coefficient. That forces the model to assume that blue is \"between\" red and green and that the effect grows linearly with the index. One-hot encoding creates a separate binary column for each category, so each category gets its own coefficient and no false ordering is introduced.",
+      "choiceRationales": {
+        "A": "Memory is not the reason: a single integer column is actually smaller than several one-hot columns, and the choice is driven by modeling correctness.",
+        "B": "Linear models work with numeric inputs, and integer indices are numeric, so they are accepted. The problem is that they carry misleading meaning.",
+        "D": "One-hot encoding increases the number of features, creating roughly one column per category, so it does not reduce them."
+      },
+      "topics": [
+        "model-development",
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "Spark ML Feature Transformers (OneHotEncoder, StringIndexer)",
+          "url": "https://spark.apache.org/docs/latest/ml-features.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:28Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:28Z"
+    },
+    {
+      "id": "5e56ca99-8a8f-5ef6-85ba-83d8d326b5a9",
+      "type": "mcq_single",
+      "prompt": "Training a large deep neural network is very expensive and hard to reproduce. All work happens in a single workspace, with no external repos or CI/CD. Which promotion approach fits best?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Promote the code and retrain in every environment"
+        },
+        {
+          "id": "B",
+          "text": "Promote the trained model artifact through the environments"
+        },
+        {
+          "id": "C",
+          "text": "Retrain weekly in each environment"
+        },
+        {
+          "id": "D",
+          "text": "Neither approach works without CI/CD"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "Databricks describes two MLOps deployment patterns: deploy code and deploy models. With deploy models, you train once (usually in dev) and promote the resulting model artifact through staging and production. In Unity Catalog this is done by copying or registering the model version across catalogs and using aliases. This fits when training is very expensive or hard to reproduce, because the exact artifact you validated is the one that gets served. It also needs no external repos or CI/CD, so it works inside a single workspace.",
+      "choiceRationales": {
+        "A": "Deploy-code retrains in every environment, which multiplies the cost of a very expensive training run and may give different models because the run is hard to reproduce.",
+        "C": "Retraining weekly in each environment adds recurring, costly runs and doesn't promote a validated artifact, so what is tested may differ from what runs in production.",
+        "D": "Promoting a model artifact (for example by copying registered model versions between Unity Catalog catalogs) needs no CI/CD, so this claim is false."
+      },
+      "topics": [
+        "databricks-ml",
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "MLOps workflows on Databricks",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/mlops/mlops-workflow",
+          "kind": "doc"
+        },
+        {
+          "title": "Manage model lifecycle in Unity Catalog",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/manage-model-lifecycle/",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:32Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:32Z"
+    },
+    {
+      "id": "35a6d03f-6dfa-5398-8a07-e7c186054590",
+      "type": "mcq_single",
+      "prompt": "A data scientist must predict next month’s dollar spend per customer from labeled history. Which approach fits?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "k-means clustering"
+        },
+        {
+          "id": "B",
+          "text": "A logistic regression classifier"
+        },
+        {
+          "id": "C",
+          "text": "A regression model, such as linear regression or a gradient-boosted trees regressor"
+        },
+        {
+          "id": "D",
+          "text": "PCA"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "Predicting next month's dollar spend means predicting a continuous numeric target, and labeled history means supervised learning. That combination is a regression problem. Linear regression and gradient-boosted trees regressors (for example in scikit-learn, XGBoost, or Spark ML) all output a real-valued prediction. You would evaluate them with regression metrics such as RMSE, MAE, or R², not classification metrics.",
+      "choiceRationales": {
+        "A": "k-means is unsupervised clustering that groups similar customers. It doesn't use labels and doesn't predict a dollar amount.",
+        "B": "Logistic regression is a classifier that outputs class probabilities for categorical labels, so it can't directly predict a continuous spend amount.",
+        "D": "PCA is an unsupervised dimensionality-reduction technique that builds components from features. It isn't a predictive model, though it can be used as a preprocessing step."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "Spark MLlib: Classification and regression",
+          "url": "https://spark.apache.org/docs/latest/ml-classification-regression.html",
+          "kind": "doc"
+        },
+        {
+          "title": "scikit-learn: Supervised learning",
+          "url": "https://scikit-learn.org/stable/supervised_learning.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:37Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:37Z"
+    },
+    {
+      "id": "ec7174a3-7eaa-5350-b2cb-1970df399727",
+      "type": "mcq_single",
+      "prompt": "A data scientist wants to compare hyperparameters and validation metrics across 20 runs in the MLflow UI. What is the best approach?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Open each run and copy the values into a spreadsheet"
+        },
+        {
+          "id": "B",
+          "text": "Export the data through the REST API only"
+        },
+        {
+          "id": "C",
+          "text": "Compare is not possible, because the UI shows one run at a time"
+        },
+        {
+          "id": "D",
+          "text": "Select the runs in the experiment’s runs table and open the comparison view"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "explanation": "The MLflow UI lets you tick the checkboxes of several runs in an experiment's runs table and click Compare. The comparison view shows parameters, metrics and tags for all selected runs side by side. It also offers visualizations such as parallel coordinates, scatter and contour plots. These help you see how hyperparameters relate to validation metrics across many runs, so you don't need to export data or inspect runs one by one.",
+      "choiceRationales": {
+        "A": "Copying values by hand would work for 20 runs, but it is slow and error-prone, and it skips the built-in comparison and plotting tools.",
+        "B": "The REST API can retrieve run data, but it isn't the only way and isn't needed here, because the UI has built-in comparison.",
+        "C": "This is false, because the MLflow UI supports selecting multiple runs and comparing them side by side."
+      },
+      "topics": [
+        "databricks-ml",
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "MLflow Tracking – Querying and comparing runs",
+          "url": "https://mlflow.org/docs/latest/ml/tracking/",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:34Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:34Z"
+    },
+    {
+      "id": "b0980093-cad6-5f2e-9384-1f2ed6d995ec",
+      "type": "mcq_single",
+      "prompt": "Which is an advantage of random search over grid search for tuning many hyperparameters under a fixed budget?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "It often finds comparably good settings in fewer trials, since grid cost multiplies with each added hyperparameter"
+        },
+        {
+          "id": "B",
+          "text": "It guarantees the global optimum"
+        },
+        {
+          "id": "C",
+          "text": "It needs no hyperparameter ranges"
+        },
+        {
+          "id": "D",
+          "text": "It is deterministic and never repeats a setting"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "explanation": "Grid search tests every combination, so the number of trials multiplies with each hyperparameter you add. Random search samples a fixed number of configurations from the ranges or distributions you define, so you set the cost directly. Often only a few hyperparameters strongly affect performance. Random search tries many distinct values of each one, while a grid repeats the same few values. This is why it usually finds comparably good settings with fewer trials.",
+      "choiceRationales": {
+        "B": "Random search is a stochastic sampling method, so it can't guarantee the global optimum, and neither can grid search over a discrete grid.",
+        "C": "Random search still needs a search space, meaning ranges or distributions to sample from, such as in scikit-learn's RandomizedSearchCV or Hyperopt.",
+        "D": "Random search is stochastic unless you fix a seed, and sampling can repeat a setting, especially in discrete spaces. Grid search is the one that is deterministic and never repeats a combination."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "scikit-learn: Tuning the hyper-parameters of an estimator",
+          "url": "https://scikit-learn.org/stable/modules/grid_search.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:38Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:38Z"
+    },
+    {
+      "id": "9f150ad7-753c-56a8-afef-f5ed5426c118",
+      "type": "mcq_single",
+      "prompt": "What does a Databricks AutoML classification experiment provide when it completes?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "A fully deployed production endpoint"
+        },
+        {
+          "id": "B",
+          "text": "A data exploration notebook plus source-code notebooks for the trials"
+        },
+        {
+          "id": "C",
+          "text": "Only a leaderboard CSV file"
+        },
+        {
+          "id": "D",
+          "text": "A Docker image of the best model"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "Databricks AutoML is a \"glass box\" tool. When a run finishes, it gives you an MLflow experiment with a trial for each model it tried. It also generates a data exploration notebook that profiles the input dataset. For each trial it generates an editable source-code notebook that reproduces the training. You can review, modify and rerun these notebooks. The best trial is also highlighted, and its model is logged to MLflow so you can register or deploy it in a separate step.",
+      "choiceRationales": {
+        "A": "AutoML doesn't deploy anything automatically. You must register the model and create a serving endpoint yourself.",
+        "C": "The results include much more than a leaderboard: MLflow runs with metrics and parameters, plus generated notebooks. The experiment UI also lets you compare trials.",
+        "D": "AutoML logs models as MLflow artifacts and doesn't build a Docker image of the best model."
+      },
+      "topics": [
+        "databricks-ml"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Databricks AutoML",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/automl/",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:42Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:42Z"
+    },
+    {
+      "id": "9b32a544-8e50-511d-a76a-c2b709f72e96",
+      "type": "mcq_single",
+      "prompt": "Which approach is most appropriate to examine the relationship between two continuous features?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "A contingency table with a chi-square test"
+        },
+        {
+          "id": "B",
+          "text": "A bar chart of category counts"
+        },
+        {
+          "id": "C",
+          "text": "A pie chart of each feature"
+        },
+        {
+          "id": "D",
+          "text": "A scatter plot with a correlation coefficient"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "explanation": "Two continuous features are best explored by plotting one against the other and quantifying their association. A scatter plot shows the shape of the relationship (linear, curved, clustered), spread, and outliers. A correlation coefficient (Pearson for linear, Spearman for monotonic) summarizes the strength and direction as a single number. Using both together guards against cases where the coefficient alone is misleading, such as non-linear patterns.",
+      "choiceRationales": {
+        "A": "A contingency table with a chi-square test assesses association between two categorical variables, and using it on continuous data would require binning and lose information.",
+        "B": "A bar chart of category counts shows the frequency of categorical levels and says nothing about how two continuous variables relate.",
+        "C": "Pie charts show proportions of a whole for categories, so they can't display a relationship between two continuous features."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:43Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:43Z"
+    },
+    {
+      "id": "6db1ecd8-89d3-5dc9-95b8-7d44a3367f0d",
+      "type": "mcq_single",
+      "prompt": "After training in the production catalog, a new model version passes validation checks. What is the recommended next step?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Overwrite the Champion alias immediately, with no comparison"
+        },
+        {
+          "id": "B",
+          "text": "Delete the old version"
+        },
+        {
+          "id": "C",
+          "text": "Assign the Challenger alias, compare against Champion, and move the Champion alias if it is better"
+        },
+        {
+          "id": "D",
+          "text": "Transition the version to a Production stage"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "In Unity Catalog, model stages are deprecated and aliases are the recommended way to manage a model's lifecycle. A new version that passes validation should get a Challenger alias. You then compare it with the current Champion version, using the same evaluation data and metrics. If it performs better, you move the Champion alias to the new version. Consumers that load `models:/catalog.schema.model@Champion` pick up the new version without code changes, and the old version stays available for rollback.",
+      "choiceRationales": {
+        "A": "Moving the Champion alias with no comparison could put a worse model into production, because passing validation checks does not show that the version beats the current Champion.",
+        "B": "Deleting the old version removes your rollback option and the baseline you need for comparison, and it doesn't promote the new version.",
+        "D": "Stages such as Production belong to the legacy Workspace Model Registry and are deprecated, and Unity Catalog models use aliases instead."
+      },
+      "topics": [
+        "model-deployment",
+        "databricks-ml"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Manage model lifecycle in Unity Catalog",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/manage-model-lifecycle/",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:44Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:44Z"
+    },
+    {
+      "id": "2b39aa44-38b8-5762-a664-4f35401594e9",
+      "type": "mcq_single",
+      "prompt": "What is a benefit of k-fold cross-validation over a single train-validation split?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Every row is used for validation exactly once, giving a more reliable estimate"
+        },
+        {
+          "id": "B",
+          "text": "It lowers training cost"
+        },
+        {
+          "id": "C",
+          "text": "It removes the need for a test set"
+        },
+        {
+          "id": "D",
+          "text": "It guarantees no overfitting"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "A"
+        ]
+      },
+      "explanation": "In k-fold cross-validation, the data is split into k folds. The model trains k times, and each time it validates on a different fold and trains on the other k-1 folds. Every row is therefore used for validation exactly once and for training k-1 times. Averaging the k scores reduces the variance and the dependence on one lucky or unlucky split. That gives a more reliable estimate of generalization performance, especially on smaller datasets. The cost is that training runs k times.",
+      "choiceRationales": {
+        "B": "It raises training cost, because the model is trained k times instead of once.",
+        "C": "A held-out test set is still needed for an unbiased final estimate, because cross-validation is typically used for model selection and tuning, which leaks information into the validation scores.",
+        "D": "Cross-validation only helps you detect and measure overfitting. It does not prevent it, and a model can still overfit."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "scikit-learn: Cross-validation: evaluating estimator performance",
+          "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:49Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:49Z"
+    },
+    {
+      "id": "3ebd7430-a4d3-54aa-85b0-9b1764bb5032",
+      "type": "mcq_single",
+      "prompt": "Which Spark ML approach correctly fills missing values in a numeric income column with its median?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Imputer(strategy=\"mode\") on a string column payment_method"
+        },
+        {
+          "id": "B",
+          "text": "StringIndexer on income"
+        },
+        {
+          "id": "C",
+          "text": "OneHotEncoder on income"
+        },
+        {
+          "id": "D",
+          "text": "Imputer(strategy=\"median\", inputCols=[\"income\"], outputCols=[\"income_imp\"])"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "D"
+        ]
+      },
+      "explanation": "`pyspark.ml.feature.Imputer` replaces missing values (nulls or NaN) in numeric columns using a statistic learned from the data. It supports `mean` (the default) and `median`, and newer Spark versions also support `mode`. You pass `inputCols` and `outputCols`, fit the Imputer to get an `ImputerModel`, then transform the DataFrame. Choice D sets `strategy=\"median\"` on the numeric `income` column and writes the result to `income_imp`, so it does exactly what the question asks.",
+      "choiceRationales": {
+        "A": "Imputer works only on numeric columns, so it can't be applied to a string column like payment_method. It also doesn't address the median-income requirement.",
+        "B": "StringIndexer maps string labels to numeric indices. It doesn't fill missing values with a median and isn't meant for a numeric income column.",
+        "C": "OneHotEncoder turns categorical indices into sparse binary vectors. It doesn't impute missing values, and it isn't appropriate for a continuous income column."
+      },
+      "topics": [
+        "data-processing"
+      ],
+      "tags": [],
+      "difficulty": 1,
+      "resources": [
+        {
+          "title": "Spark ML Feature Transformers (Imputer)",
+          "url": "https://spark.apache.org/docs/latest/ml-features.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:49Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:49Z"
+    },
+    {
+      "id": "98045641-5043-59b2-a477-fb2d08bc7d8f",
+      "type": "mcq_single",
+      "prompt": "Which call removes the tag validation_status from version 4 of the Unity Catalog model prod.ml.fraud?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "client.set_registered_model_alias(\"prod.ml.fraud\", \"validation_status\", 4)"
+        },
+        {
+          "id": "B",
+          "text": "client.delete_model_version_tag(\"prod.ml.fraud\", 4, \"validation_status\")"
+        },
+        {
+          "id": "C",
+          "text": "client.remove_tag(\"prod.ml.fraud\", 4)"
+        },
+        {
+          "id": "D",
+          "text": "client.delete_registered_model_alias(\"prod.ml.fraud\", \"validation_status\")"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "In MLflow, tags on a specific model version are managed with `set_model_version_tag` and `delete_model_version_tag`. The delete call takes the model name, the version, and the tag key, in that order: `client.delete_model_version_tag(\"prod.ml.fraud\", 4, \"validation_status\")`. This works for Unity Catalog models, where the name is the three-level `catalog.schema.model`. Tags are key-value metadata. Aliases are a separate feature, which is why the alias methods don't apply.",
+      "choiceRationales": {
+        "A": "`set_registered_model_alias` creates or reassigns an alias, here named \"validation_status\", that points to version 4. It adds an alias and doesn't touch tags.",
+        "C": "`MlflowClient` has no `remove_tag` method for model versions. The call also leaves out the tag key.",
+        "D": "`delete_registered_model_alias` removes an alias named \"validation_status\" from the registered model. It doesn't remove a tag from version 4, and it takes no version argument."
+      },
+      "topics": [
+        "databricks-ml",
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "MLflow Python API: MlflowClient",
+          "url": "https://mlflow.org/docs/latest/python_api/mlflow.client.html",
+          "kind": "doc"
+        },
+        {
+          "title": "Manage model lifecycle in Unity Catalog (Databricks)",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/manage-model-lifecycle/",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:52Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:52Z"
+    },
+    {
+      "id": "dfc394c2-98e8-5fd4-bd94-051a1c0bb719",
+      "type": "mcq_single",
+      "prompt": "Which request key sends tensor-based input in columnar format to a serving endpoint?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "dataframe_records"
+        },
+        {
+          "id": "B",
+          "text": "instances"
+        },
+        {
+          "id": "C",
+          "text": "inputs"
+        },
+        {
+          "id": "D",
+          "text": "dataframe_split"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "C"
+        ]
+      },
+      "explanation": "Databricks model serving endpoints accept two kinds of scoring payloads: DataFrame-style JSON and tensor-style JSON that follows the TensorFlow Serving convention. For tensors, the `inputs` key sends data in columnar format. Each input name maps to the full array of values, or a single tensor is passed directly. The `instances` key sends the same kind of tensor data in row format instead, where each element is one record.",
+      "choiceRationales": {
+        "A": "`dataframe_records` sends pandas-DataFrame-style input as a list of row dictionaries. It is not the tensor format, and it is row-oriented.",
+        "B": "`instances` is the tensor format, but it is row-based, with one entry per example. The question asks for columnar.",
+        "D": "`dataframe_split` sends DataFrame input as separate `columns` and `data` (and optionally `index`) lists. It is a DataFrame format, not a tensor one."
+      },
+      "topics": [
+        "model-deployment"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "Query serving endpoints for custom models (Databricks)",
+          "url": "https://docs.databricks.com/aws/en/machine-learning/model-serving/score-custom-model-endpoints",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:56Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:56Z"
+    },
+    {
+      "id": "e18969e4-315a-5915-a909-75ecb8780e41",
+      "type": "mcq_single",
+      "prompt": "As the maximum depth of a decision tree increases from 1 to 30, what typically happens?",
+      "choices": [
+        {
+          "id": "A",
+          "text": "Bias increases and variance decreases"
+        },
+        {
+          "id": "B",
+          "text": "Bias decreases and variance increases"
+        },
+        {
+          "id": "C",
+          "text": "Both bias and variance decrease"
+        },
+        {
+          "id": "D",
+          "text": "Both bias and variance increase"
+        }
+      ],
+      "answer": {
+        "choiceIds": [
+          "B"
+        ]
+      },
+      "explanation": "A deeper tree can make more splits, so it fits the training data more closely. That lowers bias because the model can represent more complex patterns. The same flexibility makes the tree sensitive to the specific training sample, which raises variance and the risk of overfitting. This is the bias-variance tradeoff, and it is why max depth is tuned with validation data.",
+      "choiceRationales": {
+        "A": "This describes the opposite direction: a very shallow tree (like a stump) has high bias and low variance, so it is what you see as depth decreases.",
+        "C": "Bias and variance generally trade off against each other, and increasing depth doesn't reduce variance. Deeper trees fit noise, so variance rises.",
+        "D": "Bias does not increase with depth. More splits let the tree fit the training data better, which lowers bias."
+      },
+      "topics": [
+        "model-development"
+      ],
+      "tags": [],
+      "difficulty": 2,
+      "resources": [
+        {
+          "title": "scikit-learn: Decision Trees",
+          "url": "https://scikit-learn.org/stable/modules/tree.html",
+          "kind": "doc"
+        }
+      ],
+      "media": [],
+      "status": "reviewed",
+      "draft": {
+        "fields": [
+          "explanation",
+          "choiceRationales",
+          "resources",
+          "topics",
+          "difficulty"
+        ],
+        "by": "sonnet via Claude Code",
+        "at": "2026-11-23T15:17:57Z"
+      },
+      "createdAt": "2026-11-22T01:59:26Z",
+      "updatedAt": "2026-11-23T15:17:57Z"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "ee5583ae-8cf3-59fd-b17a-d5de45e81dcb",
+      "name": "Mixed Practice Exam 1",
+      "itemIds": [
+        "e8f5d807-2d8b-5dd8-a941-ca32ea259c22",
+        "c35b135e-e964-54ac-8e17-713fb22bcb78",
+        "eb520d74-493e-5fe1-92e1-ebf3ef46fff8",
+        "076c72f8-db3b-5c62-b0d8-0d31dcb66aac",
+        "0759f584-fd5e-51aa-ab4f-b275ef3738b6",
+        "973899bd-6d77-57f0-aaad-b9689aa6f2cb",
+        "749ec5ae-eb19-59d8-8927-564d37971c45",
+        "7306f379-29cc-52ae-be6d-c52593efcd9e",
+        "5e56ca99-8a8f-5ef6-85ba-83d8d326b5a9",
+        "35a6d03f-6dfa-5398-8a07-e7c186054590",
+        "ec7174a3-7eaa-5350-b2cb-1970df399727",
+        "b0980093-cad6-5f2e-9384-1f2ed6d995ec",
+        "9f150ad7-753c-56a8-afef-f5ed5426c118",
+        "9b32a544-8e50-511d-a76a-c2b709f72e96",
+        "6db1ecd8-89d3-5dc9-95b8-7d44a3367f0d",
+        "2b39aa44-38b8-5762-a664-4f35401594e9",
+        "3ebd7430-a4d3-54aa-85b0-9b1764bb5032",
+        "98045641-5043-59b2-a477-fb2d08bc7d8f",
+        "dfc394c2-98e8-5fd4-bd94-051a1c0bb719",
+        "e18969e4-315a-5915-a909-75ecb8780e41"
+      ],
+      "timeLimitSec": 2400,
+      "shuffle": false,
+      "shuffleChoices": false
+    }
+  ],
+  "createdAt": "2026-11-22T01:59:26Z",
+  "updatedAt": "2026-11-23T15:17:57Z"
+}

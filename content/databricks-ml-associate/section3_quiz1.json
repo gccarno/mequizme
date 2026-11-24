@@ -294,14 +294,14 @@
       ],
       "answer": {
         "choiceIds": [
-          "C"
+          "B"
         ]
       },
-      "explanation": "Taking the key as given, C would be the answer only if you read it as a criticism of PR AUC. PR AUC summarizes performance across all thresholds, so it doesn't show how the model behaves at the single threshold you deploy. That's a weak argument for a fraud task, though. PR AUC is usually preferred when classes are heavily imbalanced, and accuracy is the metric that fails there. Treat this key with caution.",
+      "explanation": "Accuracy is the trap on imbalanced data. If 1% of transactions are fraud, a model that predicts \"not fraud\" every time is 99% accurate and catches nothing, so choosing models by accuracy alone rewards ignoring the class you care about. Recall, F1 and the area under the precision-recall curve all focus on the rare positive class, which is why they are the usual choices for fraud detection. PR AUC in particular is the standard threshold-free metric when positives are rare.\n\n*Answer key corrected: the original quiz file marked C.*",
       "choiceRationales": {
-        "A": "Recall measures the share of actual fraud cases caught, so it is useful for fraud. Used alone it can be inflated by flagging everything, but it is not the least appropriate choice.",
-        "B": "Accuracy is actually the weakest sole metric here, because with rare fraud a model that predicts the majority class every time scores very high while catching no fraud. That is why the key looks wrong.",
-        "D": "F1 balances precision and recall at a chosen threshold, so it handles class imbalance reasonably well and is a sensible selection metric."
+        "A": "Recall measures how much of the fraud you catch. On its own it can be gamed by flagging everything, but it at least looks at the rare class, so it is not the least appropriate.",
+        "C": "PR AUC is one of the best choices here: it summarizes precision and recall across thresholds and is not inflated by the large number of legitimate transactions.",
+        "D": "F1 balances precision and recall on the fraud class, so it holds up well under class imbalance."
       },
       "topics": [
         "model-development"
@@ -317,19 +317,8 @@
       ],
       "media": [],
       "status": "reviewed",
-      "draft": {
-        "fields": [
-          "explanation",
-          "choiceRationales",
-          "resources",
-          "difficulty"
-        ],
-        "by": "sonnet via Claude Code",
-        "at": "2026-11-23T15:18:59Z",
-        "notes": "The AI thinks the answer key may be wrong. For an imbalanced fraud dataset, accuracy (B) is the least appropriate sole metric because a model that predicts 'not fraud' for everything scores very high. PR AUC (C) is one of the best choices for this setting."
-      },
       "createdAt": "2026-11-20T01:48:54Z",
-      "updatedAt": "2026-11-23T15:18:59Z"
+      "updatedAt": "2026-11-24T00:08:52Z"
     },
     {
       "id": "077ab62f-489f-55a9-8b5a-6e30e2b73f51",

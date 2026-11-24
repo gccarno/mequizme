@@ -306,14 +306,14 @@
       ],
       "answer": {
         "choiceIds": [
-          "B"
+          "A"
         ]
       },
-      "explanation": "The key marks B, but I think the correct answer is A. Nominal categories (card, cash, transfer) have no order or distance. Arithmetic like a mean or median on encoded integers is therefore meaningless, and it can produce a fractional code that maps to no real category. The mode keeps the imputed value a valid category. In Databricks, you can do this with Spark ML's `Imputer` (numeric only, with a `mode` strategy in recent versions) or with scikit-learn's `SimpleImputer(strategy='most_frequent')`. Either way, mode imputation is the standard choice for nominal data.",
+      "explanation": "Use the mode. payment_method is nominal: card, cash and transfer have no order and no distance between them. Any integer codes you give them are arbitrary labels, so arithmetic on those codes means nothing. The mean or median of the codes depends on how the categories happened to be numbered, and the mean can be a fraction that matches no category at all. The most frequent category is always a real value and changes the distribution the least. In scikit-learn that is `SimpleImputer(strategy='most_frequent')`; in Spark you can fill with the most common value (for example with `fillna` after a `groupBy().count()`), or use `Imputer(strategy='mode')` on an indexed column.\n\n*Answer key corrected: the original quiz file marked B.*",
       "choiceRationales": {
-        "A": "This is the answer I'd pick: the most frequent category is a valid value for a nominal column and doesn't assume any ordering.",
-        "C": "A median of arbitrary category codes depends on the encoding order, which is meaningless for nominal data, and could land on a code that misrepresents the data.",
-        "D": "Averaging two categories isn't defined for nominal data and would give a non-category or arbitrary value."
+        "B": "Category codes are arbitrary labels. Their mean depends on the numbering and is often a fraction that is no category at all.",
+        "C": "The median needs an order, and nominal categories have none. The result depends on how the codes were assigned.",
+        "D": "You can't average two categories. There is no value halfway between card and cash."
       },
       "topics": [
         "data-processing"
@@ -329,19 +329,8 @@
       ],
       "media": [],
       "status": "reviewed",
-      "draft": {
-        "fields": [
-          "explanation",
-          "choiceRationales",
-          "resources",
-          "difficulty"
-        ],
-        "by": "sonnet via Claude Code",
-        "at": "2026-11-23T15:18:33Z",
-        "notes": "The AI thinks the answer key may be wrong. For a nominal categorical column, the mode (A) is the appropriate imputation. Mean of arbitrary category codes (B) imposes a meaningless numeric order and can produce a value that matches no category."
-      },
       "createdAt": "2026-11-20T01:48:56Z",
-      "updatedAt": "2026-11-23T15:18:33Z"
+      "updatedAt": "2026-11-24T00:08:52Z"
     },
     {
       "id": "7efe6406-a57e-5cc8-a87c-7746be54ec2d",

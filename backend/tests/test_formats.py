@@ -113,8 +113,8 @@ def test_ids_are_deterministic():
 
 GOLDEN_KEYS = {
     "section1_quiz1.md": "B D A B C D D A C B",
-    "section2_quiz1.md": "C D B D B C B D A C",
-    "section3_quiz1.md": "C B D A C C D A B C",
+    "section2_quiz1.md": "C D B D A C B D A C",
+    "section3_quiz1.md": "C B D A B C D A B C",
     "section4_quiz1.md": "B C A D B D C A C B",
     "more_quizes.md": "B C A D B D A C B C D A B D C A D B C B",
 }

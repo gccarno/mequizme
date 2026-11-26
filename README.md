@@ -3,7 +3,7 @@
 A local study tutor for certifications: flashcards, quizzes, timed exams, answer review,
 topic analytics, and (optionally) LLM-generated explanations and new questions.
 
-Status: **Phase 4 – AI tutor.** See the full plan in `docs/plan.md`.
+Status: **Phase 6 – phone companion and cloud sync.** See the full plan in `docs/plan.md`.
 
 ## Run it
 
@@ -76,6 +76,21 @@ listing the fields it wrote, what they replaced, and any doubt about the answer 
 removes the marker; rejecting restores the old values. New questions go to
 `content/<exam>/generated.json` with `status: draft` and stay out of quizzes until accepted. The
 tutor never changes an answer key; it flags doubts for you. Links that return 404 are dropped.
+
+## Phone companion and cloud sync
+
+The [StudyDeck](../../note_card_app/note_card_app) Android app is mequizme's phone companion. It offers FSRS review, practice quizzes and exam progress, and syncs with this app through Firestore.
+
+- **Set up the cloud once:** `infra/` is Terraform for one GCP/Firebase project plus three Sentry projects. Follow `infra/README.md`, then run `python scripts/render_env.py` to write `frontend/.env.local` and `backend/.env`. Rebuild the frontend afterwards.
+- **Connect:** click **Connect phone** in the header and sign in with Google. Use the same Google account in StudyDeck.
+- **What syncs:**
+  - Reviewed content goes to the phone.
+  - Flashcard ratings, schedules and submitted quizzes go both ways.
+  - The backend syncs every 5 minutes (`MEQUIZME_SYNC_INTERVAL`, in seconds; 0 turns it off) and whenever you click **Sync now**.
+- **How it works:** the browser only signs in. The local backend keeps the Firebase refresh token in `data/mequizme.db` and syncs over the Firestore REST API as you, so the same security rules apply as on the phone. `docs/sync.md` is the data contract both apps implement.
+- **Sentry:** error reporting is off unless `SENTRY_DSN` (backend) or `VITE_SENTRY_DSN` (frontend build) is set. Request bodies, stack-frame variables and user info are never sent.
+
+`uv run mequizme` loads `backend/.env`. With `fastapi dev`, use `uv run --env-file .env fastapi dev app/main.py`.
 
 ## Tests
 

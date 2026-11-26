@@ -96,9 +96,17 @@ Run locally with `uv run fastapi dev` + `npm run dev`, or a single `make dev`. I
 - Import Anki `.apkg` (read the SQLite inside the zip: notes and fields, Basic and Cloze, media), plus CSV/TSV, Aiken and GIFT.
 - Export to CSV/Aiken/GIFT and `.apkg` (via `genanki`); QTI later if needed.
 
-**Phase 6 (later): StudyDeck migration**
-- Update `JsonImporter.kt`/`JsonExporter.kt` to read v1 and v2 and write v2 (cards as `flashcard` items; ignore other item types or show them as cards).
-- Optional progress sync via the shared `progress` export or Firestore.
+**Phase 6: StudyDeck as the phone companion (in progress)**
+- Done:
+  - Firestore hub sync (`docs/sync.md`). The web backend uses `backend/app/cloud/`; StudyDeck uses `MequizmeSyncRepository`.
+  - Terraform for Firebase, Firestore rules and Sentry (`infra/`).
+  - Kotlin ports of FSRS and grading, checked against fixtures from `scripts/gen_mobile_fixtures.py`.
+  - StudyDeck Exams, Review, Practice and Progress screens.
+  - Sentry in the backend, the web app and Android.
+- Still to do:
+  - Update `JsonImporter.kt`/`JsonExporter.kt` to read v1 and v2 and write v2.
+  - Offline study and daily due-card reminders on the phone.
+  - Exam mode (timed) on the phone.
 
 ## Verification
 - `pytest`: schema validation of every file in `content/`; adapter round-trips (markdown → pack → same answers; StudyDeck v1 → v2 → v1 lossless); FSRS/SM-2 scheduler tests (port the cases from `Sm2AlgorithmTest.kt`); grading for single and multi choice; exam timer auto-submit on the server side.

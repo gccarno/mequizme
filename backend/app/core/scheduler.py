@@ -8,6 +8,7 @@ Ratings use the FSRS scale: 1 Again, 2 Hard, 3 Good, 4 Easy.
 from __future__ import annotations
 
 import json
+import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Protocol
@@ -91,12 +92,34 @@ def record_review(conn, item_id: str, rating: int, source: str, now: datetime | 
         state = sched.new(now).state
     result = sched.review(state, rating, now)
     conn.execute(
-        "INSERT INTO reviews (item_id, rating, source, reviewed_at, duration_ms) VALUES (?, ?, ?, ?, ?)",
-        (item_id, rating, source, now.isoformat(), duration_ms),
+        """INSERT INTO reviews (uuid, item_id, rating, source, reviewed_at, duration_ms, device)
+           VALUES (?, ?, ?, ?, ?, ?, 'web')""",
+        (str(uuid.uuid4()), item_id, rating, source, now.isoformat(), duration_ms),
     )
     conn.execute(
-        """INSERT INTO srs_state (item_id, scheduler, state, due) VALUES (?, ?, ?, ?)
-           ON CONFLICT(item_id) DO UPDATE SET scheduler=excluded.scheduler, state=excluded.state, due=excluded.due""",
-        (item_id, sched.name, json.dumps(result.state), result.due.isoformat()),
+        """INSERT INTO srs_state (item_id, scheduler, state, due, last_reviewed_at, dirty) VALUES (?, ?, ?, ?, ?, 1)
+           ON CONFLICT(item_id) DO UPDATE SET scheduler=excluded.scheduler, state=excluded.state, due=excluded.due,
+               last_reviewed_at=excluded.last_reviewed_at, dirty=1""",
+        (item_id, sched.name, json.dumps(result.state), result.due.isoformat(), now.isoformat()),
     )
     return result
+
+
+def apply_remote_srs(conn, item_id: str, scheduler: str, state: dict, due: datetime,
+                     last_reviewed_at: datetime) -> bool:
+    """Take a schedule from another device if it reflects a later review than ours. True if applied.
+
+    Concurrent offline reviews of one card resolve to the later one; the earlier review is still
+    in the log, so a scheduler re-fit can replay it."""
+    if scheduler not in SCHEDULERS:
+        return False
+    row = conn.execute("SELECT last_reviewed_at FROM srs_state WHERE item_id = ?", (item_id,)).fetchone()
+    if row and row["last_reviewed_at"] and datetime.fromisoformat(row["last_reviewed_at"]) >= last_reviewed_at:
+        return False
+    conn.execute(
+        """INSERT INTO srs_state (item_id, scheduler, state, due, last_reviewed_at, dirty) VALUES (?, ?, ?, ?, ?, 0)
+           ON CONFLICT(item_id) DO UPDATE SET scheduler=excluded.scheduler, state=excluded.state, due=excluded.due,
+               last_reviewed_at=excluded.last_reviewed_at, dirty=0""",
+        (item_id, scheduler, json.dumps(state), due.isoformat(), last_reviewed_at.isoformat()),
+    )
+    return True

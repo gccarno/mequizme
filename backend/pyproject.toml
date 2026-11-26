@@ -6,7 +6,9 @@ requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.165.0",
     "fsrs>=6.3.3",
+    "httpx>=0.28.1",
     "pydantic>=2.7",
+    "sentry-sdk[fastapi]>=2.20",
     "uvicorn[standard]>=0.54.0",
 ]
 
@@ -21,7 +23,6 @@ mequizme = "app.server:main"
 dev = [
     "pytest>=8",
     "jsonschema>=4.22",
-    "httpx>=0.28.1",
 ]
 
 [build-system]

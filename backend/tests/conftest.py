@@ -8,6 +8,9 @@ from pristine import pristine_copy
 
 # FastAPI's TestClient sends Host: testserver. Allowed in tests only, never in the real app.
 os.environ["MEQUIZME_ALLOWED_HOSTS"] = "testserver"
+# Never report test errors to Sentry, and never sync on a timer; tests call sync explicitly.
+os.environ.pop("SENTRY_DSN", None)
+os.environ["MEQUIZME_SYNC_INTERVAL"] = "0"
 
 
 @pytest.fixture(scope="session")

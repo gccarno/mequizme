@@ -1,0 +1,359 @@
+[
+ {
+  "item": {
+   "id": "x",
+   "type": "mcq_single",
+   "prompt": "?",
+   "answer": {
+    "choiceIds": [
+     "B"
+    ]
+   }
+  },
+  "choiceIds": [
+   "B"
+  ],
+  "text": null,
+  "expected": true
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "mcq_single",
+   "prompt": "?",
+   "answer": {
+    "choiceIds": [
+     "B"
+    ]
+   }
+  },
+  "choiceIds": [
+   "A"
+  ],
+  "text": null,
+  "expected": false
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "mcq_single",
+   "prompt": "?",
+   "answer": {
+    "choiceIds": [
+     "B"
+    ]
+   }
+  },
+  "choiceIds": [],
+  "text": null,
+  "expected": false
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "mcq_single",
+   "prompt": "?",
+   "answer": {
+    "choiceIds": [
+     "B"
+    ]
+   }
+  },
+  "choiceIds": null,
+  "text": null,
+  "expected": false
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "mcq_single",
+   "prompt": "?",
+   "answer": {
+    "choiceIds": [
+     "B"
+    ]
+   }
+  },
+  "choiceIds": [
+   "B",
+   "A"
+  ],
+  "text": null,
+  "expected": false
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "mcq_multi",
+   "prompt": "?",
+   "answer": {
+    "choiceIds": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  "choiceIds": [
+   "A",
+   "C"
+  ],
+  "text": null,
+  "expected": true
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "mcq_multi",
+   "prompt": "?",
+   "answer": {
+    "choiceIds": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  "choiceIds": [
+   "C",
+   "A"
+  ],
+  "text": null,
+  "expected": true
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "mcq_multi",
+   "prompt": "?",
+   "answer": {
+    "choiceIds": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  "choiceIds": [
+   "A"
+  ],
+  "text": null,
+  "expected": false
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "mcq_multi",
+   "prompt": "?",
+   "answer": {
+    "choiceIds": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  "choiceIds": [
+   "A",
+   "B",
+   "C"
+  ],
+  "text": null,
+  "expected": false
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "mcq_multi",
+   "prompt": "?",
+   "answer": {
+    "choiceIds": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  "choiceIds": [
+   "A",
+   "A",
+   "C"
+  ],
+  "text": null,
+  "expected": true
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "true_false",
+   "prompt": "?",
+   "answer": {
+    "choiceIds": [
+     "true"
+    ]
+   }
+  },
+  "choiceIds": [
+   "true"
+  ],
+  "text": null,
+  "expected": true
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "true_false",
+   "prompt": "?",
+   "answer": {
+    "choiceIds": [
+     "true"
+    ]
+   }
+  },
+  "choiceIds": [
+   "false"
+  ],
+  "text": null,
+  "expected": false
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "short_answer",
+   "prompt": "?",
+   "answer": {
+    "text": "Delta Lake",
+    "accepted": [
+     "delta",
+     "Delta tables."
+    ]
+   }
+  },
+  "choiceIds": null,
+  "text": "delta lake",
+  "expected": true
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "short_answer",
+   "prompt": "?",
+   "answer": {
+    "text": "Delta Lake",
+    "accepted": [
+     "delta",
+     "Delta tables."
+    ]
+   }
+  },
+  "choiceIds": null,
+  "text": "  Delta   Lake. ",
+  "expected": true
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "short_answer",
+   "prompt": "?",
+   "answer": {
+    "text": "Delta Lake",
+    "accepted": [
+     "delta",
+     "Delta tables."
+    ]
+   }
+  },
+  "choiceIds": null,
+  "text": "DELTA",
+  "expected": true
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "short_answer",
+   "prompt": "?",
+   "answer": {
+    "text": "Delta Lake",
+    "accepted": [
+     "delta",
+     "Delta tables."
+    ]
+   }
+  },
+  "choiceIds": null,
+  "text": "delta tables",
+  "expected": true
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "short_answer",
+   "prompt": "?",
+   "answer": {
+    "text": "Delta Lake",
+    "accepted": [
+     "delta",
+     "Delta tables."
+    ]
+   }
+  },
+  "choiceIds": null,
+  "text": "lakehouse",
+  "expected": false
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "short_answer",
+   "prompt": "?",
+   "answer": {
+    "text": "Delta Lake",
+    "accepted": [
+     "delta",
+     "Delta tables."
+    ]
+   }
+  },
+  "choiceIds": null,
+  "text": "",
+  "expected": false
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "short_answer",
+   "prompt": "?",
+   "answer": {
+    "text": "Delta Lake",
+    "accepted": [
+     "delta",
+     "Delta tables."
+    ]
+   }
+  },
+  "choiceIds": null,
+  "text": null,
+  "expected": false
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "flashcard",
+   "prompt": "?",
+   "answer": {
+    "text": "anything"
+   }
+  },
+  "choiceIds": null,
+  "text": null,
+  "expected": null
+ },
+ {
+  "item": {
+   "id": "x",
+   "type": "flashcard",
+   "prompt": "?",
+   "answer": {
+    "text": "anything"
+   }
+  },
+  "choiceIds": null,
+  "text": "anything",
+  "expected": null
+ }
+]

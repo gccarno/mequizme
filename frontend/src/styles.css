@@ -95,6 +95,15 @@ pre code { background: none; padding: 0; }
 .top nav a { color: var(--graphite); text-decoration: none; padding-bottom: 0.15rem; border-bottom: 2px solid transparent; }
 .top nav a.active { color: var(--ink); border-color: var(--form); }
 
+/* phone sync: a quiet status line at the end of the header */
+.cloud { margin-left: auto; display: flex; align-items: baseline; gap: 0.75rem; font-size: var(--t-sm); }
+.cloud .btn { min-height: 0; padding: 0.25rem 0.5rem; }
+.cloud-note { color: var(--graphite); }
+.cloud-note.error { color: var(--miss); }
+.cloud-pending { color: var(--flag); }
+.cloud-off { color: var(--graphite); font-size: var(--t-sm); }
+@media (max-width: 40rem) { .cloud-note, .cloud-off { display: none; } }
+
 .page { max-width: 72rem; margin: 0 auto; padding: 2rem 1rem 4rem; }
 .empty { max-width: var(--measure); }
 

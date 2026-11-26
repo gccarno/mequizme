@@ -184,6 +184,22 @@ export interface ChatContext {
   topic?: string;
 }
 
+export interface CloudStatus {
+  configured: boolean;
+  connected: boolean;
+  email: string | null;
+  lastSync: string | null;
+  lastError: string | null;
+  pending: number;
+  syncing: boolean;
+}
+
+export interface SyncResult {
+  pushed: Record<string, number>;
+  pulled: Record<string, number>;
+  status: CloudStatus;
+}
+
 export class ApiError extends Error {
   constructor(public status: number, message: string) {
     super(message);
@@ -261,6 +277,11 @@ export const api = {
     request<Item>(`/api/items/${itemId}/accept`, { method: "POST", body: JSON.stringify(edits ?? {}) }),
   rejectDraft: (itemId: string) =>
     request<{ deleted: boolean; item: Item | null }>(`/api/items/${itemId}/reject`, { method: "POST" }),
+  cloudStatus: () => request<CloudStatus>("/api/cloud/status"),
+  cloudConnect: (idToken: string, refreshToken: string) =>
+    request<CloudStatus>("/api/cloud/session", { method: "POST", body: JSON.stringify({ idToken, refreshToken }) }),
+  cloudDisconnect: () => request<void>("/api/cloud/session", { method: "DELETE" }),
+  cloudSync: () => request<SyncResult>("/api/cloud/sync", { method: "POST" }),
   dueQuestions: (params: { packId?: string; exam?: string }) =>
     request<{ count: number; itemIds: string[] }>(`/api/study/due-questions${qs(params)}`),
 };

@@ -8,6 +8,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom";
 import { api } from "./api";
+import { CloudSync } from "./components/CloudSync";
 import { useAiStatus } from "./components/Tutor";
 import { AttemptReview } from "./pages/AttemptReview";
 import { Drafts } from "./pages/Drafts";
@@ -16,6 +17,9 @@ import { History } from "./pages/History";
 import { Library } from "./pages/Library";
 import { Progress } from "./pages/Progress";
 import { QuizRunner } from "./pages/QuizRunner";
+import { Sentry, initSentry } from "./lib/sentry";
+
+const sentryOn = initSentry();
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
@@ -58,6 +62,7 @@ function App() {
           <NavLink to="/history">History</NavLink>
           <TutorLink />
         </nav>
+        <CloudSync />
       </header>
       <main id="main">
         <Routes>
@@ -82,12 +87,22 @@ function App() {
   );
 }
 
+function Crashed() {
+  return (
+    <p className="page">
+      Something broke and the page can't continue. Your progress is saved; <a href="/">reload the library</a>.
+    </p>
+  );
+}
+
+const app = (
+  <QueryClientProvider client={queryClient}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </QueryClientProvider>
+);
+
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </QueryClientProvider>
-  </StrictMode>,
+  <StrictMode>{sentryOn ? <Sentry.ErrorBoundary fallback={<Crashed />}>{app}</Sentry.ErrorBoundary> : app}</StrictMode>,
 );

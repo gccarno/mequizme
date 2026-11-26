@@ -130,6 +130,31 @@ def test_second_sync_is_a_no_op(web, fake):
     assert fake.writes == writes
 
 
+def test_changed_item_bumps_its_pack(web, fake):
+    _sync(web)
+    card = _card(web)
+    pack = _pack_of(web, card["id"])
+    before = fake.get(f"users/{UID}/packs/{pack}")["itemsHash"]
+    others = {p: d["itemsHash"] for p, d in fake.collection(UID, "packs").items() if p != pack}
+    with _db(web) as conn:
+        body = json.loads(conn.execute("SELECT body FROM items WHERE id = ?", (card["id"],)).fetchone()[0])
+        body["prompt"] += " (edited)"
+        conn.execute("UPDATE items SET body = ? WHERE id = ?", (json.dumps(body), card["id"]))
+    assert _sync(web)["pushed"]["content"] == 2  # the item, then its pack
+    assert fake.get(f"users/{UID}/packs/{pack}")["itemsHash"] != before
+    assert {p: d["itemsHash"] for p, d in fake.collection(UID, "packs").items() if p != pack} == others
+
+
+def test_pack_not_advertised_until_its_items_land(web, fake, monkeypatch):
+    real = fake._write
+    monkeypatch.setattr(fake, "_write", lambda w, owned: {"code": 14} if "/items/" in w.get("update", {}).get("name", "") else real(w, owned))
+    _sync(web)
+    assert fake.collection(UID, "packs") == {}
+    monkeypatch.setattr(fake, "_write", real)
+    _sync(web)
+    assert len(fake.collection(UID, "packs")) == 9
+
+
 def test_drafts_are_not_published(web, fake):
     _sync(web)
     with _db(web) as conn:

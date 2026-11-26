@@ -62,36 +62,55 @@ def _created(fs: Firestore, names: list[str], codes: list[int]) -> list[bool]:
 
 # --- push ----------------------------------------------------------------------------------
 
-def push_content(db: Database, fs: Firestore, uid: str) -> int:
-    docs: dict[str, dict] = {}
-    with db.connect() as conn:
-        for p in conn.execute("SELECT id, name, exam, body FROM packs"):
-            docs[f"users/{uid}/packs/{p['id']}"] = {"id": p["id"], "name": p["name"], "exam": p["exam"],
-                                                    "body": p["body"]}
-        for i in conn.execute("SELECT id, pack_id, position, type, topics, body FROM items WHERE status != 'draft'"):
-            docs[f"users/{uid}/packs/{i['pack_id']}/items/{i['id']}"] = {
-                "id": i["id"], "packId": i["pack_id"], "position": i["position"], "type": i["type"],
-                "topics": json.loads(i["topics"]), "body": i["body"]}
-        known = {r["path"]: r["hash"] for r in conn.execute("SELECT path, hash FROM cloud_content")}
-
-    hashes = {path: _hash(f) for path, f in docs.items()}
-    changed = [p for p in docs if known.get(p) != hashes[p]]
-    gone = [p for p in known if p.startswith(f"users/{uid}/") and p not in docs]
-    writes = [Firestore.set(fs.name(p), {**docs[p], "contentHash": hashes[p]}) for p in changed]
-    writes += [Firestore.delete(fs.name(p)) for p in gone]
+def _write_content(db: Database, fs: Firestore, docs: dict[str, dict], hashes: dict[str, str],
+                   paths: list[str]) -> set[str]:
+    """Write/delete these content docs; returns the paths that are now as in `docs`."""
+    writes = [Firestore.set(fs.name(p), {**docs[p], "contentHash": hashes[p]}) if p in docs
+              else Firestore.delete(fs.name(p)) for p in paths]
     if not writes:
-        return 0
-    codes = fs.batch_write(writes)
+        return set()
+    landed = {p for p, code in zip(paths, fs.batch_write(writes)) if code == OK}
     with db.connect() as conn:
-        for p, code in zip(changed + gone, codes):
-            if code != OK:
-                continue
+        for p in landed:
             if p in docs:
                 conn.execute("INSERT INTO cloud_content (path, hash) VALUES (?, ?) "
                              "ON CONFLICT(path) DO UPDATE SET hash = excluded.hash", (p, hashes[p]))
             else:
                 conn.execute("DELETE FROM cloud_content WHERE path = ?", (p,))
-    return sum(c == OK for c in codes)
+    return landed
+
+
+def push_content(db: Database, fs: Firestore, uid: str) -> int:
+    """Items first, then pack docs. A pack doc carries `itemsHash` over its items, so the phone
+    only refetches a pack's items when that changes; writing it last means it never advertises
+    items that failed to upload."""
+    packs: dict[str, dict] = {}
+    items: dict[str, dict] = {}
+    by_pack: dict[str, list[str]] = {}
+    with db.connect() as conn:
+        for p in conn.execute("SELECT id, name, exam, body FROM packs"):
+            packs[f"users/{uid}/packs/{p['id']}"] = {"id": p["id"], "name": p["name"], "exam": p["exam"],
+                                                     "body": p["body"]}
+        for i in conn.execute("SELECT id, pack_id, position, type, topics, body FROM items WHERE status != 'draft'"):
+            path = f"users/{uid}/packs/{i['pack_id']}/items/{i['id']}"
+            items[path] = {"id": i["id"], "packId": i["pack_id"], "position": i["position"], "type": i["type"],
+                           "topics": json.loads(i["topics"]), "body": i["body"]}
+            by_pack.setdefault(f"users/{uid}/packs/{i['pack_id']}", []).append(path)
+        known = {r["path"]: r["hash"] for r in conn.execute("SELECT path, hash FROM cloud_content")
+                 if r["path"].startswith(f"users/{uid}/")}
+
+    hashes = {p: _hash(f) for p, f in items.items()}
+    item_paths = [p for p in items if known.get(p) != hashes[p]]
+    item_paths += [p for p in known if "/items/" in p and p not in items]
+    landed = _write_content(db, fs, items, hashes, item_paths)
+
+    failed_packs = {p.split("/items/")[0] for p in item_paths if p not in landed}
+    for path, fields in packs.items():
+        fields["itemsHash"] = _hash(sorted((p, hashes[p]) for p in by_pack.get(path, [])))
+        hashes[path] = _hash(fields)
+    pack_paths = [p for p in packs if known.get(p) != hashes[p] and p not in failed_packs]
+    pack_paths += [p for p in known if "/items/" not in p and p not in packs]
+    return len(landed) + len(_write_content(db, fs, packs, hashes, pack_paths))
 
 
 def push_reviews(db: Database, fs: Firestore, uid: str) -> int:

@@ -18,7 +18,10 @@ The local web app and the StudyDeck Android app share one Firestore database (pr
 |---|---|---|
 | id, name, exam | string | |
 | body | string (JSON) | pack document without `items`: taxonomy (exam, topics with weights, passingScore), quizzes, … |
+| itemsHash | string | hash over this pack's items; changes whenever any item changes |
 | contentHash | string | |
+
+The web app writes a pack doc only after all of its item writes have succeeded. A client can therefore keep the last `itemsHash` it saw for each pack. On every sync it reads all pack docs (there are only a few), refetches the items of any pack whose `itemsHash` changed, and drops packs that no longer exist.
 
 ### `packs/{packId}/items/{itemId}`: written by web, read-only on the phone
 | field | type | |

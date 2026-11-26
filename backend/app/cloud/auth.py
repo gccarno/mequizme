@@ -25,7 +25,10 @@ class AuthError(RuntimeError):
 def verify(http: httpx.Client, api_key: str, id_token: str) -> dict:
     """Ask Firebase who an ID token belongs to (rejects forged or expired tokens)."""
     r = http.post(LOOKUP, params={"key": api_key}, json={"idToken": id_token}, timeout=30)
-    users = r.json().get("users") if r.status_code == 200 else None
+    try:
+        users = r.json().get("users") if r.status_code == 200 else None
+    except ValueError:
+        users = None
     if not users:
         raise AuthError("Firebase rejected the sign-in token")
     return {"uid": users[0]["localId"], "email": users[0].get("email")}

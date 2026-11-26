@@ -34,7 +34,10 @@ def _init_sentry() -> None:
         return
     sentry_sdk.init(
         dsn=dsn,
-        send_default_pii=False,  # no IPs or request bodies: answers and tokens stay local
+        # Answers and Firebase tokens stay local: no user/IP info, no HTTP bodies (POST
+        # /api/cloud/session carries tokens), no stack-frame variables (sync holds a refresh
+        # token). Headers and query params keep sentry-sdk's built-in token/auth/key scrubbing.
+        data_collection={"user_info": False, "http_bodies": [], "stack_frame_variables": False},
         environment=os.environ.get("SENTRY_ENVIRONMENT", "local"),
         traces_sample_rate=float(os.environ.get("SENTRY_TRACES_SAMPLE_RATE", "0")),
     )

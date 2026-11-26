@@ -1,0 +1,28 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // Everything lives under users/{uid}/...; only the signed-in owner may access it.
+    // Rules OR together, so collections are listed explicitly: a users/{uid}/** wildcard
+    // would also grant update/delete on the append-only collections below.
+    match /users/{uid}/{document=**} {
+      allow read: if isOwner(uid);
+    }
+
+    // StudyDeck decks, mequizme content and per-item schedule: owner may write freely.
+    match /users/{uid}/subjects/{id} { allow write: if isOwner(uid); }
+    match /users/{uid}/decks/{id}    { allow write: if isOwner(uid); }
+    match /users/{uid}/cards/{id}    { allow write: if isOwner(uid); }
+    match /users/{uid}/packs/{id}    { allow write: if isOwner(uid); }
+    match /users/{uid}/packs/{packId}/items/{id} { allow write: if isOwner(uid); }
+    match /users/{uid}/srs/{id}      { allow write: if isOwner(uid); }
+
+    // Review log and submitted attempts are append-only, so a buggy client can't rewrite history.
+    match /users/{uid}/reviews/{id}  { allow create: if isOwner(uid); }
+    match /users/{uid}/attempts/{id} { allow create: if isOwner(uid); }
+  }
+}
